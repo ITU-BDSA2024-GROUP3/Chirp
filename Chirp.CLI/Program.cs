@@ -21,7 +21,11 @@ if (args[0] == "read")
 }
 else if(args[0] == "cheep")
 {
-    //dat
+    //easy unix conversion taken from: https://stackoverflow.com/a/35425123
+    using (StreamWriter sw = File.AppendText(dataPath))
+    {
+     sw.WriteLine(Environment.UserName + "," + args[1] + "," + ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+    }
     
     
 }
