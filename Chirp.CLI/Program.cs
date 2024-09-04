@@ -8,6 +8,7 @@ if (args[0] == "read")
 {
     using (StreamReader reader = new StreamReader(dataPath))
     {
+        reader.ReadLine();
         while (!reader.EndOfStream)
         {
             // Regex taken from: https://stackoverflow.com/questions/6542996/how-to-split-csv-whose-columns-may-contain-comma
