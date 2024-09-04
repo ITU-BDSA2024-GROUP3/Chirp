@@ -8,6 +8,7 @@ if (args[0] == "read")
 {
     using (StreamReader reader = new StreamReader(dataPath))
     {
+        
         reader.ReadLine();
         while (!reader.EndOfStream)
         {
