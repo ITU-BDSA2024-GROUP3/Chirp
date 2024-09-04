@@ -5,10 +5,15 @@ using SimpleDB;
 
 const string dataPath = "./chirp_cli_db.csv";
 
+
+
 if (args[0] == "read")
 {
     IDatabaseRepository<int> h = new CSVDatabase<int>();
+        
+    Console.WriteLine(h.Read());
     
+    /*
     using (StreamReader reader = new StreamReader(dataPath))
     {
         reader.ReadLine();
@@ -19,9 +24,10 @@ if (args[0] == "read")
             long unixTimeSeconds = long.Parse(words[2]);
             DateTimeOffset timeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTimeSeconds);
             string time = $"{timeOffset.Day}/{timeOffset.Month}/{timeOffset.Year}";
-            Console.WriteLine($"{words[0]} @ {time} : {words[1]}");
+            
         }
     }
+    */
 }
 else if(args[0] == "cheep")
 {
