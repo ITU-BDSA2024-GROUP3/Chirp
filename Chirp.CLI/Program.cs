@@ -1,13 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Text.RegularExpressions;
+using SimpleDB;
 
 const string dataPath = "./chirp_cli_db.csv";
 
 if (args[0] == "read")
 {
+    IDatabaseRepository<int> h = new CSVDatabase<int>();
+    
     using (StreamReader reader = new StreamReader(dataPath))
     {
+        reader.ReadLine();
         while (!reader.EndOfStream)
         {
             // Regex taken from: https://stackoverflow.com/questions/6542996/how-to-split-csv-whose-columns-may-contain-comma
