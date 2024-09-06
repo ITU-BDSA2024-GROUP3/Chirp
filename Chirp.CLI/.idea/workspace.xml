@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb0f7503-1369-4b52-86bf-3bbde81c454f" name="Changes" comment="last commit failed" />
+    <list default="true" id="eb0f7503-1369-4b52-86bf-3bbde81c454f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,6 +15,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "theresiaravn"
+  }
+}]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/ITU-BDSA2024-GROUP3/Chirp.git",
@@ -50,7 +61,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725456389171</updated>
-      <workItem from="1725456392983" duration="375000" />
+      <workItem from="1725456392983" duration="3636000" />
     </task>
     <task id="LOCAL-00001" summary="added reader.readline at 11 + &lt;T&gt; in Database">
       <option name="closed" value="true" />
@@ -68,7 +79,39 @@
       <option name="project" value="LOCAL" />
       <updated>1725456756234</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="can I push nothing?">
+      <option name="closed" value="true" />
+      <created>1725456858216</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725456858216</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added line shift">
+      <option name="closed" value="true" />
+      <created>1725456995143</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725456995143</updated>
+    </task>
+    <task id="LOCAL-00005" summary="deleted empty line">
+      <option name="closed" value="true" />
+      <created>1725457023181</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725457023181</updated>
+    </task>
+    <task id="LOCAL-00006" summary="test">
+      <option name="closed" value="true" />
+      <created>1725602821151</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1725602821151</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -81,6 +124,10 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="added reader.readline at 11 + &lt;T&gt; in Database" />
     <MESSAGE value="last commit failed" />
-    <option name="LAST_COMMIT_MESSAGE" value="last commit failed" />
+    <MESSAGE value="can I push nothing?" />
+    <MESSAGE value="Added line shift" />
+    <MESSAGE value="deleted empty line" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
 </project>
