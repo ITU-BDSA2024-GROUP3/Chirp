@@ -15,13 +15,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     //Reads from the database
     public IEnumerable<T> Read(int? limit = null)
     {
-        using (var reader = new StreamReader("./chirp_cli_db.csv"))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-        {
-            IEnumerable<Cheep> records = csv.GetRecords<Cheep>();
-            
-            return (IEnumerable<T>)records;
-        }
+        return null;
     }
 
     //Stores data in the database
