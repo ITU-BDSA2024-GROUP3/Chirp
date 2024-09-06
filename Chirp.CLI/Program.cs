@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using System.Globalization;
 using System.Text;
+using Chirp.CLI;
 using SimpleDB;
 
 class Program
@@ -13,10 +14,7 @@ class Program
 
         if (args[0] == "read")
         {
-            foreach (var cheep in cheepManager.Read())
-            {
-                Console.WriteLine(cheep);
-            }
+            UserInterface.PrintCheeps(cheepManager.Read());
         }
         else if (args[0] == "cheep")
         {
