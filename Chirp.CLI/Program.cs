@@ -1,30 +1,89 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using System.Globalization;
+using System.Text;
 
-using System.Text.RegularExpressions;
 
-const string dataPath = "./chirp_cli_db.csv";
+//Structure of a cheep corrosponding to headers of CSV file
+public record Cheep(string Author, string Message, long Timestamp);
 
-if (args[0] == "read")
+
+//CheepManager does what it says
+public class CheepManager
 {
-    using (StreamReader reader = new StreamReader(dataPath))
+    //idk much about readonly, rider just said it would be good
+    private readonly string _dataPath;
+    private readonly CsvConfiguration _csvConfig;
+
+    public CheepManager(string dataPath)
     {
-        reader.ReadLine();
-        while (!reader.EndOfStream)
+        _dataPath = dataPath;
+        //set the config to "InvariantCulture" and inform the program that the file already has headers
+        _csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            // Regex taken from: https://stackoverflow.com/questions/6542996/how-to-split-csv-whose-columns-may-contain-comma
-            string[] words = Regex.Split(reader.ReadLine(), ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            long unixTimeSeconds = long.Parse(words[2]);
-            DateTimeOffset timeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTimeSeconds);
-            string time = $"{timeOffset.Day}/{timeOffset.Month}/{timeOffset.Year}";
-            Console.WriteLine($"{words[0]} @ {time} : {words[1]}");
+            HasHeaderRecord = true,
+        };
+    }
+
+    //again, self explanatory
+    public void ReadCheeps()
+    {
+        //ensure file exists
+        if (!File.Exists(_dataPath))
+        {
+            Console.WriteLine("Data file does not exist.");
+            return;
+        }
+        //create streamreader and CSVreader with "using"
+        using (var reader = new StreamReader(_dataPath))
+        using (var csv = new CsvReader(reader, _csvConfig))
+        {
+            //assaign a recod of cheeps and loop through them
+            var cheeps = csv.GetRecords<Cheep>(); 
+            foreach (var cheep in cheeps)
+            {
+                DateTimeOffset timeOffset = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp);
+                string time = $"{timeOffset.Day}/{timeOffset.Month}/{timeOffset.Year}";
+                Console.WriteLine($"{cheep.Author} @ {time} : {cheep.Message}");
+            }
+        }
+    }
+    
+    //here we go again
+    public void AddCheep(string message)
+    {
+        //create new cheep record
+        var newCheep = new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+        
+        //create streamwriter and CSVwriter with using
+        using (var writer = new StreamWriter(_dataPath, append: true))
+        using (var csv = new CsvWriter(writer, _csvConfig))
+        {
+            //add cheep to file then add blank character to end
+            csv.WriteRecord(newCheep);
+            writer.WriteLine();
         }
     }
 }
-else if(args[0] == "cheep")
+
+class Program
 {
-    //easy unix conversion taken from: https://stackoverflow.com/a/35425123
-    using (StreamWriter sw = File.AppendText(dataPath))
+    static void Main(string[] args)
     {
-     sw.WriteLine(Environment.UserName + "," + '"' + args[1]  + '"' + "," + ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+        const string dataPath = "./chirp_cli_db.csv";
+        var cheepManager = new CheepManager(dataPath);
+
+        if (args[0] == "read")
+        {
+            cheepManager.ReadCheeps();
+        }
+        else if (args[0] == "cheep")
+        {
+            cheepManager.AddCheep(args[1]);
+        }
+        else
+        {
+            Console.WriteLine("Invalid command. Use 'read' to display cheeps or 'cheep <message>' to add a new cheep.");
+        }
     }
 }
