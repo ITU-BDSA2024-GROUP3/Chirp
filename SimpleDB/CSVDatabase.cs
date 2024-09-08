@@ -38,8 +38,19 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         using (var reader = new StreamReader(_dataPath))
         using (var csv = new CsvReader(reader, _csvConfig))
         {
-            //assaign a record of cheeps and return them
-            var dataRecords = csv.GetRecords<T>().ToList();
+            //Makes sure limit is not null, to avoid possible error
+            var dataRecords = new List<T>();
+            if (limit.HasValue)
+            {
+                //Gets the newest limit amount of lines in the file
+                dataRecords = csv.GetRecords<T>().TakeLast(limit.Value).ToList();
+
+            }
+            else
+            {
+                dataRecords = csv.GetRecords<T>().ToList();
+            }
+            
             return dataRecords;
         }
     }
