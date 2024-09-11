@@ -42,7 +42,6 @@ Options:
     
     static int Main(string[] args)
     {
-        Console.WriteLine("Hello World!");
         var parser = Docopt.CreateParser(usage).WithVersion("Chirp 0.0.1");
         return parser.Parse(args) switch
         {
