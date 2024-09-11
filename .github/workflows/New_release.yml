@@ -1,0 +1,73 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET New_release.yml
+
+on:
+  release:
+    types: [published]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Build for Linux-x64
+      run: |
+        dotnet publish -c Release -r linux-x64 --self-contained false -o ./output/linux
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Build for Windows
+      run: |
+        dotnet publish -c Release -r Windows-x64 --self-contained false -o ./output/windows
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Build for macOS-x64
+      run: |
+        dotnet publish -c Release -r osx-x64 --self-contained false -o ./output/macos
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    - name: Zip Linux Executable
+      run: zip -r chirp-linux-x64.zip ./output/linux
+
+    - name: Zip Windows Executable
+      run: zip -r chirp-windows-x64.zip ./output/windows
+
+    - name: Zip macOS Executable
+      run: zip -r chirp-macos-x64.zip ./output/macos
+
+    - name: Upload Linux Executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: chirp-linux-x64
+        path: chirp-linux-x64.zip
+
+    - name: Upload Windows Executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: chirp-windows-x64
+        path: chirp-windows-x64.zip
+
+    - name: Upload macOS Executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: chirp-macos-x64
+        path: chirp-macos-x64.zip
+  
+            
