@@ -59,7 +59,7 @@ Options:
 
     static int Run(IDictionary<string, ArgValue> arguments)
     {
-        const string dataPath = "./chirp_cli_db.csv";
+        const string dataPath = "../../data/chirp_cli_db.csv";
         var cheepManager = new CSVDatabase<Cheep>(dataPath);
 
         if (arguments["read"].IsTrue)
