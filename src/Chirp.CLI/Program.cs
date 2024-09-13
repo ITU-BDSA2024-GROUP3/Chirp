@@ -59,9 +59,8 @@ Options:
 
     static int Run(IDictionary<string, ArgValue> arguments)
     {
-        const string dataPath = "../../data/chirp_cli_db.csv";
-        var cheepManager = new CSVDatabase<Cheep>(dataPath);
-
+        var cheepManager = CSVDatabase<Cheep>.instance;
+        
         if (arguments["read"].IsTrue)
         {
             if (!arguments["<limit>"].IsNone)

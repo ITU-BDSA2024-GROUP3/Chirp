@@ -12,17 +12,30 @@ public record Cheep(string Author, string Message, long Timestamp);
 public class CSVDatabase<T> : IDatabaseRepository<T>
 {
     //idk much about readonly, rider just said it would be good
-    private readonly string _dataPath;
+    private readonly string _dataPath ="../../data/chirp_cli_db.csv";
     private readonly CsvConfiguration _csvConfig;
-
-    public CSVDatabase(string dataPath)
+    
+    private static readonly CSVDatabase<T> Instance = new CSVDatabase<T>();
+    
+    static CSVDatabase()
     {
-        _dataPath = dataPath;
+    }
+    
+    private CSVDatabase()
+    {
         //set the config to "InvariantCulture" and inform the program that the file already has headers
         _csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = true,
         };
+    }
+    
+    public static CSVDatabase<T> instance
+    {
+        get
+        {
+            return Instance;
+        }
     }
 
     public IEnumerable<T> Read(int? limit = null)
