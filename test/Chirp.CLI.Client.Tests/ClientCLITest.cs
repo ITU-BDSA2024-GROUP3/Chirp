@@ -1,6 +1,6 @@
 namespace Chirp.CLI.Client.Tests;
 
-public class UnitTest1
+public class ClientCLITest
 {
     [Fact]
     public void Test1()
