@@ -13,7 +13,7 @@ public static class UserInterface
         
     }
 
-    public static string ConvertTime(long timestamp)
+    public static string ConvertTime(long timestamp)//private(?)
     {
         DateTimeOffset timeOffset = DateTimeOffset.FromUnixTimeSeconds(timestamp);
         return $"{timeOffset.Day}/{timeOffset.Month}/{timeOffset.Year}";

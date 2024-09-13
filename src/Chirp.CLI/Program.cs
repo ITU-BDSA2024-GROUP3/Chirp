@@ -77,7 +77,7 @@ Options:
         else if (arguments["cheep"].IsTrue)
         {
             var message = arguments["<message>"].ToString();
-            cheepManager.Store(new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()));
+            cheepManager.Store(CreateCheep(message));
         }
         else
         {
@@ -85,5 +85,10 @@ Options:
         }
 
         return 0;
+    }
+
+    public static Cheep CreateCheep(string message)
+    {
+        return new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
     }
 }
