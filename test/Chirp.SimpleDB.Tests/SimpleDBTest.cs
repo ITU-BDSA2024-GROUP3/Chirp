@@ -1,10 +1,23 @@
+
 namespace Chirp.SimpleDB.Tests;
 
-public class UnitTest1
+
+public class SimpleDBTest : IDisposable
 {
-    public string dataPath ="data/TestData.csv";
-    
-    var cheepManager = new CSVDatabase<Cheep>(dataPath);
+    private CSVDatabase<Cheep> cheepManager;
+    public SimpleDBTest()
+    {
+        cheepManager = CSVDatabase<Cheep>.instance;
+        cheepManager.setPath("../data/TestData.csv");
+    }
+
+    //Tear down
+    public void Dispose()
+    {
+        
+    }
+
+
         
     [Theory]
     public void TestMessage(string message, long unixTimeStamp)
@@ -12,25 +25,26 @@ public class UnitTest1
         
         cheepManager.Store(new Cheep(Environment.UserName, message, unixTimeStamp));
         
-        Assert.Equal(message , cheepManager.Read.Last().Message);
+        Assert.Equal(message , cheepManager.Read().Last().Message);
         
     }
-    
+    [Theory]
     public void TestAuthor(string message, long unixTimeStamp)
     {
         
         cheepManager.Store(new Cheep(Environment.UserName, message, unixTimeStamp));
         
-        Assert.Equal(Environment.UserName , cheepManager.Read.Last().Author);
+        Assert.Equal(Environment.UserName , cheepManager.Read().Last().Author);
         
     }
     
+    [Theory]
     public void TestTimeStamp(string message, long unixTimeStamp)
     {
         
         cheepManager.Store(new Cheep(Environment.UserName, message, unixTimeStamp));
         
-        Assert.Equal(unixTimeStamp , cheepManager.Read.Last().Timestamp);
+        Assert.Equal(unixTimeStamp , cheepManager.Read().Last().Timestamp);
         
     }
 }
