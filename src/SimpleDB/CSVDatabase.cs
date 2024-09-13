@@ -48,8 +48,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         //ensure file exists
         if (!File.Exists(dataPath))
         {
-            Console.WriteLine("Data file does not exist.");
-            return null;
+            throw new FileNotFoundException("Data file not found");
         }
         
         //create streamreader and CSVreader with "using"

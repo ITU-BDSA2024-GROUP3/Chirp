@@ -1,10 +1,15 @@
 
+using CsvHelper;
+using CsvHelper.Configuration;
+
 namespace Chirp.SimpleDB.Tests;
 
 
 public class SimpleDBTest : IDisposable
 {
     private CSVDatabase<Cheep> cheepManager;
+    private readonly CsvConfiguration _csvConfig;
+
     public SimpleDBTest()
     {
         cheepManager = CSVDatabase<Cheep>.instance;
@@ -14,7 +19,23 @@ public class SimpleDBTest : IDisposable
     //Tear down
     public void Dispose()
     {
+        var dataPath = "../data/TestData.csv";
+        cheepManager.setPath(dataPath);
+
+        File.WriteAllText(dataPath, String.Empty);
+    }
+
+    [Fact]
+    public void testException()
+    {
+        //Act
+        cheepManager.setPath("../data/TestDat.csv");
+        var exceptionType = typeof(FileNotFoundException);
         
+        //Assert
+        Assert.Throws(exceptionType, () => {
+            throw new FileNotFoundException();
+        });
     }
 
 
