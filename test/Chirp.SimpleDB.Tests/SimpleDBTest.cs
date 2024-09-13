@@ -14,7 +14,18 @@ public class SimpleDBTest : IDisposable
     //Tear down
     public void Dispose()
     {
+
+    [Fact]
+    public void testException()
+    {
+        //Act
+        cheepManager.setPath("../data/TestDat.csv");
+        var exceptionType = typeof(FileNotFoundException);
         
+        //Assert
+        Assert.Throws(exceptionType, () => {
+            throw new FileNotFoundException();
+        });
     }
 
 
