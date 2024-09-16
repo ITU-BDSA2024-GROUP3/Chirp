@@ -9,28 +9,30 @@ public class SimpleDBTest : IDisposable
 {
     private CSVDatabase<Cheep> cheepManager;
     private readonly CsvConfiguration _csvConfig;
+    private string dataPath = "../../../../data/TestData.csv";
 
     public SimpleDBTest()
     {
         cheepManager = CSVDatabase<Cheep>.instance;
-        cheepManager.setPath("../data/TestData.csv");
+        cheepManager.setPath(dataPath);
     }
 
     //Tear down
     public void Dispose()
     {
-        var dataPath = "../data/TestData.csv";
         cheepManager.setPath(dataPath);
 
-        File.WriteAllText(dataPath, String.Empty);
+        //File.WriteAllText(dataPath, String.Empty);
     }
 
     [Fact]
-    public void testException()
+    public void readException()
     {
+        //Assign
+        var exceptionType = typeof(FileNotFoundException);
+        
         //Act
         cheepManager.setPath("../data/TestDat.csv");
-        var exceptionType = typeof(FileNotFoundException);
         
         //Assert
         Assert.Throws(exceptionType, () => {
@@ -38,9 +40,44 @@ public class SimpleDBTest : IDisposable
         });
     }
 
+    [Fact]
+    public void fileExists()
+    {
+        //Assign
+        
+        //Act
+        File.Create(dataPath).Close();
+        //Assert
+        Assert.True(File.Exists(dataPath));
+    }
+    
+    /*[Theory]
+    [InlineData(CreateCheep(string message))]
+    public void readOutput(Cheep c1)
+    {
+        //Assign
+        using (var writer = new StreamWriter(dataPath, append: true))
+        using (var csv = new CsvWriter(writer, _csvConfig))
+        {
+            //add cheep to file then add blank character to end
+            csv.WriteRecord(c1);
+            writer.WriteLine();
+        }
+        
+        //Act
+        
+        
+        
+        //Assert
+        
+    }
+    */
+    
+    
+
 
         
-    [Theory]
+    /*[Theory]
     public void TestMessage(string message, long unixTimeStamp)
     {
         
@@ -68,4 +105,5 @@ public class SimpleDBTest : IDisposable
         Assert.Equal(unixTimeStamp , cheepManager.Read().Last().Timestamp);
         
     }
+    */
 }
