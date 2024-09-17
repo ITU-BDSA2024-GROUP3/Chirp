@@ -12,10 +12,10 @@ public class ClientCLITest
     [InlineData(1726177000, "12/9/2024")]
     [InlineData(1726099201, "12/9/2024")]
     [InlineData(1717200001, "1/6/2024")]
-    public void testConvertTime(long timestamp, string expected)
+    public void TestConvertTime(long timestamp, string expected)
     {
         //timestamp = 1726177000
         var actual = UserInterface.ConvertTime(timestamp);
-        Assert.Equal(expected, actual); //12/9/2024
+        Assert.Equal(expected, actual);
     }
 }

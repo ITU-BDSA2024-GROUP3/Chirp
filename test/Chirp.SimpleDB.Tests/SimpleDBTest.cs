@@ -29,33 +29,31 @@ public class SimpleDBTest : IDisposable
         }
     }
 
-    /*[Fact]
-    public void readException()
+    [Fact]
+    public void TestReadException()
     {
         //Assign
         var exceptionType = typeof(FileNotFoundException);
-        
+
         //Act
         cheepManager.setPath("../data/TestDat.csv");
-        
+
         //Assert
-        Assert.Throws(exceptionType, () => {
-            throw new FileNotFoundException();
-        });
+        Assert.Throws(exceptionType, () => { cheepManager.Read(); });
     }
 
     [Fact]
     public void fileExists()
     {
         //Assign
-        
+
         //Act
         File.Create(dataPath).Close();
         //Assert
         Assert.True(File.Exists(dataPath));
     }
-    
-    [Theory]
+
+    /*[Theory]
     [InlineData(CreateCheep(string message))]
     public void readOutput(Cheep c1)
     {
@@ -67,17 +65,15 @@ public class SimpleDBTest : IDisposable
             csv.WriteRecord(c1);
             writer.WriteLine();
         }
-        
+
         //Act
-        
-        
-        
+
+
+
         //Assert
-        
+
     }
     */
-    
-    
 
 
         
