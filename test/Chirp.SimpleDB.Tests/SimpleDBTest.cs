@@ -123,6 +123,51 @@ public class SimpleDBTest : IDisposable
         cheepManager.Store(cheep);
         Assert.Equal(cheep , cheepManager.Read().Last());
     }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("æøå")]
+    public void TestCheepCurrentTime(string message)
+    {
+        Cheep cheep = new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+        cheepManager.Store(cheep);
+        Assert.Equal(cheep, cheepManager.Read().Last());
+    }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("æøå")]
+    public void TestAuthorCurrentTime(string message)
+    {
+        Cheep cheep = new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+        cheepManager.Store(cheep);
+        Assert.Equal(Environment.UserName, cheepManager.Read().Last().Author);
+    }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("æøå")]
+    public void TestMessageCurrentTime(string message)
+    {
+        
+        Cheep cheep = new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds());
+        cheepManager.Store(cheep);
+        Assert.Equal(message, cheepManager.Read().Last().Message);
+    }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("æøå")]
+    public void TestTimeCurrentTime(string message)
+    {
+        long time = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
+        Cheep cheep = new Cheep(Environment.UserName, message, time);
+        cheepManager.Store(cheep);
+        Assert.Equal(time, cheepManager.Read().Last().Timestamp);
+
+        
+    }
+    
     /*[Theory]
     [InlineData("Hello World")]  
     [InlineData("æøå")]
