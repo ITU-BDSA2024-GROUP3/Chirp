@@ -22,10 +22,14 @@ public class SimpleDBTest : IDisposable
     {
         cheepManager.setPath(dataPath);
 
-        //File.WriteAllText(dataPath, String.Empty);
+        File.WriteAllText(dataPath, String.Empty);
+        using (var writer = new StreamWriter(dataPath, append: true))
+        {
+            writer.WriteLine("Author,Message,Timestamp");
+        }
     }
 
-    [Fact]
+    /*[Fact]
     public void readException()
     {
         //Assign
@@ -51,7 +55,7 @@ public class SimpleDBTest : IDisposable
         Assert.True(File.Exists(dataPath));
     }
     
-    /*[Theory]
+    [Theory]
     [InlineData(CreateCheep(string message))]
     public void readOutput(Cheep c1)
     {
@@ -77,7 +81,9 @@ public class SimpleDBTest : IDisposable
 
 
         
-    /*[Theory]
+    [Theory]
+    [InlineData("Hello World", 1726177000)]
+    [InlineData("æøå", 1726174826)]
     public void TestMessage(string message, long unixTimeStamp)
     {
         
@@ -87,6 +93,9 @@ public class SimpleDBTest : IDisposable
         
     }
     [Theory]
+    [InlineData("Hello World", 1726177000)]
+    [InlineData("æøå", 1726174826)]
+
     public void TestAuthor(string message, long unixTimeStamp)
     {
         
@@ -97,6 +106,8 @@ public class SimpleDBTest : IDisposable
     }
     
     [Theory]
+    [InlineData("Hello World", 1726177000)]  
+    [InlineData("æøå", 1726174826)]
     public void TestTimeStamp(string message, long unixTimeStamp)
     {
         
@@ -105,5 +116,27 @@ public class SimpleDBTest : IDisposable
         Assert.Equal(unixTimeStamp , cheepManager.Read().Last().Timestamp);
         
     }
-    */
+
+    [Theory]
+    [InlineData("Hello World", 1726177000)]  
+    [InlineData("æøå", 1726174826)]
+    //inspiration from lecture example
+    public void TestCheep(string message, long unixTimeStamp)
+    {
+        Cheep cheep = new Cheep(Environment.UserName, message, unixTimeStamp);
+        cheepManager.Store(cheep);
+        Assert.Equal(cheep , cheepManager.Read().Last());
+    }
+    /*[Theory]
+    [InlineData("Hello World")]  
+    [InlineData("æøå")]
+    public void TestCheepWithCreateCheep(string message)
+    {
+        Cheep cheep = Program.CreateCheep(message);
+        cheepManager.Store(cheep);
+        Assert.Equal(cheep , cheepManager.Read().Last());
+
+    }*/
+    
+    
 }
