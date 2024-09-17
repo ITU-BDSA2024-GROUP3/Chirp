@@ -22,7 +22,7 @@ public class SimpleDBTest : IDisposable
     {
         cheepManager.setPath(dataPath);
 
-        //File.WriteAllText(dataPath, String.Empty);
+        File.WriteAllText(dataPath, String.Empty);
     }
 
     [Fact]
