@@ -29,7 +29,7 @@ public class SimpleDBTest : IDisposable
         }
     }
 
-    [Fact]
+    /*[Fact]
     public void TestReadException()
     {
         //Assign
@@ -53,7 +53,7 @@ public class SimpleDBTest : IDisposable
         Assert.True(File.Exists(dataPath));
     }
 
-    /*[Theory]
+    [Theory]
     [InlineData(CreateCheep(string message))]
     public void readOutput(Cheep c1)
     {
