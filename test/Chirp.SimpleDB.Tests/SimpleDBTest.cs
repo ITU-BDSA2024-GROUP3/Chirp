@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using CsvHelper;
 using CsvHelper.Configuration;
-
+using Xunit.Abstractions;
 
 
 namespace Chirp.SimpleDB.Tests;
@@ -10,12 +10,14 @@ namespace Chirp.SimpleDB.Tests;
 
 public class SimpleDBTest : IDisposable
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private CSVDatabase<Cheep> cheepManager;
     private readonly CsvConfiguration _csvConfig;
-    private string dataPath = "../../../../data/TestData.csv";
+    private string dataPath = "../../../../../data/TestData.csv";
 
-    public SimpleDBTest()
+    public SimpleDBTest(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
         cheepManager = CSVDatabase<Cheep>.instance;
         cheepManager.setPath(dataPath);
     }
@@ -29,6 +31,15 @@ public class SimpleDBTest : IDisposable
         using (var writer = new StreamWriter(dataPath, append: true))
         {
             writer.WriteLine("Author,Message,Timestamp");
+        }
+    }
+    
+    public void InsertCheeps(int amount, string message)
+    {
+        for (int i = 0; i < amount+10; i++)
+        {
+            cheepManager.Store(new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()));
+
         }
     }
 
@@ -55,29 +66,6 @@ public class SimpleDBTest : IDisposable
         //Assert
         Assert.True(File.Exists(dataPath));
     }
-
-    [Fact]
-    public void fileInput()
-    {
-        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..","..","..","..","..","..","src","Chirp.CLI");
-        
-        //Assign
-        {
-            //add cheep to file then add blank character to end
-            csv.WriteRecord(c1);
-            writer.WriteLine();
-        }
-
-        //Act
-
-
-
-        //Assert
-
-    }
-    */
-
-
         
     [Theory]
     [InlineData("Hello World", 1726177000)]
@@ -210,9 +198,4 @@ public class SimpleDBTest : IDisposable
         }
        
     }
-    
-    
-    
-    
-    
 }
