@@ -1,4 +1,6 @@
 using SimpleDB;
+using UtilFunctions;
+
 
 namespace Chirp.CLI;
 

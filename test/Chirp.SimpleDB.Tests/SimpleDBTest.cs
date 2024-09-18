@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -29,15 +30,15 @@ public class SimpleDBTest : IDisposable
         }
     }
 
-    /*[Fact]
-    public void TestReadException()
+    [Fact]
+    public void readException()
     {
         //Assign
         var exceptionType = typeof(FileNotFoundException);
-
+        
         //Act
         cheepManager.setPath("../data/TestDat.csv");
-
+        
         //Assert
         Assert.Throws(exceptionType, () => { cheepManager.Read(); });
     }
@@ -46,20 +47,19 @@ public class SimpleDBTest : IDisposable
     public void fileExists()
     {
         //Assign
-
+        
         //Act
         File.Create(dataPath).Close();
         //Assert
         Assert.True(File.Exists(dataPath));
     }
 
-    [Theory]
-    [InlineData(CreateCheep(string message))]
-    public void readOutput(Cheep c1)
+    [Fact]
+    public void fileInput()
     {
+        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..","..","..","..","..","..","src","Chirp.CLI");
+        
         //Assign
-        using (var writer = new StreamWriter(dataPath, append: true))
-        using (var csv = new CsvWriter(writer, _csvConfig))
         {
             //add cheep to file then add blank character to end
             csv.WriteRecord(c1);

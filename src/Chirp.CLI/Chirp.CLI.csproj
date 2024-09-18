@@ -5,6 +5,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UtilFunctions\UtilFunctions.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <PackageReference Include="docopt.net" Version="0.8.1" />
   </ItemGroup>
 

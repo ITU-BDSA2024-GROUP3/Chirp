@@ -2,12 +2,9 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using ArrayList = System.Collections.ArrayList;
+using UtilFunctions;
 
 namespace SimpleDB;
-
-public record Cheep(string Author, string Message, long Timestamp);
-
 
 public class CSVDatabase<T> : IDatabaseRepository<T>
 {
