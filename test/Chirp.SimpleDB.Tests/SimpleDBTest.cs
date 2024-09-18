@@ -2,6 +2,8 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 
+
+
 namespace Chirp.SimpleDB.Tests;
 
 
@@ -26,6 +28,15 @@ public class SimpleDBTest : IDisposable
         using (var writer = new StreamWriter(dataPath, append: true))
         {
             writer.WriteLine("Author,Message,Timestamp");
+        }
+    }
+
+    public void InsertCheeps(int amount, string message)
+    {
+        for (int i = 0; i < amount+10; i++)
+        {
+            cheepManager.Store(new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()));
+
         }
     }
 
@@ -178,6 +189,39 @@ public class SimpleDBTest : IDisposable
         Assert.Equal(cheep , cheepManager.Read().Last());
 
     }*/
+
+    [Theory]
+    [InlineData(10)]
+    [InlineData(5)]
+    [InlineData(100)]
+    [InlineData(48)]
+
+    public void TestReadAmountWithLimit(int limit)
+    {
+        InsertCheeps(limit, "Hello World");
+        int count = 0;
+        foreach (var cheep in cheepManager.Read(limit))
+        {
+            count++;
+        }
+        Assert.Equal(limit, count);
+    }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("åæø")]
+    public void TestReadMessage(string message)
+    {
+        InsertCheeps(10, message);
+        foreach (var cheep in cheepManager.Read())
+        {
+            Assert.Equal(message, cheep.Message);
+        }
+       
+    }
+    
+    
+    
     
     
 }
