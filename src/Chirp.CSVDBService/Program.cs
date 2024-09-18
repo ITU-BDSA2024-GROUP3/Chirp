@@ -5,7 +5,11 @@ var app = builder.Build();
 
 CSVDatabase<Cheep> database = CSVDatabase<Cheep>.instance;
 
-app.MapGet("/cheeps", () => database.Read());
+app.MapGet("/cheeps", (int? limit) =>
+{
+    Console.WriteLine(limit);
+    return database.Read(limit);
+});
 app.MapPost("/cheep", (Cheep cheep) =>
 {
     database.Store(cheep);

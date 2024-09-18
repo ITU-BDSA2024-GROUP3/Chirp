@@ -6,6 +6,9 @@ using Chirp.CLI;
 using SimpleDB;
 using UtilFunctions;
 using DocoptNet;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 
 /*
@@ -39,9 +42,6 @@ Options:
 
 var arguments = new Docopt().Apply(usage, args, version: "0.0.1", exit: true);
 
-var cheepManager = CSVDatabase<Cheep>.instance;
-
-
 if ((bool)arguments["read"].Value)
 {
     int? limit = null;
@@ -49,11 +49,26 @@ if ((bool)arguments["read"].Value)
     {
         limit = Convert.ToInt32(arguments["<limit>"].Value);
     }
-    UserInterface.PrintCheeps(cheepManager.Read(limit));
+
+    // Create an HTTP client object
+    var baseURL = "http://localhost:5132";
+    using HttpClient client = new();
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.BaseAddress = new Uri(baseURL);
+    
+    // Send an asynchronous HTTP GET request and automatically construct a Cheep object from the
+    // JSON object in the body of the response
+    var requestURI = $"cheeps";
+    if(limit != null) requestURI += $"?limit={limit}";
+    
+    var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
+    
+    UserInterface.PrintCheeps(cheeps);
 }
 
 if ((bool)(arguments["cheep"].Value))
 {
     var message = arguments["<message>"].Value.ToString();
-    cheepManager.Store(Util.CreateCheep(message));
+    //cheepManager.Store(Util.CreateCheep(message));
 }
