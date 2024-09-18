@@ -8,25 +8,22 @@ using UtilFunctions;
 using DocoptNet;
 
 
-
-class Program
-{
-    /*
-    const string usage = @"Chirp CLI version.
+/*
+const string usage = @"Chirp CLI version.
 
 Usage:
-  chirp read <limit>
-  chirp cheep <message>
-  chirp (-h | --help)
-  chirp --version
+chirp read <limit>
+chirp cheep <message>
+chirp (-h | --help)
+chirp --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
-";  
-    */
-    
-    const string usage = @"Chirp CLI version.
+-h --help     Show this screen.
+--version     Show version.
+";
+*/
+
+const string usage = @"Chirp CLI version.
 
 Usage:
   chirp read
@@ -40,50 +37,23 @@ Options:
   --version     Show version.
 ";
 
-    
-    static int Main(string[] args)
-    {
-        var parser = Docopt.CreateParser(usage).WithVersion("Chirp 0.0.1");
-        return parser.Parse(args) switch
-        {
-            IArgumentsResult<IDictionary<string, ArgValue>> { Arguments: var arguments } => Run(arguments),
-            IHelpResult => ShowHelp(usage),
-            IVersionResult { Version: var version } => ShowVersion(version),
-            IInputErrorResult { Usage: var usage } => OnError(usage),
-            var result => throw new System.Runtime.CompilerServices.SwitchExpressionException(result)
-        };
-    }
-    
-    static int ShowHelp(string help) { Console.WriteLine("HELPING!!!! " + help); return 0; }
-    static int ShowVersion(string version) { Console.WriteLine(version); return 0; }
-    static int OnError(string usage) { Console.Error.WriteLine("ERROR " + usage); return 1; }
+var arguments = new Docopt().Apply(usage, args, version: "0.0.1", exit: true);
 
-    static int Run(IDictionary<string, ArgValue> arguments)
-    {
-        var cheepManager = CSVDatabase<Cheep>.instance;
-        
-        if (arguments["read"].IsTrue)
-        {
-            if (!arguments["<limit>"].IsNone)
-            {
-                Int32.TryParse(arguments["<limit>"].ToString(), out var limit);
-                UserInterface.PrintCheeps(cheepManager.Read(limit));
-            }
-            else
-            {
-                UserInterface.PrintCheeps(cheepManager.Read(null));
-            }
-        }
-        else if (arguments["cheep"].IsTrue)
-        {
-            var message = arguments["<message>"].ToString();
-            cheepManager.Store(Util.CreateCheep(message));
-        }
-        else
-        {
-            Console.WriteLine("Invalid command. Use 'read' to display cheeps or 'cheep <message>' to add a new cheep.");
-        }
+var cheepManager = CSVDatabase<Cheep>.instance;
 
-        return 0;
+
+if ((bool)arguments["read"].Value)
+{
+    int? limit = null;
+    if (!arguments["<limit>"].IsNullOrEmpty)
+    {
+        limit = Convert.ToInt32(arguments["<limit>"].Value);
     }
+    UserInterface.PrintCheeps(cheepManager.Read(limit));
+}
+
+if ((bool)(arguments["cheep"].Value))
+{
+    var message = arguments["<message>"].Value.ToString();
+    cheepManager.Store(Util.CreateCheep(message));
 }
