@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using Chirp.CLI;
 using SimpleDB;
+using UtilFunctions;
 using DocoptNet;
 
 
@@ -76,7 +77,7 @@ Options:
         else if (arguments["cheep"].IsTrue)
         {
             var message = arguments["<message>"].ToString();
-            cheepManager.Store(new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()));
+            cheepManager.Store(Util.CreateCheep(message));
         }
         else
         {
@@ -84,5 +85,5 @@ Options:
         }
 
         return 0;
-    } 
+    }
 }
