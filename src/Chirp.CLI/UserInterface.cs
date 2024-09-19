@@ -1,24 +1,20 @@
-using SimpleDB;
 using UtilFunctions;
-
 
 namespace Chirp.CLI;
 
 public static class UserInterface
 {
+    //prints all the cheeps stored in the database
     public static void PrintCheeps(IEnumerable<Cheep> cheeps)
     {
-        foreach (Cheep cheep in cheeps)
-        {
+        foreach (var cheep in cheeps)
             Console.WriteLine($"{cheep.Author} @ {ConvertTime(cheep.Timestamp)} : {cheep.Message}");
-        }
-        
     }
 
-    public static string ConvertTime(long timestamp)//private(?)
+    //converts the unix time stamp to a timeset day:month:year
+    public static string ConvertTime(long timestamp) //private(?)
     {
-        DateTimeOffset timeOffset = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+        var timeOffset = DateTimeOffset.FromUnixTimeSeconds(timestamp);
         return $"{timeOffset.Day}/{timeOffset.Month}/{timeOffset.Year}";
     }
-    
 }
