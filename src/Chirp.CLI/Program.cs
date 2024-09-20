@@ -9,6 +9,7 @@ using DocoptNet;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 
 /*
@@ -70,5 +71,33 @@ if ((bool)arguments["read"].Value)
 if ((bool)(arguments["cheep"].Value))
 {
     var message = arguments["<message>"].Value.ToString();
+    
+    Cheep cheep = Util.CreateCheep(message);
+    
+    
+    var baseURL = "http://localhost:5132";
+    using HttpClient client = new();
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.BaseAddress = new Uri(baseURL);
+    
+    var requestURI = $"cheep";
+    requestURI += $"?message={message}";
+    
+    
+    CancellationTokenSource cts = new();
+    CancellationToken cancellationToken = cts.Token;
+
+    var mes = JsonSerializer.Serialize(cheep);
+    
+    var finMes = new StringContent(mes, Encoding.UTF8, "application/json");
+
+    var temp = await client.PostAsJsonAsync(requestURI, finMes, cancellationToken);
+    
+    Console.WriteLine(temp.StatusCode);
+    
+    //PostAsJsonAsync(System.Net.Http.HttpClient, string, UtilFunctions.Cheep, System.Threading.CancellationToken)',
+//Task<System.Net.Http.HttpResponseMessage> PostAsJsonAsync<Cheep>(this System.Net.Http.HttpClient, string?, UtilFunctions.Cheep, System.Text.Json.JsonSerializerOptions?, System.Threading.CancellationToken) (in class HttpClientJsonExtensions)
+
     //cheepManager.Store(Util.CreateCheep(message));
 }
