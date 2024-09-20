@@ -86,14 +86,8 @@ if ((bool)(arguments["cheep"].Value))
     
     CancellationTokenSource cts = new();
     CancellationToken cancellationToken = cts.Token;
-
-    var mes = JsonSerializer.Serialize(cheep);
     
-    var finMes = new StringContent(mes, Encoding.UTF8, "application/json");
-
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
-    //PostAsJsonAsync(System.Net.Http.HttpClient, string, UtilFunctions.Cheep, System.Threading.CancellationToken)',
-//Task<System.Net.Http.HttpResponseMessage> PostAsJsonAsync<Cheep>(this System.Net.Http.HttpClient, string?, UtilFunctions.Cheep, System.Text.Json.JsonSerializerOptions?, System.Threading.CancellationToken) (in class HttpClientJsonExtensions)
-
+  
     //cheepManager.Store(Util.CreateCheep(message));
 }
