@@ -63,8 +63,10 @@ if ((bool)arguments["read"].Value)
     var requestURI = $"cheeps";
     if(limit != null) requestURI += $"?limit={limit}";
     
+    var cheepsRes = await client.GetAsync(requestURI);
     var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
     
+    Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
     UserInterface.PrintCheeps(cheeps);
 }
 
@@ -88,6 +90,8 @@ if ((bool)(arguments["cheep"].Value))
     CancellationToken cancellationToken = cts.Token;
     
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
+    
+    Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
   
     //cheepManager.Store(Util.CreateCheep(message));
 }
