@@ -1,8 +1,12 @@
 
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Xunit.Abstractions;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 
 namespace Chirp.SimpleDB.Tests;
@@ -14,12 +18,18 @@ public class SimpleDBTest : IDisposable
     private CSVDatabase<Cheep> cheepManager;
     private readonly CsvConfiguration _csvConfig;
     private string dataPath = "../../../../../data/TestData.csv";
+    private string baseURL = "http://localhost:5132";
+    private HttpClient client = new();
 
     public SimpleDBTest(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
-        cheepManager = CSVDatabase<Cheep>.instance;
-        cheepManager.setPath(dataPath);
+        
+        
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.BaseAddress = new Uri(baseURL);
+
     }
 
     //Tear down
@@ -38,7 +48,6 @@ public class SimpleDBTest : IDisposable
     {
         for (int i = 0; i < amount+10; i++)
         {
-            cheepManager.Store(new Cheep(Environment.UserName, message, ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds()));
 
         }
     }
@@ -55,29 +64,32 @@ public class SimpleDBTest : IDisposable
         //Assert
         Assert.Throws(exceptionType, () => { cheepManager.Read(); });
     }
-
-    [Fact]
-    public void fileExists()
-    {
-        //Assign
-        
-        //Act
-        File.Create(dataPath).Close();
-        //Assert
-        Assert.True(File.Exists(dataPath));
-    }
         
     [Theory]
     [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
-    public void TestMessage(string message, long unixTimeStamp)
+    public async void TestMessage(string message, long unixTimeStamp)
     {
+        var cheep = Util.CreateCheep(message);
+
         
-        cheepManager.Store(new Cheep(Environment.UserName, message, unixTimeStamp));
+        var requestURI = $"cheep";
+        requestURI += $"?message={message}";
         
-        Assert.Equal(message , cheepManager.Read().Last().Message);
+    
+    
+        CancellationTokenSource cts = new();
+        CancellationToken cancellationToken = cts.Token;
+    
+        var temp =  await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
+        
+        requestURI = $"cheeps";
+        var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
+        
+        Assert.Equal(message , cheeps.Last().Message);
         
     }
+    
     [Theory]
     [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
