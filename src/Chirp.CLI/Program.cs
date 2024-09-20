@@ -74,7 +74,6 @@ if ((bool)(arguments["cheep"].Value))
     
     Cheep cheep = Util.CreateCheep(message);
     
-    
     var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
@@ -92,7 +91,7 @@ if ((bool)(arguments["cheep"].Value))
     
     var finMes = new StringContent(mes, Encoding.UTF8, "application/json");
 
-    var temp = await client.PostAsJsonAsync(requestURI, finMes, cancellationToken);
+    var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
     
     Console.WriteLine(temp.StatusCode);
     
