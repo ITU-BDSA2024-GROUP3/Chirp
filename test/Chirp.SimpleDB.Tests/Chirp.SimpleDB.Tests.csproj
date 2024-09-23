@@ -24,7 +24,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
-    <ProjectReference Include="..\..\src\Client.CLI\Chirp.CLI.csproj" />
+    <ProjectReference Include="..\..\src\Chirp.CLI\Chirp.CLI.csproj" />
     <ProjectReference Include="..\..\src\UtilFunctions\UtilFunctions.csproj" />
   </ItemGroup>
 
