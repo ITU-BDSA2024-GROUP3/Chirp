@@ -2,11 +2,6 @@ namespace Chirp.CLI.Client.Tests;
 
 public class ClientCLITest
 {
-    [Fact]
-    public void Test1()
-    {
-    }
-
     // 
     [Theory]
     [InlineData(1726177000, "12/9/2024")]
