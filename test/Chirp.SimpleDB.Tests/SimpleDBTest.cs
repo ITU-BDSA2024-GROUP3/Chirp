@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using CsvHelper;
@@ -11,7 +10,6 @@ using System.IO;
 
 namespace Chirp.SimpleDB.Tests;
 
-
 public class SimpleDBTest : IDisposable
 {
     private readonly ITestOutputHelper _testOutputHelper;
@@ -20,17 +18,17 @@ public class SimpleDBTest : IDisposable
     private string dataPath = "../../../../../data/TestData.csv";
     private string baseURL = "http://localhost:5132";
     private HttpClient client;
-    
+
     string pathToSrc = "../../../../../src/";
 
 
     public SimpleDBTest(ITestOutputHelper testOutputHelper)
     {
         client = new HttpClient();
-        
+
         _testOutputHelper = testOutputHelper;
-        
-        
+
+
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.BaseAddress = new Uri(baseURL);
@@ -71,8 +69,8 @@ public class SimpleDBTest : IDisposable
 
             // Give the server time to build and start
             Thread.Sleep(10000);
-            
-            
+
+
             // Start the client process
             int port = 5132;
             ProcessStartInfo clientStartInfo = new ProcessStartInfo();
@@ -83,22 +81,89 @@ public class SimpleDBTest : IDisposable
             clientStartInfo.RedirectStandardOutput = true;
             clientProcess.StartInfo = clientStartInfo;
             clientProcess.Start();
-            
+
             // Client process terminates naturally
             // Server process never terminates and must be killed
             clientProcess.WaitForExit();
             serverProcess.Kill();
-            
-            //Read the test data
+
+            // Read the test data
             StreamReader reader = new StreamReader("../../../../data/TestData.csv");
             reader.ReadLine();
             string line = reader.ReadLine();
             reader.Close();
-            
+
+            // Assert
             Assert.Contains("This is a test!", line);
         }
     }
-    
+
+    [Fact]
+    public void TestReadE2E()
+    {
+        
+        // Start the server process
+        Process serverProcess = new Process();
+        ProcessStartInfo serverStartInfo = new ProcessStartInfo();
+        serverStartInfo.FileName = "dotnet"; //"C:\\Program Files\\dotnet\\dotnet.exe";
+        serverStartInfo.Arguments = "run -- data ../../test/data/TestData.csv";
+        serverStartInfo.UseShellExecute = false;
+        serverStartInfo.WorkingDirectory = $"{pathToSrc}/Chirp.CSVDBService";
+        serverStartInfo.RedirectStandardOutput = true;
+        serverProcess.StartInfo = serverStartInfo;
+        serverProcess.Start();
+
+        // Give the server time to build and start
+        Thread.Sleep(10000);
+
+        int port = 5132;
+        Process clientProcess;
+        ProcessStartInfo clientStartInfo;
+
+        // Insert three cheeps: "This is a test 0", "This is a test 1", and "This is a test 2"
+        for (int i = 0; i < 3; i++)
+        {
+            clientProcess = new Process();
+            clientStartInfo = new ProcessStartInfo();
+            clientStartInfo.FileName = "dotnet"; //"C:\\Program Files\\dotnet\\dotnet.exe";
+            clientStartInfo.Arguments = $"run -- cheep \"This is test {i}\" \"http://localhost:{port}\"";
+            clientStartInfo.UseShellExecute = false;
+            clientStartInfo.WorkingDirectory = $"{pathToSrc}/Chirp.CLI";
+            clientStartInfo.RedirectStandardOutput = true;
+            clientProcess.StartInfo = clientStartInfo;
+            clientProcess.Start();
+            clientProcess.WaitForExit();
+        }
+        
+        // Read cheeps
+        clientProcess = new Process();
+        clientStartInfo = new ProcessStartInfo();
+        clientStartInfo.FileName = "dotnet"; //"C:\\Program Files\\dotnet\\dotnet.exe";
+        clientStartInfo.Arguments = $"run -- read 3 \"http://localhost:{port}\"";
+        clientStartInfo.UseShellExecute = false;
+        clientStartInfo.WorkingDirectory = $"{pathToSrc}/Chirp.CLI";
+        clientStartInfo.RedirectStandardOutput = true;
+        clientProcess.StartInfo = clientStartInfo;
+        clientProcess.Start();
+        clientProcess.WaitForExit();
+
+        // Read the console
+        StreamReader reader = clientProcess.StandardOutput;
+        string output = reader.ReadToEnd();
+        reader.Close();
+
+
+        // Client process terminates naturally
+        // Server process never terminates and must be killed
+        clientProcess.WaitForExit();
+        serverProcess.Kill();
+
+        // Assert
+        Assert.Contains("This is test 0", output);
+        Assert.Contains("This is test 1", output);
+        Assert.Contains("This is test 2", output);
+    }
+
     public void InsertCheeps(int amount, string message)
     {
         /*
@@ -115,15 +180,15 @@ public class SimpleDBTest : IDisposable
         /*
         //Assign
         var exceptionType = typeof(FileNotFoundException);
-        
+
         //Act
         cheepManager.setPath("../data/TestDat.csv");
-        
+
         //Assert
         Assert.Throws(exceptionType, () => { cheepManager.Read(); });
         */
     }
-        
+
     [Theory]
     [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
@@ -132,53 +197,52 @@ public class SimpleDBTest : IDisposable
         /*
         var cheep = Util.CreateCheep(message);
 
-        
+
         var requestURI = $"cheep";
         requestURI += $"?message={message}";
-        
-    
-    
+
+
+
         CancellationTokenSource cts = new();
         CancellationToken cancellationToken = cts.Token;
-    
+
         var temp =  await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
-        
+
         requestURI = $"cheeps";
         var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
-        
+
         Assert.Equal(message , cheeps.Last().Message);
         */
     }
-    
+
     [Theory]
     [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
-
     public void TestAuthor(string message, long unixTimeStamp)
     {
         Cheep cheep = new Cheep(Environment.UserName, message, unixTimeStamp);
-        
+
         /*
         cheepManager.Store(cheep);
-        
+
         Assert.Equal(Environment.UserName , cheepManager.Read().Last().Author);
         */
     }
-    
+
     [Theory]
-    [InlineData("Hello World", 1726177000)]  
+    [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
     public void TestTimeStamp(string message, long unixTimeStamp)
     {
-        /*   
+        /*
         cheepManager.Store(new Cheep(Environment.UserName, message, unixTimeStamp));
-        
+
         Assert.Equal(unixTimeStamp , cheepManager.Read().Last().Timestamp);
         */
     }
 
     [Theory]
-    [InlineData("Hello World", 1726177000)]  
+    [InlineData("Hello World", 1726177000)]
     [InlineData("æøå", 1726174826)]
     //inspiration from lecture example
     public void TestCheep(string message, long unixTimeStamp)
@@ -238,9 +302,9 @@ public class SimpleDBTest : IDisposable
         Assert.Equal(time, cheepManager.Read().Last().Timestamp);
         */
     }
-    
+
     /*[Theory]
-    [InlineData("Hello World")]  
+    [InlineData("Hello World")]
     [InlineData("æøå")]
     public void TestCheepWithCreateCheep(string message)
     {
@@ -255,7 +319,6 @@ public class SimpleDBTest : IDisposable
     [InlineData(5)]
     [InlineData(100)]
     [InlineData(48)]
-
     public void TestReadAmountWithLimit(int limit)
     {
         /*
