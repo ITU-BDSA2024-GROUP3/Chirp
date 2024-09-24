@@ -78,7 +78,7 @@ if ((bool)(arguments["cheep"].Value))
     
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
     
-    Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
+    //Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
   
     //cheepManager.Store(Util.CreateCheep(message));
 }
