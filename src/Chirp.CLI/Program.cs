@@ -38,7 +38,7 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
 ";
-
+//docopt is used to read input from the console
 var arguments = new Docopt().Apply(usage, args, version: "0.0.1", exit: true);
 
 if ((bool)arguments["read"].Value)
@@ -89,6 +89,7 @@ if ((bool)(arguments["cheep"].Value))
     
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
     
+    // following can be used to test what and if the statuscode of our cheeps is/works
     //Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
   
     //cheepManager.Store(Util.CreateCheep(message));
