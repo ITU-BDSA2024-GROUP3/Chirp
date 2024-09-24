@@ -89,6 +89,7 @@ if ((bool)(arguments["cheep"].Value))
     
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
     
+    
     // following can be used to test what and if the statuscode of our cheeps is/works
     //Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
   
