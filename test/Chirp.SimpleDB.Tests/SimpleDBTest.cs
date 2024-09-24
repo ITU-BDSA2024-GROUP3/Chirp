@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-
+using System.IO;
 
 namespace Chirp.SimpleDB.Tests;
 
@@ -19,10 +19,15 @@ public class SimpleDBTest : IDisposable
     private readonly CsvConfiguration _csvConfig;
     private string dataPath = "../../../../../data/TestData.csv";
     private string baseURL = "http://localhost:5132";
-    private HttpClient client = new();
+    private HttpClient client;
+    
+    string pathToSrc = "../../../../../src/";
+
 
     public SimpleDBTest(ITestOutputHelper testOutputHelper)
     {
+        client = new HttpClient();
+        
         _testOutputHelper = testOutputHelper;
         
         
@@ -30,28 +35,78 @@ public class SimpleDBTest : IDisposable
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.BaseAddress = new Uri(baseURL);
 
+        ClearTestData();
     }
 
     //Tear down
     public void Dispose()
     {
-        /*
-        cheepManager.setPath(dataPath);
+        ClearTestData();
+    }
 
-        File.WriteAllText(dataPath, String.Empty);
-        using (var writer = new StreamWriter(dataPath, append: true))
+    private void ClearTestData()
+    {
+        //Clear Chirp/test/data/TestData.csv
+        StreamWriter writer = new StreamWriter("../../../../data/TestData.csv", append: false);
+        writer.WriteAsync("Author,Message,Timestamp");
+        writer.Close();
+    }
+
+    [Fact]
+    public void TestCheepE2E()
+    {
+        // Start two processes
+        using (var serverProcess = new Process())
+        using (var clientProcess = new Process())
         {
-            writer.WriteLine("Author,Message,Timestamp");
+            // Start the server process
+            ProcessStartInfo serverStartInfo = new ProcessStartInfo();
+            serverStartInfo.FileName = "dotnet"; //"C:\\Program Files\\dotnet\\dotnet.exe";
+            serverStartInfo.Arguments = "run -- data ../../test/data/TestData.csv";
+            serverStartInfo.UseShellExecute = false;
+            serverStartInfo.WorkingDirectory = $"{pathToSrc}/Chirp.CSVDBService";
+            serverStartInfo.RedirectStandardOutput = true;
+            serverProcess.StartInfo = serverStartInfo;
+            serverProcess.Start();
+
+            // Give the server time to build and start
+            Thread.Sleep(10000);
+            
+            
+            // Start the client process
+            int port = 5132;
+            ProcessStartInfo clientStartInfo = new ProcessStartInfo();
+            clientStartInfo.FileName = "dotnet"; //"C:\\Program Files\\dotnet\\dotnet.exe";
+            clientStartInfo.Arguments = $"run -- cheep \"This is a test!\" \"http://localhost:{port}\"";
+            clientStartInfo.UseShellExecute = false;
+            clientStartInfo.WorkingDirectory = $"{pathToSrc}/Chirp.CLI";
+            clientStartInfo.RedirectStandardOutput = true;
+            clientProcess.StartInfo = clientStartInfo;
+            clientProcess.Start();
+            
+            // Client process terminates naturally
+            // Server process never terminates and must be killed
+            clientProcess.WaitForExit();
+            serverProcess.Kill();
+            
+            //Read the test data
+            StreamReader reader = new StreamReader("../../../../data/TestData.csv");
+            reader.ReadLine();
+            string line = reader.ReadLine();
+            reader.Close();
+            
+            Assert.Contains("This is a test!", line);
         }
-        */
     }
     
     public void InsertCheeps(int amount, string message)
     {
+        /*
         for (int i = 0; i < amount+10; i++)
         {
 
         }
+        */
     }
 
     [Fact]

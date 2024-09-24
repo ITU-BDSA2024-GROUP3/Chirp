@@ -11,28 +11,14 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-
-/*
-const string usage = @"Chirp CLI version.
-
-Usage:
-chirp read <limit>
-chirp cheep <message>
-chirp (-h | --help)
-chirp --version
-
-Options:
--h --help     Show this screen.
---version     Show version.
-";
-*/
-
 const string usage = @"Chirp CLI version.
 
 Usage:
   chirp read
   chirp read <limit>
+  chirp read <limit> <url>
   chirp cheep <message>
+  chirp cheep <message> <url>
   chirp (-h | --help)
   chirp --version
 
@@ -43,6 +29,9 @@ Options:
 
 var arguments = new Docopt().Apply(usage, args, version: "0.0.1", exit: true);
 
+const string defaultURl = "http://localhost:5132";
+var baseURL = !arguments["<url>"].IsNullOrEmpty ? arguments["<url>"].Value.ToString() : defaultURl;
+
 if ((bool)arguments["read"].Value)
 {
     int? limit = null;
@@ -52,7 +41,6 @@ if ((bool)arguments["read"].Value)
     }
 
     // Create an HTTP client object
-    var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -66,7 +54,7 @@ if ((bool)arguments["read"].Value)
     var cheepsRes = await client.GetAsync(requestURI);
     var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
     
-    Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
+    //Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
     UserInterface.PrintCheeps(cheeps);
 }
 
@@ -76,7 +64,6 @@ if ((bool)(arguments["cheep"].Value))
     
     Cheep cheep = Util.CreateCheep(message);
     
-    var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
