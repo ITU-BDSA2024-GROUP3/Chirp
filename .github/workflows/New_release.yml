@@ -1,97 +1,84 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET New_release.yml
+#Code donated by group 15
+name: Build, Test and Release
 
 on:
-  release:
-    types: [published]
-    
+  push:
+    tags:
+      - "v*.*.*"
+
 jobs:
-  release:
-    name: Release
+  build:
+
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
   
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
+  
+    - name: Setup
+      uses: actions/setup-dotnet@v4
+      with:
           dotnet-version: 7.0.x
-        
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-      
-      - name: Build for Linux
-        shell: bash
-        run: |
-            # Define some variables for things we need
-            tag=$(git describe --tags --abbrev=0)
-            release_name="App-$tag-linux-x64"
-  
-            # Build everything
-            dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "linux-x64" -c Release -o "$release_name"
-  
-            # Pack files
-            if [ "linux-x64" == "win-x64" ]; then
-              7z a -tzip "${release_name}.zip" "./${release_name}/*"
-            else
-              tar czvf "${release_name}.tar.gz" "$release_name"
-            fi
-  
-            # Delete output directory
-            rm -r "$release_name"
-  
-      - name: Build for Windows
-        shell: bash
-        run: |
-            # Define some variables for things we need
-            tag=$(git describe --tags --abbrev=0)
-            release_name="App-$tag-win-x64"
-  
-            # Build everything
-            dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "win-x64" -c Release -o "$release_name"
-  
-            # Pack files
-            if [ "win-x64" == "win-x64" ]; then
-              7z a -tzip "${release_name}.zip" "./${release_name}/*"
-            else
-              tar czvf "${release_name}.tar.gz" "$release_name"
-            fi
-  
-            # Delete output directory
-            rm -r "$release_name"
-  
-      - name: Build for MacOS
-        shell: bash
-        run: |
-            # Define some variables for things we need
-            tag=$(git describe --tags --abbrev=0)
-            release_name="App-$tag-osx-x64"
-  
-            # Build everything
-            dotnet publish src/App/App.csproj --framework netcoreapp3.1 --runtime "osx-x64" -c Release -o "$release_name"
-  
-            # Pack files
-            if [ "osx-x64" == "win-x64" ]; then
-              7z a -tzip "${release_name}.zip" "./${release_name}/*"
-            else
-              tar czvf "${release_name}.tar.gz" "$release_name"
-            fi
-  
-            # Delete output directory
-            rm -r "$release_name"
-  
-      - name: .NET New_release.yml
-        uses: softprops/action-gh-release@v2
-        with:
-          files: "App*"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
+    - name: Build Linux
+      shell: bash
+      run: |
+          # Define some variables for things we need
+          tag=$(git describe --tags --abbrev=0)
+          release_name="App-$tag-linux-x64"
+
+          # Build everything
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -o "Linux-release" -p:PublishSingleFile=true
+          
+          7z a -tzip "Chirp-Linux-release.zip" "Linux-release"
+
+          rm -r Linux-release
+
+    - name: Build MacOS
+      shell: bash
+      run: |
+          # Define some variables for things we need
+          tag=$(git describe --tags --abbrev=0)
+          release_name="App-$tag-osx-x64"
+
+          # Build everything
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime osx-x64 -c Release -o "MacOS-release" -p:PublishSingleFile=true
+          
+          7z a -tzip "Chirp-MacOS-release.zip" "MacOS-release"
+
+          rm -r MacOS-release
+
+
+    - name: Build Windows
+      shell: bash
+      run: |
+          # Define some variables for things we need
+          tag=$(git describe --tags --abbrev=0)
+          release_name="App-$tag-win-x64"
+
+          # Build everything
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "Windows-release" -p:PublishSingleFile=true
+          
+          7z a -tzip "Chirp-Windows-release.zip" "./Windows-release/*"
+
+          rm -r Windows-release
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+          files: |
+           Chirp-Linux-release.zip
+           Chirp-MacOS-release.zip
+           Chirp-Windows-release.zip
+            
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
