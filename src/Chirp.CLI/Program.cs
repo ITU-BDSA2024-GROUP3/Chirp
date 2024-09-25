@@ -50,7 +50,8 @@ if ((bool)arguments["read"].Value)
     }
 
     // Create an HTTP client object
-    var baseURL = "http://localhost:5132";
+    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    //var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -63,8 +64,12 @@ if ((bool)arguments["read"].Value)
     
     var cheepsRes = await client.GetAsync(requestURI);
     var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
+    //var cheeps = await client.GetAsync(requestURI);
+
     
-    //Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
+    Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
+    
+    //Console.WriteLine(cheeps.Content.ReadAsStringAsync().Result);
     UserInterface.PrintCheeps(cheeps);
 }
 
@@ -74,7 +79,7 @@ if ((bool)(arguments["cheep"].Value))
     
     Cheep cheep = Util.CreateCheep(message);
     
-    var baseURL = "http://localhost:5132";
+    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

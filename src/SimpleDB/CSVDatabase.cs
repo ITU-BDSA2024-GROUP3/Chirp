@@ -9,7 +9,10 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     private readonly CsvConfiguration _csvConfig;
 
     //idk much about readonly, rider just said it would be good
-    private string dataPath = "../../data/chirp_cli_db.csv";
+    //private string dataPath = "/../../../../data/chirp_cli_db.csv";
+
+    //private string dataPath = makePath("data", "chirp_cli_db.csv");
+    private string dataPath = Path.Combine("chirp_cli_db.csv");
 
     //why is there two databases?
     static CSVDatabase()
@@ -30,7 +33,11 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     public IEnumerable<T> Read(int? limit = null)
     {
         //ensure file exists
-        if (!File.Exists(dataPath)) throw new FileNotFoundException("Data file not found");
+        if (!File.Exists(dataPath))
+        {
+            Console.WriteLine();
+            throw new FileNotFoundException("Data file not found");
+        }
 
         //create streamreader and CSVreader with "using"
         using (var reader = new StreamReader(dataPath))
@@ -55,6 +62,10 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         using (var csv = new CsvWriter(writer, _csvConfig))
         {
             //add cheep to file then add blank character to end
+            if (!File.Exists(dataPath))
+            {
+                writer.WriteLine("Author,Message,Timestamp");
+            }
             csv.WriteRecord(record);
             writer.WriteLine();
         }
