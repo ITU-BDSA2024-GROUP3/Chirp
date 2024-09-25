@@ -63,8 +63,12 @@ if ((bool)arguments["read"].Value)
     
     var cheepsRes = await client.GetAsync(requestURI);
     var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
+<<<<<<< Updated upstream
     
     //Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
+=======
+    Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
+>>>>>>> Stashed changes
     UserInterface.PrintCheeps(cheeps);
 }
 
@@ -88,10 +92,14 @@ if ((bool)(arguments["cheep"].Value))
     CancellationToken cancellationToken = cts.Token;
     
     var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
+<<<<<<< Updated upstream
     
     
     // following can be used to test what and if the statuscode of our cheeps is/works
     //Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
+=======
+    temp.StatusCode
+>>>>>>> Stashed changes
   
     //cheepManager.Store(Util.CreateCheep(message));
 }
