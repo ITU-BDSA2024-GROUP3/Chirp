@@ -17,7 +17,7 @@ public class DBFacade
         _sqlDataPath = sqlDataPath;
     }
 
-    public List<CheepViewModel> ReadCheeps()
+    public List<CheepViewModel> ReadCheeps(int page)
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
         
