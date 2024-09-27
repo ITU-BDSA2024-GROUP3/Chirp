@@ -7,24 +7,23 @@ namespace SimpleDB;
 public class DBFacade
 {
     //reference: https://stackoverflow.com/questions/26020/what-is-the-best-way-to-connect-and-use-a-sqlite-database-from-c-sharp
-    SqliteConnection _db;
+    private readonly string _sqlDataPath = "";
     //connect to where the database is stored
-    public DBFacade(string databasePath) {
-        _db = new SqliteConnection(databasePath);
-        _db.Open();
-        
-    }
-
-    /* void Store(T record)
-        {
-            //put cheep in database
-            //put the data inside the table
-        }
-
-    IEnumerable<T> Read(int? limit = null)
+    public DBFacade()
     {
-        //return cheep from database
-        return null;
+        string sqlDataPath = "/tmp/test.db";
+        _sqlDataPath = sqlDataPath;
     }
-    */
+
+    public List<CheepViewModel> ReadCheeps()
+    {
+        List<CheepViewModel> cheeps = new List<CheepViewModel>();
+        
+        var queryString = @"SELECT u.username, m.text, m.pub_date
+                                FROM message m
+                                JOIN user u ON m.author_id = u.user_id
+                                ORDER BY m.pub_date DESC";
+        
+        return ExecuteQuery(queryString);
+    }
 }
