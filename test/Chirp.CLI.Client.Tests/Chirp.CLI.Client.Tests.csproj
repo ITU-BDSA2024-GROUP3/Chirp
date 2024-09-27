@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Chirp.CLI\Chirp.CLI.csproj"/>
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0-rc.1.24451.1"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1"/>
         <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
