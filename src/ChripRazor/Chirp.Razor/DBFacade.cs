@@ -11,6 +11,7 @@ public class DBFacade
     //connect to where the database is stored
     public DBFacade(string databasePath) {
         _db = new SqliteConnection(databasePath);
+        _db.Open();
         
     }
 
