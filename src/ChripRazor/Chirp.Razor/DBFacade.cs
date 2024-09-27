@@ -74,12 +74,13 @@ public class DBFacade
         var queryString = @"SELECT u.username, m.text, m.pub_date
                                 FROM message m
                                 JOIN user u ON m.author_id = u.user_id
-                                ORDER BY m.pub_date DESC";
+                                ORDER BY m.pub_date DESC
+                                LIMIT 32 OFFSET ($page -1)*32";
         
-        return Execute(queryString);
+        return Execute(queryString, page);
     }
 
-    private List<CheepViewModel> Execute(string queryString)
+    private List<CheepViewModel> Execute(string queryString, int page)
     {
         var cheeps = new List<CheepViewModel>();
         using (var dataBaseConnection = new SqliteConnection($"Data Source ={_sqlDataPath}"))
@@ -87,6 +88,7 @@ public class DBFacade
             dataBaseConnection.Open();
             var command = dataBaseConnection.CreateCommand();
             command.CommandText = queryString;
+            command.Parameters.AddWithValue("$page", page);
             
             using var reader = command.ExecuteReader();
             while (reader.Read())

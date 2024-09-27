@@ -13,9 +13,9 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet()
+    public ActionResult OnGet([FromQuery] int page)
     {
-        Cheeps = _service.GetCheeps(1);
+        Cheeps = _service.GetCheeps(page);
         return Page();
     }
 }
