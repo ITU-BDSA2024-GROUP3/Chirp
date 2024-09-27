@@ -39,7 +39,31 @@ public class DBFacade
                                 JOIN user u ON m.author_id = u.user_id
                                 ORDER BY m.pub_date DESC";
         
-        return ExecuteQuery(queryString);
+        return Execute(queryString);
+    }
+
+    private List<CheepViewModel> Execute(string queryString)
+    {
+        var cheeps = new List<CheepViewModel>();
+        using (var dataBaseConnection = new SqliteConnection($"Data Source =_sqlDataPath"))
+        {
+            dataBaseConnection.Open();
+            var command = dataBaseConnection.CreateCommand();
+            command.CommandText = queryString;
+            
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var dataRecord = (IDataRecord)reader;
+                Object[] values = new Object[dataRecord.FieldCount];
+                reader.GetValues(values);
+
+                var cheep = new CheepViewModel((string)values[0], (string)values[1], (string)values[2]);
+                cheeps.Add(cheep);
+            };
+            }
+
+            return cheeps;
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
