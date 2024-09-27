@@ -95,7 +95,7 @@ public class DBFacade
                 Object[] values = new Object[dataRecord.FieldCount];
                 reader.GetValues(values);
 
-                var cheep = new CheepViewModel((string)values[0], (string)values[1], UnixTimeStampToDateTimeString((Int64)values[2]));
+                var cheep = new CheepViewModel((string)values[0], (string)values[1], (Int64)values[2]);
                 cheeps.Add(cheep);
             };
         }
@@ -128,18 +128,12 @@ public class DBFacade
                 Object[] values = new Object[dataRecord.FieldCount];
                 reader.GetValues(values);
 
-                var cheep = new CheepViewModel((string)values[0], (string)values[1], (string)values[2]);
+                var cheep = new CheepViewModel((string)values[0], (string)values[1], (Int64)values[2]);
                 cheeps.Add(cheep);
             }
         }
         return cheeps;
     }
     
-    private static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
-    }
+    
 }

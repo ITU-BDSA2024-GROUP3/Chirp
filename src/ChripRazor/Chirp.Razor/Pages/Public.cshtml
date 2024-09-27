@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Chirp.Razor.Pages
 @model Chirp.Razor.Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -19,7 +20,7 @@
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
+                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.Timestamp)</small>
                     </p>
                 </li>
             }

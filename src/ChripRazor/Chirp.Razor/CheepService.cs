@@ -1,6 +1,6 @@
 using Chirp.Razor;
 
-public record CheepViewModel(string Author, string Message, string Timestamp);
+public record CheepViewModel(string Author, string Message, Int64 Timestamp);
 
 public interface ICheepService
 {
@@ -23,6 +23,14 @@ public class CheepService : ICheepService
         DBFacade facade = new DBFacade();
 
         return facade.GetCheepsFromAuthor(author);
+    }
+    
+    public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
+    {
+        // Unix timestamp is seconds past epoch
+        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp);
+        return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
 
     
