@@ -11,6 +11,7 @@ public class DBFacade
     //connect to where the database is stored
     public DBFacade()
     {
+        //duplicate string??
         string sqlDataPath = "/tmp/test.db";
         _sqlDataPath = sqlDataPath;
     }
@@ -24,7 +25,7 @@ public class DBFacade
                                 JOIN user u ON m.author_id = u.user_id
                                 ORDER BY m.pub_date DESC";
         
-        return ExecuteQuery(queryString);
+        return Execute(queryString);
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
