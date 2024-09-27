@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.Data.Sqlite;
 using SQLitePCL;
 
@@ -12,7 +13,7 @@ public class DBFacade
     public DBFacade()
     {
         //duplicate string??
-        string sqlDataPath = "/tmp/test.db";
+        string sqlDataPath = "/tmp/chirp.db";
         _sqlDataPath = sqlDataPath;
     }
 
@@ -26,6 +27,30 @@ public class DBFacade
                                 ORDER BY m.pub_date DESC";
         
         return Execute(queryString);
+    }
+
+    private List<CheepViewModel> Execute(string queryString)
+    {
+        var cheeps = new List<CheepViewModel>();
+        using (var dataBaseConnection = new SqliteConnection($"Data Source =_sqlDataPath"))
+        {
+            dataBaseConnection.Open();
+            var command = dataBaseConnection.CreateCommand();
+            command.CommandText = queryString;
+            
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var dataRecord = (IDataRecord)reader;
+                Object[] values = new Object[dataRecord.FieldCount];
+                reader.GetValues(values);
+
+                var cheep = new CheepViewModel((string)values[0], (string)values[1], (string)values[2]);
+                cheeps.Add(cheep);
+            };
+            }
+
+            return cheeps;
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
@@ -50,10 +75,16 @@ public class DBFacade
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                
+                var dataRecord = (IDataRecord)reader;
+                Object[] values = new Object[dataRecord.FieldCount];
+                reader.GetValues(values);
+
+                var cheep = new CheepViewModel((string)values[0], (string)values[1], (string)values[2]);
+                cheeps.Add(cheep);
             }
         }
 
+        return cheeps;
     }
 
 }
