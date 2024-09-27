@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0-rc.1.24451.1"/>
         <ProjectReference Include="..\..\SimpleDB\SimpleDB.csproj"/>
+        <EmbeddedResource Include="..\..\..\data\*.sql"/>
     </ItemGroup>
 
 </Project>
