@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
 using SQLitePCL;
 
-namespace SimpleDB;
+namespace Chirp.Razor;
 //namespace System.Data.SQLlite;
 
 public class DBFacade
@@ -26,4 +26,33 @@ public class DBFacade
         
         return ExecuteQuery(queryString);
     }
+
+    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    {
+        List<CheepViewModel> cheeps = new List<CheepViewModel>();
+
+        
+        var sqlQuery = @"SELECT u.username, m.text, m.pub_date
+                                FROM message m
+                                JOIN user u ON m.author_id = u.user_id
+                                WHERE u.username = $author
+                                ORDER BY m.pub_date DESC";
+
+        using (var connection = new SqliteConnection($"Data Source={_sqlDataPath}"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = sqlQuery;
+            command.Parameters.AddWithValue("$author", author);
+            
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                
+            }
+        }
+
+    }
+
 }
