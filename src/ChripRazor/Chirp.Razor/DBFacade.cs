@@ -9,10 +9,25 @@ public class DBFacade
     //reference: https://stackoverflow.com/questions/26020/what-is-the-best-way-to-connect-and-use-a-sqlite-database-from-c-sharp
     private readonly string _sqlDataPath = "";
     //connect to where the database is stored
+    
+    string value;
+    bool toDelete;
+    
     public DBFacade()
     {
-        string sqlDataPath = "/tmp/test.db";
-        _sqlDataPath = sqlDataPath;
+        
+        value = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+
+        if (value == null)
+        {
+            string path =Path.Combine(Path.GetTempPath(), "chirp.db");
+            Environment.SetEnvironmentVariable("CHIRPDBPATH", path);
+            toDelete = true;
+            
+            value = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+        }
+        _sqlDataPath = value;
+    
     }
 
     public List<CheepViewModel> ReadCheeps()
