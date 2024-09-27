@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.Data.Sqlite;
 using SQLitePCL;
 
@@ -10,11 +9,25 @@ public class DBFacade
     //reference: https://stackoverflow.com/questions/26020/what-is-the-best-way-to-connect-and-use-a-sqlite-database-from-c-sharp
     private readonly string _sqlDataPath = "";
     //connect to where the database is stored
+    
+    string value;
+    bool toDelete;
+    
     public DBFacade()
     {
-        //duplicate string??
-        string sqlDataPath = "/tmp/chirp.db";
-        _sqlDataPath = sqlDataPath;
+        
+        value = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+
+        if (value == null)
+        {
+            string path =Path.Combine(Path.GetTempPath(), "chirp.db");
+            Environment.SetEnvironmentVariable("CHIRPDBPATH", path);
+            toDelete = true;
+            
+            value = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+        }
+        _sqlDataPath = value;
+    
     }
 
     public List<CheepViewModel> ReadCheeps(int page)
@@ -75,16 +88,10 @@ public class DBFacade
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var dataRecord = (IDataRecord)reader;
-                Object[] values = new Object[dataRecord.FieldCount];
-                reader.GetValues(values);
-
-                var cheep = new CheepViewModel((string)values[0], (string)values[1], (string)values[2]);
-                cheeps.Add(cheep);
+                
             }
         }
 
-        return cheeps;
     }
 
 }
