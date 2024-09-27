@@ -11,7 +11,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     //idk much about readonly, rider just said it would be good
     private string dataPath = "../../data/chirp_cli_db.csv";
 
-    //why is there two databases?
+   
     static CSVDatabase()
     {
     }
