@@ -5,7 +5,7 @@ public record CheepViewModel(string Author, string Message, Int64 Timestamp);
 public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps(int page);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page);
 }
 
 public class CheepService : ICheepService
@@ -17,12 +17,12 @@ public class CheepService : ICheepService
         return facade.ReadCheeps(page);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
         // filter by the provided author name
         DBFacade facade = new DBFacade();
 
-        return facade.GetCheepsFromAuthor(author);
+        return facade.GetCheepsFromAuthor(author, page);
     }
     
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)

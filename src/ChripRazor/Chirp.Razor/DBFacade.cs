@@ -104,7 +104,7 @@ public class DBFacade
         return cheeps;
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
 
@@ -113,7 +113,8 @@ public class DBFacade
                                 FROM message m
                                 JOIN user u ON m.author_id = u.user_id
                                 WHERE u.username = $author
-                                ORDER BY m.pub_date DESC";
+                                ORDER BY m.pub_date DESC
+                                LIMIT 32 OFFSET ($page -1)*32";
 
         using (var connection = new SqliteConnection($"Data Source={_sqlDataPath}"))
         {
@@ -122,6 +123,8 @@ public class DBFacade
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
             command.Parameters.AddWithValue("$author", author);
+            command.Parameters.AddWithValue("$page", page);
+
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
