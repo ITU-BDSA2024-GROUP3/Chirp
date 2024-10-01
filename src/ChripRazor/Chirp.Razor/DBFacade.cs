@@ -46,8 +46,8 @@ public class DBFacade
         
         connect.Open();
         
-        var schema = readSqlFile("schema.sql");
-        var dump = readSqlFile("dump.sql");
+        var schema = readSqlFile("data/schema.sql");
+        var dump = readSqlFile("data/dump.sql");
         
         Command(connect, schema);
         Command(connect, dump);
