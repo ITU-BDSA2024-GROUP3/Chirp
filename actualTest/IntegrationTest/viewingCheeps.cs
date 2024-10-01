@@ -1,4 +1,4 @@
-namespace actualTest;
+namespace integrationtest;
 
 public class UnitTest1
 {
