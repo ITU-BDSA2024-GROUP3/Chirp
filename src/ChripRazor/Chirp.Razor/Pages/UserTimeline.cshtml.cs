@@ -19,7 +19,6 @@ public class UserTimelineModel : PageModel
         Cheeps = _service.GetCheepsFromAuthor(author, page);
         
         currentPage = page;
-        Cheeps = _service.GetCheeps(currentPage);
 
         if (currentPage < 1)
         {
