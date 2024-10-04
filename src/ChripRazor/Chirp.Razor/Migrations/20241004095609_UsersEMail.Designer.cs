@@ -2,6 +2,7 @@
 using Chirp.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Razor.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241004095609_UsersEMail")]
+    partial class UsersEMail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -36,7 +39,7 @@ namespace Chirp.Razor.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Chirp.Razor.DomainModel.User", b =>
@@ -55,7 +58,7 @@ namespace Chirp.Razor.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Chirp.Razor.DomainModel.Message", b =>
