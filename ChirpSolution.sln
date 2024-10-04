@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\ChripRaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{B00F47BF-8CE3-407E-8177-F320894B0F80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{920A7ADE-B537-4F07-B9AF-F107D6D7229D} = {011B1A60-FE9C-49D1-96EB-636AB5D75AD7}
