@@ -19,11 +19,11 @@ public class DBFacade
     
     string value;
     bool toDelete;
+    private readonly ICheepRepository _repository;
     
     public DBFacade()
     {
         embedded = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
-        
         value = Environment.GetEnvironmentVariable("CHIRPDBPATH");
 
         if (value == null)

@@ -21,14 +21,24 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity.MessageId;
     }
 
-    public async Task<List<MessageDTO>> ReadCheeps()
+    public async Task<List<MessageDTO>> ReadCheeps(int page, int? userId )
     {
         // Formulate the query - will be translated to SQL by EF Core
-        var query = _dbContext.Messages.Select(message => new MessageDTO()
-            { Text = message.Text, User = message.User });
+        IQueryable<MessageDTO> query;
+        if (userId != null)
+        {
+            query = _dbContext.Messages.Where(message => message.UserId == userId).Select(message => new MessageDTO()
+                { Text = message.Text, User = message.User }).Skip((page - 1) * 32).Take(32);
+        }
+        else
+        {
+            query = _dbContext.Messages.Select(message => new MessageDTO()
+                { Text = message.Text, User = message.User }).Skip((page - 1) * 32).Take(32);
+        }
+        
         // Execute the query
         var result = await query.ToListAsync();
-
+        
         return result;
     }
 
