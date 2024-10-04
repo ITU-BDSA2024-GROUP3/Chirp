@@ -20,10 +20,10 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.User.UserId/?page=1">@cheep.User.Name</a>
+                            <a href="/@cheep.Author.AuthorId/?page=1">@cheep.Author.Name</a>
                         </strong>
                         @cheep.Text
-                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.Timestamp)</small>
+                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
                     </p>
                 </li>
             }

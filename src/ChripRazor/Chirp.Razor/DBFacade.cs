@@ -68,14 +68,14 @@ public class DBFacade
         command.ExecuteNonQuery();
     }
 
-    public Task<List<MessageDTO>> ReadCheeps(int page)
+    public Task<List<CheepDTO>> ReadCheeps(int page)
     {
         return _repository.ReadCheeps(page, null);
        
     }
 
     
-    public Task<List<MessageDTO>> GetCheepsFromAuthor(int userId, int page)
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
     {
         return _repository.ReadCheeps(page, userId);
     }

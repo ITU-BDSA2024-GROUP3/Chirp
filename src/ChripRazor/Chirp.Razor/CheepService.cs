@@ -5,8 +5,8 @@ using Chirp.Razor.DomainModel;
 
 public interface ICheepService
 {
-    public Task<List<MessageDTO>> GetCheeps(int page);
-    public Task<List<MessageDTO>> GetCheepsFromAuthor(int userId, int page);
+    public Task<List<CheepDTO>> GetCheeps(int page);
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
 }
 
 public class CheepService : ICheepService
@@ -19,12 +19,12 @@ public class CheepService : ICheepService
         _repository = repository;
         facade = new DBFacade(_repository);
     }
-    public Task<List<MessageDTO>> GetCheeps(int page)
+    public Task<List<CheepDTO>> GetCheeps(int page)
     {
         return facade.ReadCheeps(page);
     }
 
-    public Task<List<MessageDTO>> GetCheepsFromAuthor(int userId, int page)
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
     {
         // filter by the provided author name
 

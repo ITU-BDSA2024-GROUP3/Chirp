@@ -1,9 +1,10 @@
 ﻿namespace Chirp.Razor.DomainModel;
 
-public class User
+public class Author
 {
-    public int UserId { get; set; }
+    public int AuthorId { get; set; }
+    
     public string Name { get; set; }
-    public ICollection<Message> Messages { get; set; }
     public string Email { get; set; }
+    public ICollection<Cheep> Cheeps { get; set; }
 }

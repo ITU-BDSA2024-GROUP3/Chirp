@@ -12,28 +12,28 @@ public class CheepRepository : ICheepRepository
         _dbContext = context;
     }
 
-    public async Task<int> CreateCheep(MessageDTO newMessage)
+    public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Message message = new() { Text = newMessage.Text, User = newMessage.User, Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds()};
-        var queryResult = await _dbContext.Messages.AddAsync(message); // does not write to the database!
+        Cheep message = new() { Text = newMessage.Text, Author = newMessage.Author, TimeStamp = DateTime.Now};
+        var queryResult = await _dbContext.Cheeps.AddAsync(message); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
-        return queryResult.Entity.MessageId;
+        return queryResult.Entity.CheepId;
     }
 
-    public async Task<List<MessageDTO>> ReadCheeps(int page, int? userId )
+    public async Task<List<CheepDTO>> ReadCheeps(int page, int? authorId )
     {
         // Formulate the query - will be translated to SQL by EF Core
-        IQueryable<MessageDTO> query;
-        if (userId != null)
+        IQueryable<CheepDTO> query;
+        if (authorId != null)
         {
-            query = _dbContext.Messages.Where(message => message.UserId == userId).Select(message => new MessageDTO()
-                { Text = message.Text, User = message.User }).Skip((page - 1) * 32).Take(32);
+            query = _dbContext.Cheeps.Where(message => message.AuthorId == authorId).Select(message => new CheepDTO()
+                { Text = message.Text, Author = message.Author }).Skip((page - 1) * 32).Take(32);
         }
         else
         {
-            query = _dbContext.Messages.Select(message => new MessageDTO()
-                { Text = message.Text, User = message.User }).Skip((page - 1) * 32).Take(32);
+            query = _dbContext.Cheeps.Select(message => new CheepDTO()
+                { Text = message.Text, Author = message.Author }).Skip((page - 1) * 32).Take(32);
         }
         
         // Execute the query
@@ -42,15 +42,15 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
-    public async Task<int> UpdateCheep(Message updatedMessage)
+    public async Task<int> UpdateCheep(Cheep updatedMessage)
     {
-        var message = await _dbContext.Messages.FindAsync(updatedMessage.MessageId);
+        var message = await _dbContext.Cheeps.FindAsync(updatedMessage.CheepId);
         if (message is null)
         {
             throw new Exception("Unable to find the recipe");
         }
         message.Text = updatedMessage.Text;
-        message.Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-        return message.MessageId;
+        message.TimeStamp = DateTime.Now;
+        return message.CheepId;
     }
 }
