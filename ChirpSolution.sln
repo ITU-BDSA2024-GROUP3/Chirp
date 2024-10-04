@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChripRazor", "ChripRazor", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\ChripRazor\Chirp.Razor\Chirp.Razor.csproj", "{DE55898D-3C3E-4127-B075-CCFDD8A315BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{B00F47BF-8CE3-407E-8177-F320894B0F80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{920A7ADE-B537-4F07-B9AF-F107D6D7229D} = {011B1A60-FE9C-49D1-96EB-636AB5D75AD7}
