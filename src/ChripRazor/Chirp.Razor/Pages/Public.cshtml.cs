@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Razor.DomainModel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Razor.Pages;
@@ -6,7 +7,7 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
     
     public PublicModel(ICheepService service)
@@ -14,10 +15,10 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet([FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync([FromQuery] int page)
     {
         currentPage = page;
-        Cheeps = _service.GetCheeps(currentPage);
+        Cheeps = await _service.GetCheeps(currentPage);
 
         if (currentPage < 1)
         {

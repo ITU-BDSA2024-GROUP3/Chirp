@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Razor.DomainModel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Razor.Pages;
@@ -6,7 +7,8 @@ namespace Chirp.Razor.Pages;
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public AuthorDTO Author { get; set; }
+    public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
 
     public UserTimelineModel(ICheepService service)
@@ -14,9 +16,15 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet(string author, [FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync(int userId, [FromQuery] int page)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author, page);
+        var authorTask = _service.GetAuthor(userId);
+        var cheepsTask = _service.GetCheepsFromAuthor(userId, page);
+
+        await Task.WhenAll(authorTask, cheepsTask);
+        
+        Author = authorTask.Result;
+        Cheeps = cheepsTask.Result;
         
         currentPage = page;
 
