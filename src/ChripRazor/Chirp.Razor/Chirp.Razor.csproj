@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
-        <EmbeddedResource Include="data\*.sql" />
+        <EmbeddedResource Include="..\..\..\data\*.sql" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
