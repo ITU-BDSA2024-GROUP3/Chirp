@@ -28,12 +28,12 @@ public class CheepRepository : ICheepRepository
         if (authorId != null)
         {
             query = _dbContext.Cheeps.Where(message => message.AuthorId == authorId).Select(message => new CheepDTO()
-                { Text = message.Text, Author = message.Author }).Skip((page - 1) * 32).Take(32);
+                { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() }).Skip((page - 1) * 32).Take(32);
         }
         else
         {
             query = _dbContext.Cheeps.Select(message => new CheepDTO()
-                { Text = message.Text, Author = message.Author }).Skip((page - 1) * 32).Take(32);
+                { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() }).Skip((page - 1) * 32).Take(32);
         }
         
         // Execute the query
