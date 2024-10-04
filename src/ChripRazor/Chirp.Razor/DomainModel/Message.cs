@@ -6,5 +6,5 @@ public class Message
     public int UserId { get; set; }
     public string Text { get; set; }
     public User User { get; set; }
-    public Int64 Timestamp { get; set; }
+    public long Timestamp { get; set; }
 }
