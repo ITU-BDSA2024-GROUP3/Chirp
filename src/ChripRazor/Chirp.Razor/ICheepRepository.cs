@@ -4,7 +4,7 @@ namespace Chirp.Razor;
 
 public interface ICheepRepository 
 {
-    public Task<int> CreateCheep(Message newMessage);
-    public Task<List<Message>> ReadCheeps();
-    public Task UpdateCheep(Message updatedMessage);
+    public Task<int> CreateCheep(MessageDTO newMessage);
+    public Task<List<MessageDTO>> ReadCheeps();
+    public Task<int> UpdateCheep(Message updatedMessage);
 }
