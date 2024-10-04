@@ -73,12 +73,14 @@ public class DBFacade
         return _repository.ReadCheeps(page, null);
        
     }
-
+    
+    public Task<AuthorDTO> GetAuthor(int id)
+    {
+        return _repository.ReadAuthor(id);
+    }
     
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
     {
         return _repository.ReadCheeps(page, userId);
     }
-    
-    
 }

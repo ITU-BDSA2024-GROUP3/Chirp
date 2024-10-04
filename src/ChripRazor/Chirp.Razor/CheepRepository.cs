@@ -53,4 +53,12 @@ public class CheepRepository : ICheepRepository
         message.TimeStamp = DateTime.Now;
         return message.CheepId;
     }
+
+    public async Task<AuthorDTO> ReadAuthor(int id)
+    {
+        IQueryable<AuthorDTO> query = _dbContext.Authors.Where(author => author.AuthorId == id)
+            .Select(author => new AuthorDTO() {Name = author.Name})
+            .Take(1);
+        return await query.FirstOrDefaultAsync();
+    }
 }
