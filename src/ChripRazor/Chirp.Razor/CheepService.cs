@@ -1,28 +1,34 @@
 using Chirp.Razor;
+using Chirp.Razor.DomainModel;
 
-public record CheepViewModel(string Author, string Message, Int64 Timestamp);
+//public record CheepViewModel(string Author, string Message, Int64 Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps(int page);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page);
+    public Task<List<MessageDTO>> GetCheeps(int page);
+    public Task<List<MessageDTO>> GetCheepsFromAuthor(int userId, int page);
 }
 
 public class CheepService : ICheepService
 {
-    
-    public List<CheepViewModel> GetCheeps(int page)
+    private readonly ICheepRepository _repository;
+    private readonly DBFacade facade;
+
+    public CheepService(ICheepRepository repository)
     {
-        DBFacade facade = new DBFacade();
+        _repository = repository;
+        facade = new DBFacade(_repository);
+    }
+    public Task<List<MessageDTO>> GetCheeps(int page)
+    {
         return facade.ReadCheeps(page);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
+    public Task<List<MessageDTO>> GetCheepsFromAuthor(int userId, int page)
     {
         // filter by the provided author name
-        DBFacade facade = new DBFacade();
 
-        return facade.GetCheepsFromAuthor(author, page);
+        return facade.GetCheepsFromAuthor(userId, page);
     }
     
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
