@@ -14,7 +14,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(MessageDTO newMessage)
     {
-        Message message = new() { Text = newMessage.Text, User = newMessage.User };
+        Message message = new() { Text = newMessage.Text, User = newMessage.User, Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds()};
         var queryResult = await _dbContext.Messages.AddAsync(message); // does not write to the database!
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
@@ -35,12 +35,12 @@ public class CheepRepository : ICheepRepository
     public async Task<int> UpdateCheep(Message updatedMessage)
     {
         var message = await _dbContext.Messages.FindAsync(updatedMessage.MessageId);
-        //update cheep
         if (message is null)
         {
             throw new Exception("Unable to find the recipe");
         }
-
+        message.Text = updatedMessage.Text;
+        message.Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         return message.MessageId;
     }
 }
