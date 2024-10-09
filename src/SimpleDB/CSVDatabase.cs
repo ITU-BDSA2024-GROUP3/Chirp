@@ -1,12 +1,16 @@
 ﻿using System.Globalization;
+using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.FileProviders;
 
 namespace SimpleDB;
 
 public class CSVDatabase<T> : IDatabaseRepository<T>
 {
     private readonly CsvConfiguration _csvConfig;
+
+    private readonly IFileProvider embedded;
 
     //idk much about readonly, rider just said it would be good
     //private string dataPath = "/../../../../data/chirp_cli_db.csv";
@@ -21,6 +25,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
 
     private CSVDatabase()
     {
+        embedded = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
         //set the config to "InvariantCulture" and inform the program that the file already has headers
         _csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
@@ -33,14 +38,9 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     public IEnumerable<T> Read(int? limit = null)
     {
         //ensure file exists
-        if (!File.Exists(dataPath))
-        {
-            Console.WriteLine();
-            throw new FileNotFoundException("Data file not found");
-        }
 
-        //create streamreader and CSVreader with "using"
-        using (var reader = new StreamReader(dataPath))
+        using var embed = embedded.GetFileInfo("data/chirp_cli_db.csv").CreateReadStream();
+        using var reader = new StreamReader(embed);
         using (var csv = new CsvReader(reader, _csvConfig))
         {
             //Makes sure limit is not null, to avoid possible error
@@ -53,12 +53,17 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
 
             return dataRecords;
         }
+        
+
     }
 
     public void Store(T record)
     {
         //create streamwriter and CSVwriter with using
-        using (var writer = new StreamWriter(dataPath, true))
+        
+        //using (var writer = new StreamWriter(dataPath, true))
+        using var embed = embedded.GetFileInfo(dataPath).CreateReadStream();
+        using var writer = new StreamWriter(embed);
         using (var csv = new CsvWriter(writer, _csvConfig))
         {
             //add cheep to file then add blank character to end

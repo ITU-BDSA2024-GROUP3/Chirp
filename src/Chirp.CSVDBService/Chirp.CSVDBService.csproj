@@ -10,4 +10,12 @@
 <ItemGroup>
   <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
 </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="data/*.csv"/>
+  </ItemGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.8" />
+</ItemGroup>
 </Project>
