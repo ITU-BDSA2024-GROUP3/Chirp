@@ -13,29 +13,27 @@ public interface ICheepService
 public class CheepService : ICheepService
 {
     private readonly ICheepRepository _repository;
-    private readonly DBFacade facade;
 
     public CheepService(ICheepRepository repository)
     {
         _repository = repository;
-        facade = new DBFacade(_repository);
     }
     
     public Task<List<CheepDTO>> GetCheeps(int page)
     {
-        return facade.ReadCheeps(page);
+        return _repository.ReadCheeps(page, null);
     }
 
     public Task<AuthorDTO> GetAuthor(int id)
     {
-        return facade.GetAuthor(id);
+        return _repository.ReadAuthor(id);
     }
     
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
     {
         // filter by the provided author name
 
-        return facade.GetCheepsFromAuthor(userId, page);
+        return _repository.ReadCheeps(page, userId);
     }
     
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
