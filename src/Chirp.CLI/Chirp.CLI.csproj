@@ -1,13 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
+    <ProjectReference Include="..\Chirp.CSVDBService\Chirp.CSVDBService.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\UtilFunctions\UtilFunctions.csproj" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="docopt.net" Version="0.8.1" />

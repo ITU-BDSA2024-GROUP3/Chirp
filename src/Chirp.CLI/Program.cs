@@ -1,13 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
-using Chirp.CLI;
-using DocoptNet;
-using SimpleDB;
-using UtilFunctions;
+using Chirp.CSVDBService;
 using DocoptNet;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Chirp.CLI;
 
 
 /*
@@ -50,8 +48,8 @@ if ((bool)arguments["read"].Value)
     }
 
     // Create an HTTP client object
-    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
-    //var baseURL = "http://localhost:5132";
+    //var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -77,9 +75,10 @@ if ((bool)(arguments["cheep"].Value))
 {
     var message = arguments["<message>"].Value.ToString();
     
-    Cheep cheep = Util.CreateCheep(message);
+    var cheep = Util.CreateCheep(message);
     
-    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    //var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
