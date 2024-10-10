@@ -15,7 +15,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     //private string dataPath = "/../../../../data/chirp_cli_db.csv";
 
     //private string dataPath = makePath("data", "chirp_cli_db.csv");
-    private string dataPath = Path.Combine("data/"+"chirp_cli_db.csv");
+    private string dataPath = Path.Combine("data","chirp_cli_db.csv");
 
     //why is there two databases?
     static CSVDatabase()
@@ -70,8 +70,6 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     public void Store(T record)
     {
         //create streamwriter and CSVwriter with using
-        var csvFileLenth = new System.IO.FileInfo(dataPath).Length;
-        
         //using (var writer = new StreamWriter(dataPath, true))
         using (var writer = new StreamWriter(dataPath, true))
         using (var csv = new CsvWriter(writer, _csvConfig))

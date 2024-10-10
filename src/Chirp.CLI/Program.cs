@@ -48,8 +48,8 @@ if ((bool)arguments["read"].Value)
     }
 
     // Create an HTTP client object
-    //var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
-    var baseURL = "http://localhost:5132";
+    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    //var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -61,14 +61,15 @@ if ((bool)arguments["read"].Value)
     if(limit != null) requestURI += $"?limit={limit}";
     
     var cheepsRes = await client.GetAsync(requestURI);
-    var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>(requestURI);
+    var cheeps = await client.GetFromJsonAsync<List<Cheep>>(requestURI);
     //var cheeps = await client.GetAsync(requestURI);
 
     
     Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
     
-    //Console.WriteLine(cheeps.Content.ReadAsStringAsync().Result);
-    UserInterface.PrintCheeps(cheeps);
+    //Console.WriteLine(cheeps);
+
+    if (cheeps != null) UserInterface.PrintCheeps(cheeps);
 }
 
 if ((bool)(arguments["cheep"].Value))
@@ -77,25 +78,28 @@ if ((bool)(arguments["cheep"].Value))
     
     var cheep = Util.CreateCheep(message);
     
-    //var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
-    var baseURL = "http://localhost:5132";
+    var baseURL = "http://bdsagroup3chirpremotedb.azurewebsites.net";
+    //var baseURL = "http://localhost:5132";
     using HttpClient client = new();
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     client.BaseAddress = new Uri(baseURL);
     
-    var requestURI = $"cheep";
-    requestURI += $"?message={message}";
+    var requestURI = $"/cheep";
+    requestURI += "?message={message}";
     
     
-    CancellationTokenSource cts = new();
-    CancellationToken cancellationToken = cts.Token;
+    using var response = await client.PutAsJsonAsync($"/cheep", cheep);
+    response.EnsureSuccessStatusCode();
+            
+    Console.WriteLine($"Post successful: {cheep.ToString()}");
     
-    var temp = await client.PostAsJsonAsync(requestURI, cheep, cancellationToken);
-    
+    //using var temp = await client.PostAsJsonAsync(requestURI, cheep);
     
     // following can be used to test what and if the statuscode of our cheeps is/works
     //Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
+    //Console.WriteLine(temp.StatusCode);
+
   
     //cheepManager.Store(Util.CreateCheep(message));
 }
