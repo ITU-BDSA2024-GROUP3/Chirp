@@ -1,6 +1,7 @@
-﻿using Chirp.Razor;
-using Chirp.Razor.ChirpCore;
-using Chirp.Razor.ChirpInfrastucture;
+﻿
+using ChirpCore;
+using ChirpCore.DomainModel;
+using ChirpInfrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 

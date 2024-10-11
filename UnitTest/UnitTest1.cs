@@ -1,4 +1,4 @@
-using Chirp.Razor.ChirpWeb;
+using ChirpWeb;
 
 namespace UnitTest;
 
