@@ -1,11 +1,14 @@
 using System.Data.Common;
 using Chirp.Razor.ChirpCore;
 using Chirp.Razor.ChirpInfrastucture;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+
+
 
 namespace integrationtest;
 
@@ -81,7 +84,14 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("What did they take?")]
     public async void CanSeePublicTimelineText(string message)
     {
-        
+        var response = await _client.GetAsync($"/");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var htmlDocument = new HtmlDocument();
+        htmlDocument.LoadHtml(content);
+
+        var tableElement = htmlDocument.GetElementbyId("messagelist");
+        Assert.NotNull(tableElement);
     }
     [Theory]
     [InlineData("What did they take?")]
