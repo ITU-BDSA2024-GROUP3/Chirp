@@ -1,4 +1,10 @@
+using System.Data.Common;
+using Chirp.Razor.ChirpCore;
+using Chirp.Razor.ChirpInfrastucture;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace integrationtest;
@@ -11,7 +17,40 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public TestAPI(WebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
+        _fixture.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                var dbContextDescriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                         typeof(DbContextOptions<ChirpDBContext>));
+
+                services.Remove(dbContextDescriptor);
+
+                var dbConnectionDescriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                         typeof(DbConnection));
+
+                services.Remove(dbConnectionDescriptor);
+
+                // Create open SqliteConnection so EF won't automatically close it.
+                services.AddSingleton<DbConnection>(container =>
+                {
+                    var connection = new SqliteConnection("DefaultConnection=:memory:");
+                    connection.OpenAsync();
+                    return connection;
+                });
+
+                services.AddDbContext<ChirpDBContext>((container, options) =>
+                {
+                    var connection = container.GetRequiredService<DbConnection>();
+                    options.UseSqlite(connection);
+                    
+                });
+            });
+        });
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        
     }
 
     [Fact]
@@ -37,4 +76,30 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Chirp!", content);
         Assert.Contains($"{author}'s Timeline", content);
     }
+
+    [Theory]
+    [InlineData("What did they take?")]
+    public async void CanSeePublicTimelineText(string message)
+    {
+        
+    }
+    [Theory]
+    [InlineData("What did they take?")]
+    public async void CanSeePrivateTimelineText(string message)
+    {
+        
+    }
+    /*
+     * correctNumberOfCheepsPerPagePublic
+     * correctNumberOfCheepsPerPagePrivate
+     * correctNumberOfCheepsPerPagePublicNotPage1
+     * correctNumberOfCheepsPerPagePrivateNotPage1
+     * changePagesChangesTextPublic
+     * changePagesChangesTextPrivate
+     * TimeStampOnCheepPublic
+     * TimeStampOnCheepPrivate
+     * AuthorOnCheepPublic
+     * AuthorOnCheepPrivate
+     * Layout (boxes)?
+     */
 }
