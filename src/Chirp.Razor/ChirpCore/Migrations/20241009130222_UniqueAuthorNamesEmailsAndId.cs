@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Chirp.Razor.Migrations
+namespace Chirp.Razor.ChirpCore.Migrations
 {
     /// <inheritdoc />
     public partial class UniqueAuthorNamesEmailsAndId : Migration
