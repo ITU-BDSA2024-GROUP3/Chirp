@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{011B1A60-FE9C-49D1-96EB-636AB5D75AD7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9982438D-A061-47E9-8A45-F1838292B836}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChripRazor", "ChripRazor", "{920A7ADE-B537-4F07-B9AF-F107D6D7229D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\ChripRazor\Chirp.Razor\Chirp.Razor.csproj", "{DE55898D-3C3E-4127-B075-CCFDD8A315BA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{B00F47BF-8CE3-407E-8177-F320894B0F80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C0467B57-0A24-4962-9511-01A6B0734979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChirpCore", "src\ChirpCore\ChirpCore.csproj", "{449507CB-C180-459A-842F-6C4A91996077}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChirpWeb", "src\ChirpWeb\ChirpWeb.csproj", "{C83E216A-4989-4EA5-A9CB-27D8F52B9D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChirpInfrastructure", "src\ChirpInfrastructure\ChirpInfrastructure.csproj", "{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE55898D-3C3E-4127-B075-CCFDD8A315BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B00F47BF-8CE3-407E-8177-F320894B0F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,9 +32,22 @@ Global
 		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2BAE52F-BFA3-48C4-BA99-B9A211DD73D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449507CB-C180-459A-842F-6C4A91996077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449507CB-C180-459A-842F-6C4A91996077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449507CB-C180-459A-842F-6C4A91996077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449507CB-C180-459A-842F-6C4A91996077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83E216A-4989-4EA5-A9CB-27D8F52B9D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83E216A-4989-4EA5-A9CB-27D8F52B9D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83E216A-4989-4EA5-A9CB-27D8F52B9D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83E216A-4989-4EA5-A9CB-27D8F52B9D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{920A7ADE-B537-4F07-B9AF-F107D6D7229D} = {011B1A60-FE9C-49D1-96EB-636AB5D75AD7}
-		{DE55898D-3C3E-4127-B075-CCFDD8A315BA} = {920A7ADE-B537-4F07-B9AF-F107D6D7229D}
+		{449507CB-C180-459A-842F-6C4A91996077} = {C0467B57-0A24-4962-9511-01A6B0734979}
+		{C83E216A-4989-4EA5-A9CB-27D8F52B9D66} = {C0467B57-0A24-4962-9511-01A6B0734979}
+		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5} = {C0467B57-0A24-4962-9511-01A6B0734979}
 	EndGlobalSection
 EndGlobal

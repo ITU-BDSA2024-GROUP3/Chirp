@@ -1,9 +1,8 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace Chirp.Razor.Migrations
+namespace ChirpWeb.Migrations
 {
     /// <inheritdoc />
     public partial class InitialDBSchema : Migration

@@ -1,5 +1,11 @@
-using Chirp.Razor;
+using ChirpCore;
+using ChirpInfrastructure;
+using ChirpWeb;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,4 +48,7 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-public partial class Program { }
+namespace ChirpWeb
+{
+    public partial class Program { }
+}

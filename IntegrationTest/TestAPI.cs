@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit.Abstractions;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace integrationtest;
 

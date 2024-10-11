@@ -1,6 +1,7 @@
-using Chirp.Razor;
-using Chirp.Razor.DomainModel;
+using ChirpCore;
+using ChirpCore.DomainModel;
 
+namespace ChirpWeb;
 //public record CheepViewModel(string Author, string Message, Int64 Timestamp);
 
 public interface ICheepService
@@ -26,7 +27,7 @@ public class CheepService : ICheepService
 
     public Task<AuthorDTO> GetAuthor(int id)
     {
-        return _repository.ReadAuthor(id);
+        return _repository.ReadAuthorById(id);
     }
     
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
@@ -34,6 +35,17 @@ public class CheepService : ICheepService
         // filter by the provided author name
 
         return _repository.ReadCheeps(page, userId);
+    }
+
+    public async Task<int> SendCheep(CheepDTO cheep, string name)
+    {
+        if (cheep.Author != null)
+        {
+
+            int id = await _repository.GetAuthorCount() + 1;
+            cheep.Author = await _repository.CreateAuthor(name, "", id);
+        }
+        return await _repository.CreateCheep(cheep);
     }
     
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)

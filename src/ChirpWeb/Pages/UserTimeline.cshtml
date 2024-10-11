@@ -1,16 +1,17 @@
-﻿@page "/"
-@using Chirp.Razor.Pages
-@model Chirp.Razor.Pages.PublicModel
+﻿@page "/{userId}"
+@using ChirpWeb
+@model ChirpWeb.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    var routeName = HttpContext.GetRouteValue("userId");
     
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
 
 <div>
-    <h2> Public Timeline </h2>
+    <h2> @Model.Author.Name's Timeline </h2>
 
     @if (Model.Cheeps.Any())
     {
@@ -20,7 +21,7 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author.AuthorId/?page=1">@cheep.Author.Name</a>
+                            <a href="/@cheep.Author.AuthorId">@cheep.Author.Name</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
@@ -35,9 +36,10 @@
     }
 
     <Button class="btn">
-        <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+        <a href="/@routeName?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
     </Button>
     <button class="btn">
-        <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
+        <a href="/@routeName?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
     </button>
+    
 </div>

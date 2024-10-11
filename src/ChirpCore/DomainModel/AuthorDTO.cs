@@ -1,4 +1,4 @@
-﻿namespace Chirp.Razor.DomainModel;
+﻿namespace ChirpCore.DomainModel;
 
 public class AuthorDTO
 {
