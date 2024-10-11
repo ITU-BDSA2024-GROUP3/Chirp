@@ -2,12 +2,12 @@
 
 #nullable disable
 
-using Chirp.Razor.ChirpInfrastucture;
+using ChirpInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Chirp.Razor.ChirpCore.Migrations
+namespace ChirpWeb.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
     [Migration("20241004110654_InitialDBSchema")]
