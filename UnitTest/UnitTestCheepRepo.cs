@@ -1,5 +1,5 @@
 ﻿using Chirp.Razor;
-using Chirp.Razor.DomainModel;
+using Chirp.Razor.ChirpCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
