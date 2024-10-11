@@ -3,6 +3,7 @@ using System;
 using Chirp.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Razor.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241009130222_UniqueAuthorNamesEmailsAndId")]
+    partial class UniqueAuthorNamesEmailsAndId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -33,6 +36,15 @@ namespace Chirp.Razor.Migrations
 
                     b.HasKey("AuthorId");
 
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Authors");
                 });
 
@@ -47,9 +59,10 @@ namespace Chirp.Razor.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(160)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("TEXT");
 
                     b.HasKey("CheepId");
