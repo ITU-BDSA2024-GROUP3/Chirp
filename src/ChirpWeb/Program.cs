@@ -48,7 +48,4 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-namespace ChirpWeb
-{
-    public partial class Program { }
-}
+public partial class Program { }

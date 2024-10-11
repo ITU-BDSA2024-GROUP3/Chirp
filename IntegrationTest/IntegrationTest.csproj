@@ -7,6 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,7 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\Chirp.Razor\Chirp.Razor.csproj" />
+        <ProjectReference Include="..\src\ChirpInfrastructure\ChirpInfrastructure.csproj" />
+        <ProjectReference Include="..\src\ChirpWeb\ChirpWeb.csproj" />
     </ItemGroup>
 
 </Project>

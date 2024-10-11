@@ -1,13 +1,13 @@
 using System.Data.Common;
-using Chirp.Razor.ChirpCore;
-using Chirp.Razor.ChirpInfrastucture;
+
+using ChirpInfrastructure;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
-
+using Xunit.Abstractions;
 
 
 namespace integrationtest;
