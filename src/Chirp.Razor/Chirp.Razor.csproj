@@ -22,7 +22,10 @@
       <AdditionalFiles Include="ChirpWeb\Pages\Public.cshtml" />
       <AdditionalFiles Include="ChirpWeb\Pages\Shared\_Layout.cshtml" />
       <AdditionalFiles Include="ChirpWeb\Pages\UserTimeline.cshtml" />
+      <InternalsVisibleTo Include="Program"/>
     </ItemGroup>
+    
+    
 
     <ItemGroup>
       <Content Update="ChirpWeb\wwwroot\css\style.css">
