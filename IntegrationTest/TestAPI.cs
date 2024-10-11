@@ -24,15 +24,17 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Helge")]
-    [InlineData("Adrian")]
-    public async void CanSeePrivateTimeline(string author)
+    [InlineData("Helge", 11)] //Change to ids to find page
+    [InlineData("Adrian", 12)]
+    public async void CanSeePrivateTimeline(string author,int id)
     {
-        var response = await _client.GetAsync($"/{author}");
+        var response = await _client.GetAsync($"/{id}");
         response.EnsureSuccessStatusCode();
+        
         var content = await response.Content.ReadAsStringAsync();
 
         Assert.Contains("Chirp!", content);
         Assert.Contains($"{author}'s Timeline", content);
+        
     }
 }
