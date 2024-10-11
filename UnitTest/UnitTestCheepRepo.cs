@@ -44,11 +44,132 @@ public class UnitTestCheepRepo
       //Assert.True(messages.Contains("messageData"));
       Assert.Contains("messageData", messages);
    }
-   /*[Theory]
+   
+   [Theory]
+   [InlineData(1,"Tom", "myemail")]
+   public async void TestReadAuthorById(int id, string name, string email)
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        
+      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      ICheepRepository repo = new CheepRepository(context);
+      
+      var authorDto = await repo.ReadAuthorById(id);
+      Assert.NotNull(author);
+      Assert.Equal(name, authorDto.Name);
+   }
+   [Theory]
+   [InlineData(1,"Tom", "myemail")]
+   public async void TestReadAuthorByEmail(int id, string name, string email)
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        
+      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      ICheepRepository repo = new CheepRepository(context);
+      
+      var authorDto = await repo.ReadAuthorByEmail(email);
+      Assert.NotNull(author);
+      Assert.Equal(name, authorDto.Name);
+   }
+   [Theory]
+   [InlineData(1,"Tom", "myemail")]
+   public async void TestReadAuthorByName(int id, string name, string email)
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        
+      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      ICheepRepository repo = new CheepRepository(context);
+      
+      var authorDto = await repo.ReadAuthorByName(name);
+      Assert.NotNull(author);
+      Assert.Equal(name, authorDto.Name);
+   }
+   
+   [Theory]
+   [InlineData(1,"Tom", "myemail")]
+   public async void TestCreateAuthor(int id, string name, string email)
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      ICheepRepository repo = new CheepRepository(context);
+      var author = await repo.CreateAuthor(name, email, id);
+      
+      Assert.NotNull(author);
+      
+   }
+   [Theory]
+   [InlineData(1,"Tom", "myemail", 10 )]
+   public async void TestGetAuthorCount(int id, string name, string email, int authorNr)
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+     
+      
+      ICheepRepository repo = new CheepRepository(context);
+
+      for (int i = 0; i < authorNr; i++)
+      {
+         await repo.CreateAuthor(name+i, email+i, id+i);
+      }
+      
+      var athcount = await repo.GetAuthorCount();
+      
+      Assert.Equal(authorNr, athcount);
+   }
+   /*
+   [Theory]
    public async void TestReadCheepText()
    {
       
-   }*/
+   }
+
+   
+   
+   
+   TestGetAuthorCount()
+   
+   TestCreateCheep
+   
+   */
    
     
 }
