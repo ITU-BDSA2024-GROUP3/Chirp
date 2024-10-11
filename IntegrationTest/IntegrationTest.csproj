@@ -22,8 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        
-        <ProjectReference Include="..\src\ChripRazor\Chirp.Razor\Chirp.Razor.csproj" />
+        <ProjectReference Include="..\src\Chirp.Razor\Chirp.Razor.csproj" />
     </ItemGroup>
 
 </Project>

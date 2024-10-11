@@ -41,7 +41,8 @@ public class UnitTestCheepRepo
       {
          messages.Add(cheeP.Text);
       }
-      Assert.True(messages.Contains("messageData"));
+      //Assert.True(messages.Contains("messageData"));
+      Assert.Contains("messageData", messages);
    }
    /*[Theory]
    public async void TestReadCheepText()
