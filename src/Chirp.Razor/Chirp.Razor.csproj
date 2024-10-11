@@ -41,5 +41,20 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
     </ItemGroup>
+    
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\appsettings.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\Chirp.Razor.deps.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\Chirp.Razor.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\Chirp.Razor.staticwebassets.runtime.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\UnitTest.deps.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\bin\Debug\net8.0\UnitTest.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\obj\Debug\net8.0\UnitTest.sourcelink.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="UnitTest\obj\UnitTest.csproj.nuget.dgspec.json" />
+    </ItemGroup>
 
 </Project>
