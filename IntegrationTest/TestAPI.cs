@@ -85,9 +85,9 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         
     }
 
-    [Theory]
-    [InlineData("What did they take?")]
-    public async void CanSeePublicTimelineText(string message)
+    [Fact]
+    //[InlineData("What did they take?")]
+    public async void CanSeePublicTimelineCheep()
     {
         var response = await _client.GetAsync($"/");
         response.EnsureSuccessStatusCode();
@@ -99,10 +99,48 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.NotNull(tableElement);
     }
     [Theory]
+    [InlineData("Helge", 11)] //Change to ids to find page
+    [InlineData("Adrian", 12)]
+    public async void CanSeePrivateTimelineCheep(string author, int id)
+    {
+        _output.WriteLine($"Author: {author}, Id: {id}");
+        var response = await _client.GetAsync($"/{id}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var htmlDocument = new HtmlDocument();
+        htmlDocument.LoadHtml(content);
+
+        var tableElement = htmlDocument.GetElementbyId("messagelist");
+        Assert.NotNull(tableElement);
+    }
+
+    [Theory]
     [InlineData("What did they take?")]
-    public async void CanSeePrivateTimelineText(string message)
+    public async void CanSeePublicTimelineText(string message)
     {
         
+    }
+
+    [Theory]
+
+    [InlineData("What did they take?", "Helge", 11)] //Change to ids to find page
+    [InlineData("What did they take?", "Adrian", 12)]//change messages
+    public async void CanSeePrivateTimelineText(string message, string author, int id)
+    {
+        
+    }
+    [Theory]
+    [InlineData(1)]
+    public async void CorrectNumberOfCheepsPerPagePublic(int page)
+    {
+        var response = await _client.GetAsync($"/");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var htmlDocument = new HtmlDocument();
+        htmlDocument.LoadHtml(content);
+
+        var tableElement = htmlDocument.GetElementbyId("messagelist");
+        Assert.Equal(32, tableElement.InnerHtml.Length);//takes all cheeps
     }
     /*
      * correctNumberOfCheepsPerPagePublic
