@@ -1,6 +1,6 @@
-﻿using Chirp.Razor.ChirpInfrastucture;
+﻿using ChirpCore.DomainModel;
 
-namespace Chirp.Razor.ChirpCore;
+namespace ChirpCore;
 
 public interface ICheepRepository 
 {

@@ -2,16 +2,19 @@
 
 #nullable disable
 
-using Chirp.Razor.ChirpInfrastucture;
+using ChirpInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Chirp.Razor.ChirpCore.Migrations
+namespace ChirpWeb.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241009130222_UniqueAuthorNamesEmailsAndId")]
+    partial class UniqueAuthorNamesEmailsAndId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");

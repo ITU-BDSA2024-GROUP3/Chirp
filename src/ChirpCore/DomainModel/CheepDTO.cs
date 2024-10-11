@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Chirp.Razor.ChirpInfrastucture;
 
-namespace Chirp.Razor.ChirpCore;
+namespace ChirpCore.DomainModel;
 
 public class CheepDTO
 {

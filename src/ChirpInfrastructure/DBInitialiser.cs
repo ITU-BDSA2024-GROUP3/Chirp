@@ -1,10 +1,13 @@
-﻿namespace Chirp.Razor.ChirpInfrastucture;
+﻿using ChirpCore;
+using ChirpCore.DomainModel;
+
+namespace ChirpInfrastructure;
 
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDBContext chirpContext)
     {
-        if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
+        if (!(Queryable.Any<Author>(chirpContext.Authors) && Queryable.Any<Cheep>(chirpContext.Cheeps)))
         {
             var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };

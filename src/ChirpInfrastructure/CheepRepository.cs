@@ -1,7 +1,8 @@
-﻿using Chirp.Razor.ChirpCore;
+﻿using ChirpCore;
+using ChirpCore.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Razor.ChirpInfrastucture;
+namespace ChirpInfrastructure;
 
 public class CheepRepository : ICheepRepository
 {
@@ -31,7 +32,7 @@ public class CheepRepository : ICheepRepository
         IQueryable<CheepDTO> query;
         if (authorId != null)
         {
-            query = _dbContext.Cheeps.Where(message => message.AuthorId == authorId).Select(message => new CheepDTO()
+            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.AuthorId == authorId).Select(message => new CheepDTO()
                     { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
                 .Skip((page - 1) * 32).Take(32);
         }
@@ -63,7 +64,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<AuthorDTO> ReadAuthorById(int id)
     {
-        IQueryable<AuthorDTO> query = _dbContext.Authors.Where(author => author.AuthorId == id)
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.AuthorId == id)
             .Select(author => new AuthorDTO() { Name = author.Name })
             .Take(1);
         return await query.FirstOrDefaultAsync();
@@ -71,7 +72,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
-        IQueryable<AuthorDTO> query = _dbContext.Authors.Where(author => author.Name == name)
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
             .Select(author => new AuthorDTO() { Name = author.Name })
             .Take(1);
         return await query.FirstOrDefaultAsync();
@@ -79,7 +80,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<AuthorDTO> ReadAuthorByEmail(string email)
     {
-        IQueryable<AuthorDTO> query = _dbContext.Authors.Where(author => author.Email == email)
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
             .Select(author => new AuthorDTO() { Name = author.Name })
             .Take(1);
         return await query.FirstOrDefaultAsync();

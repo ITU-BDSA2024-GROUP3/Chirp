@@ -8,8 +8,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
-        <EmbeddedResource Include=".\data\schema.sql" />
-        <EmbeddedResource Include=".\data\dump.sql" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
@@ -18,12 +16,7 @@
         <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <AdditionalFiles Include="ChirpWeb\Pages\Public.cshtml" />
-      <AdditionalFiles Include="ChirpWeb\Pages\Shared\_Layout.cshtml" />
-      <AdditionalFiles Include="ChirpWeb\Pages\UserTimeline.cshtml" />
-      <InternalsVisibleTo Include="Program"/>
-    </ItemGroup>
+
     
     
 

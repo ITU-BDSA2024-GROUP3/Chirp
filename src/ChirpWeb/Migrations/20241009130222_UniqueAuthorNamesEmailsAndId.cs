@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Chirp.Razor.ChirpCore.Migrations
+namespace ChirpWeb.Migrations
 {
     /// <inheritdoc />
     public partial class UniqueAuthorNamesEmailsAndId : Migration
