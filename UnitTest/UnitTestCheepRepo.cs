@@ -1,12 +1,19 @@
 ﻿using Chirp.Razor;
 using Chirp.Razor.ChirpCore;
+using Chirp.Razor.ChirpInfrastucture;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace UnitTest;
 
-public class UnitTestCheepRepo
+public class UnitTestCheepRepo : IDisposable
 {
+   
+
+   public async void Dispose()
+   {
+   }
+
    [Fact]
    public async void TestReadCheep()
    {
