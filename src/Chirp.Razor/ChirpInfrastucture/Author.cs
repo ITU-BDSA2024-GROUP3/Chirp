@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace Chirp.Razor.DomainModel;
+﻿namespace Chirp.Razor.ChirpInfrastucture;
 
 
 public class Author

@@ -1,7 +1,7 @@
-﻿using Chirp.Razor.DomainModel;
+﻿using Chirp.Razor.ChirpCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Razor;
+namespace Chirp.Razor.ChirpInfrastucture;
 
 public class CheepRepository : ICheepRepository
 {

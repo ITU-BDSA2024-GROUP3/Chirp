@@ -1,6 +1,6 @@
-using Chirp.Razor;
-using Chirp.Razor.DomainModel;
+using Chirp.Razor.ChirpCore;
 
+namespace Chirp.Razor.ChirpWeb;
 //public record CheepViewModel(string Author, string Message, Int64 Timestamp);
 
 public interface ICheepService

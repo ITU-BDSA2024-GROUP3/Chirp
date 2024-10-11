@@ -1,4 +1,5 @@
-﻿using Chirp.Razor.DomainModel;
+﻿using Chirp.Razor.ChirpCore;
+using Chirp.Razor.ChirpWeb;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

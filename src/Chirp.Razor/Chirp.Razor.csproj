@@ -18,4 +18,25 @@
         <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="ChirpWeb\Pages\Public.cshtml" />
+      <AdditionalFiles Include="ChirpWeb\Pages\Shared\_Layout.cshtml" />
+      <AdditionalFiles Include="ChirpWeb\Pages\UserTimeline.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="ChirpWeb\wwwroot\css\style.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="ChirpWeb\wwwroot\favicon\favicon.ico">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="ChirpWeb\wwwroot\images\icon1.png">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
