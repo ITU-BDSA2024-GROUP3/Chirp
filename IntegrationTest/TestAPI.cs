@@ -397,7 +397,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(21, 22, "Hej, velkommen til kurset.")]
     [InlineData(20, 21, "The one is very hard, and yesterday evening in an open door leading to the staple fuel.")]
 
-    public async void CheepsChangeWhenPagesChangePublic(int page1, int page2, string message)
+    public async void CheepsChangeWhenPagesChangePublic(int page1, int page2, string message)//duplicate cheeps?
     {
         var content1 = await SetPublicPage(page1);
         var content2 = await SetPublicPage(page2);
@@ -483,14 +483,23 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         Assert.DoesNotContain($"<small>&mdash;</small>\r\n", content);
     }
 
-    public async void AuthorAlwaysExistsPublic()
-    {
+    [Theory]
+    [InlineData(1)]
+    [InlineData(3)]
+    [InlineData(5)]
+    [InlineData(10)]
 
+    public async void AuthorAlwaysExistsPublic(int page)
+    {
+        var content = await SetPublicPage(page);
+        Assert.DoesNotContain("<a href=\"//?page=1\"></a>", content);
     }
-
-    public async void AuthorAlwaysExistsPrivate()
+    [InlineData("Jacqualine Gilcoine", 10, 1)]
+    [InlineData("Jacqualine Gilcoine", 10, 2)]
+    public async void AuthorAlwaysExistsPrivate(string author, int id, int page)
     {
-
+        var content = await SetPrivatePage(page, author, id);
+        Assert.DoesNotContain($"<a href=\"/\"></a>", content);
     }
 
     [Theory]
