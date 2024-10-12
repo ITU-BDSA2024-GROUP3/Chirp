@@ -505,7 +505,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [Theory]
     [InlineData("Adrian", 12, 21)]
     [InlineData("Helge", 11, 21)]
-    [InlineData("Jacqualine Gilcoin", 10, 1)]
+    [InlineData("Jacqualine Gilcoine", 10, 1)]
     public async void AuthorsExistPublic(string author, int id, int page)
     {
         var content = await SetPublicPage(page);
@@ -513,8 +513,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Jacqualine Gilcoin", 10, 1)]
-    [InlineData("Jacqualine Gilcoin", 10, 2)]
+    [InlineData("Jacqualine Gilcoine", 10, 1)]
+    [InlineData("Jacqualine Gilcoine", 10, 2)]
 
     public async void PrivateTimelineOnlyHasOneAuthor(string author, int id, int page)
     {
@@ -546,7 +546,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
-    //[InlineData("Adrian", 12, 1)]
+    [InlineData("Adrian", 12, 1)]
 
     public async void AuthorLinksExistPrivate(string author, int id, int page)
     {
@@ -566,8 +566,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Jacqualine Gilcoin", 10, 1)]
-    [InlineData("Jacqualine Gilcoin", 10, 2)]
+    [InlineData("Jacqualine Gilcoine", 10, 1)]
+    [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Adrian", 12, 1)]
     [InlineData("Helge", 11, 1)]
 
