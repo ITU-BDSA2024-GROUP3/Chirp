@@ -448,6 +448,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
             content);
 
     }
+
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
         "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.",
@@ -461,14 +462,25 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
             content);
     }
 
-    public async void TimeStampAlwaysExistsPublic()
-    {
+    [Theory]
+    [InlineData(1)]
+    [InlineData(3)]
+    [InlineData(10)]
+    [InlineData(20)]
 
+    public async void TimeStampAlwaysExistsPublic(int page)
+    {
+        var content = await SetPublicPage(page);
+        Assert.DoesNotContain($"<small>&mdash;</small>\r\n", content);
     }
 
-    public async void TimeStampAlwaysExistsPrivate()
-    {
+    [Theory]
+    [InlineData("Jacqualine Gilcoine", 10, 1)]
 
+    public async void TimeStampAlwaysExistsPrivate(string author, int id, int page)
+    {
+        var content = await SetPrivatePage(page, author, id);
+        Assert.DoesNotContain($"<small>&mdash;</small>\r\n", content);
     }
 
     public async void AuthorAlwaysExistsPublic()
