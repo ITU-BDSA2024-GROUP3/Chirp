@@ -13,7 +13,7 @@ public class ChirpDBContext : DbContext
     {
         
     }
-    
+    //overides a function called withn DBcontext to ensure unique name, email and ID of authors
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
