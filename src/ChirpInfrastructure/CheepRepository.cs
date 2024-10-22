@@ -98,6 +98,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> GetAuthorCount()
     {
+        //uses sql to count from database
         return await _dbContext.Authors.CountAsync();
     }
     /* old code:
