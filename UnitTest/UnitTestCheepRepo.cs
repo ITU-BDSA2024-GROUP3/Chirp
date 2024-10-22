@@ -195,7 +195,6 @@ public class UnitTestCheepRepo : IDisposable
       };
       
       var result = await repo.CreateCheep(cheepDataTransferObject);
-      Assert.NotNull(result);
       Assert.Equal(1, result);
          
       //return queryResult.Entity.CheepId;
