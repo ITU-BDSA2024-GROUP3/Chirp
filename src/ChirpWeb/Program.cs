@@ -1,6 +1,7 @@
 using ChirpCore;
 using ChirpInfrastructure;
 using ChirpWeb;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,20 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "GitHub";
+    })
+    .AddCookie()
+    .AddGitHub(o =>
+    {
+        o.ClientId = builder.Configuration["GitHub:ClientID"];
+        o.ClientSecret = builder.Configuration["GitHub:ClientSecret"];
+        o.CallbackPath = "/signin-github";
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +49,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 
