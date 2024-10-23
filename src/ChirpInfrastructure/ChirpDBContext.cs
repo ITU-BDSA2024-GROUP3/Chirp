@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChirpInfrastructure;
 
-public class ChirpDBContext : IdentityDbContext<Author>
+public class ChirpDBContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }

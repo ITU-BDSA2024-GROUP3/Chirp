@@ -16,13 +16,10 @@ builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddScoped<ICheepService, CheepService>();
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
-//
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     //options.SignIn.RequireConfirmedAccount = true;
     options.Lockout.AllowedForNewUsers = true;
@@ -30,6 +27,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<ChirpDBContext>();
+
+builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
+//
 // remaining configuration not show
 //
 
