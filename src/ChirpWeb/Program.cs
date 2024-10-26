@@ -2,6 +2,7 @@ using ChirpCore;
 using ChirpInfrastructure;
 using ChirpWeb;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,12 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+//builder.Services.AddSession(); This might need to be added when testing
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddScoped<ICheepService, CheepService>();
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -52,6 +54,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseSession(); This might need to be added when testing, not sure of it's exact function
 
 app.MapRazorPages();
 

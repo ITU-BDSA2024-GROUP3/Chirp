@@ -1,6 +1,7 @@
 ﻿
 using ChirpCore.DomainModel;
 using ChirpWeb;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,6 +17,7 @@ public class UserTimelineModel : PageModel
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
+        currentPage = 1;
     }
 
     public async Task<ActionResult> OnGetAsync(int userId, [FromQuery] int page)
@@ -36,5 +38,12 @@ public class UserTimelineModel : PageModel
         }
 
         return Page();
+    }
+    public IActionResult OnGetLogin()
+    {
+        return Challenge(new AuthenticationProperties
+        {
+            RedirectUri = "/"
+        }, "GitHub");
     }
 }
