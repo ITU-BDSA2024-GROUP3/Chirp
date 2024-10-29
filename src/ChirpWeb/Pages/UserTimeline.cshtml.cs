@@ -18,10 +18,17 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public async Task<ActionResult> OnGetAsync(int userId, [FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync(string userEmail, [FromQuery] int page)
     {
-        var authorTask = _service.GetAuthor(userId);
-        var cheepsTask = _service.GetCheepsFromAuthor(userId, page);
+        var authorTask = _service.ReadAuthorByEmail(userEmail);
+        AuthorDTO author = authorTask.Result;
+
+        if (author == null)
+        {
+            return NotFound();
+        }
+        
+        var cheepsTask = _service.GetCheepsFromAuthor(author.AuthorId, page);
 
         await Task.WhenAll(authorTask, cheepsTask);
         

@@ -65,7 +65,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorById(int id)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.AuthorId == id)
-            .Select(author => new AuthorDTO() { Name = author.Name })
+            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -73,7 +73,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
-            .Select(author => new AuthorDTO() { Name = author.Name })
+            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId  })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -81,7 +81,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
-            .Select(author => new AuthorDTO() { Name = author.Name })
+            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId  })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
