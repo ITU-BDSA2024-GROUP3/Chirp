@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChirpInfrastructure;
 
-public class ChirpDBContext : IdentityDbContext<ApplicationUser>
+public class ChirpDBContext : IdentityDbContext<Author>
 {
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
@@ -28,7 +28,7 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
             .HasIndex(c => c.Email)
             .IsUnique();
         modelBuilder.Entity<Author>()
-            .HasIndex(c => c.AuthorId)
+            .HasIndex(c => c.UserId)
             .IsUnique();
     }
 }

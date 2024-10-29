@@ -19,7 +19,7 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+builder.Services.AddDefaultIdentity<Author>(options =>
 {
     //options.SignIn.RequireConfirmedAccount = true;
     options.Lockout.AllowedForNewUsers = true;

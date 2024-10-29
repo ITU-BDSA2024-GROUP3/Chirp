@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ChirpCore\ChirpCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

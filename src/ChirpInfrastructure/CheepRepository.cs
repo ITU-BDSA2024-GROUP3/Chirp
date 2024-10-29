@@ -26,13 +26,13 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity.CheepId;
     }
 
-    public async Task<List<CheepDTO>> ReadCheeps(int page, int? authorId)
+    public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core
         IQueryable<CheepDTO> query;
-        if (authorId != null)
+        if (UserId != null)
         {
-            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.AuthorId == authorId).Select(message => new CheepDTO()
+            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId).Select(message => new CheepDTO()
                     { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
                 .Skip((page - 1) * 32).Take(32);
         }
@@ -64,8 +64,8 @@ public class CheepRepository : ICheepRepository
 
     public async Task<AuthorDTO> ReadAuthorById(int id)
     {
-        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.AuthorId == id)
-            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId })
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -73,7 +73,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
-            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId  })
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId  })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -81,14 +81,14 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
-            .Select(author => new AuthorDTO() { Name = author.Name, AuthorId = author.AuthorId  })
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId  })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<Author> CreateAuthor(string name, string email, int authorId)
+    public async Task<Author> CreateAuthor(string name, string email, int UserId)
     {
-        Author author = new() { AuthorId = authorId, Name = name, Email = email, Cheeps = new List<Cheep>() };
+        Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>() };
         var queryResult = await _dbContext.Authors.AddAsync(author); // does not write to the database!
 
         await _dbContext.SaveChangesAsync();
