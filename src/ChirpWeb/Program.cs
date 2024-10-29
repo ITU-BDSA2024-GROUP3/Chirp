@@ -52,7 +52,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//WHAT U ARE
 app.UseAuthentication();
+//WHAT U CAN DO, DEPENDING ON WHO YOU ARE
 app.UseAuthorization();
 //app.UseSession(); This might need to be added when testing, not sure of it's exact function
 
