@@ -10,6 +10,6 @@ public interface ICheepRepository
     public Task<AuthorDTO> ReadAuthorById(int id);
     public Task<AuthorDTO> ReadAuthorByName(string name);
     public Task<AuthorDTO> ReadAuthorByEmail(string email);
-    public Task<Author> CreateAuthor(string name, string email, int authorId);
+    public Task<Author> CreateAuthor(string name, string email, int userId);
     public Task<int> GetAuthorCount();
 }

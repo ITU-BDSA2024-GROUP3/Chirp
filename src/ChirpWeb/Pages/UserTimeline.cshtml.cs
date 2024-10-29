@@ -28,7 +28,7 @@ public class UserTimelineModel : PageModel
             return NotFound();
         }
         
-        var cheepsTask = _service.GetCheepsFromAuthor(author.AuthorId, page);
+        var cheepsTask = _service.GetCheepsFromAuthor(author.UserId, page);
 
         await Task.WhenAll(authorTask, cheepsTask);
         

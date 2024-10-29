@@ -25,7 +25,7 @@ public class UtilFunctionsTest
         {
             CheepId = 1,
             Author = author,
-            AuthorId = author.AuthorId,
+            UserId = author.UserId,
             Text = "messageData",
             TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime // Ensure this matches the format in your model
         };
