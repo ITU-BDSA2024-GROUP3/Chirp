@@ -481,9 +481,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n",
-            content);
+        bool windows= content.Contains(
+            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+        bool linux= content.Contains(
+            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{id}\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+        Assert.True(windows || linux);
     }
 
     [Theory]
