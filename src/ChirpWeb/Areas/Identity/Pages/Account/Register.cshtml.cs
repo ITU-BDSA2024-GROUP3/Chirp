@@ -133,8 +133,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 user.Name = Input.Name;
                 user.Email = Input.Email;
                 user.Cheeps = new List<Cheep>();
-                /*int id = await _repository.GetAuthorCount() + 1;
-                user.UserId = id;*/
+                user.UserId = new Random().Next();
 
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

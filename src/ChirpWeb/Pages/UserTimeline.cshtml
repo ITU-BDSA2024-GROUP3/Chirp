@@ -4,9 +4,7 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("name");
-    //var routeName = "test";
-    System.Console.WriteLine("Test");
+    var routeName = HttpContext.GetRouteValue("author");
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
