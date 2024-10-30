@@ -1,5 +1,5 @@
 using System.Data.Common;
-
+using System.Diagnostics;
 using ChirpInfrastructure;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -366,12 +366,27 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void ButtonLinksCorrectlyPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains(
+        bool windows1 = content.Contains(    
+            $"<button class=\"btn\">\r\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
+        bool linux1 = content.Contains( 
+            $"<button class=\"btn\">\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
+        bool windows2 =
+            content.Contains(
+                $"<Button class=\"btn\">\r\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
+        bool linux2 =
+            content.Contains(
+                $"<Button class=\"btn\">\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
+        
+        Assert.True((windows1 && windows2) || (linux2 && linux1));
+        
+        
+        
+        /*Assert.Contains(
             $"<button class=\"btn\">\r\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r",
             content);
         Assert.Contains(
             $"<Button class=\"btn\">\r\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r",
-            content);
+            content);*/
     }
 
     [Fact]
