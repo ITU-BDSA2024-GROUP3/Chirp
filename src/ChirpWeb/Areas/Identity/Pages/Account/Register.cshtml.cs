@@ -32,7 +32,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         
-        //private readonly ICheepRepository _repository;
+        private readonly ICheepService _service;
 
 
         public RegisterModel(
@@ -41,7 +41,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender
-            //,ICheepRepository repository
+            ,ICheepService service
             )
         {
             
@@ -52,7 +52,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             
-            //_repository = repository;
+            _service = service;
         }
 
         /// <summary>
@@ -127,13 +127,15 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var user = await _repository.CreateAuthor(name, "", id);
+                //var user = await _service.CreateAuthor(name, "", id);
                 var user = CreateUser();
 
                 user.Name = Input.Name;
                 user.Email = Input.Email;
                 user.Cheeps = new List<Cheep>();
-                user.UserId = new Random().Next();
+                var id = await _service.GetAuthorCount();
+                user.UserId =  id + 1;
+                //user.UserId = new Random().Next(); //This needs to be changed
 
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

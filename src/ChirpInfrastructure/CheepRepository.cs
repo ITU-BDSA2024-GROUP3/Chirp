@@ -98,9 +98,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> GetAuthorCount()
     {
-        IQueryable<AuthorDTO> query = _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name })
-            .OrderDescending().Take(1);
-        Console.WriteLine(query.Count());
+        IQueryable<AuthorDTO> query = _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId});
         return await query.CountAsync();
     }
 }
