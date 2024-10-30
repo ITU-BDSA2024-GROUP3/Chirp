@@ -19,7 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ChirpCore\ChirpCore.csproj" />
     <ProjectReference Include="..\ChirpInfrastructure\ChirpInfrastructure.csproj" />
-    <InternalsVisibleTo Include="..\..\IntegrationTest\IntegrationTest.csproj" />
+    <InternalsVisibleTo Include="IntegrationTest" /> 
   </ItemGroup>
 
 
