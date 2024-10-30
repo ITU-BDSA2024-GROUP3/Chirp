@@ -37,10 +37,12 @@ public class PublicModel : PageModel
 
     public async Task<ActionResult> OnPost()
     {
+        /*
         if (!User.Identity.IsAuthenticated)
         {
             return RedirectToPage("Public");
         }
+        */
         
         if (!ModelState.IsValid)
         {
@@ -48,9 +50,7 @@ public class PublicModel : PageModel
             return RedirectToPage("Public");
         }
 
-        // Create cheep
-        //Author author = (User.Identity.Name)
-        CheepDTO newCheep = new CheepDTO() { Text = Text, Author = _service.GetAuthor(1).Result };
+        CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = 1};
         _service.CreateCheep(newCheep);
         
         return RedirectToPage("Public");

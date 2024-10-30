@@ -38,7 +38,7 @@ public class CheepService : ICheepService
 
     public Task<AuthorDTO> GetAuthor(int id)
     {
-        return _repository.ReadAuthorById(id);
+        return _repository.ReadAuthorDTOById(id);
     }
     
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail)

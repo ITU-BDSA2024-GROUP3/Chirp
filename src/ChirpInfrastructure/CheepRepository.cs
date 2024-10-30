@@ -18,13 +18,16 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Cheep message = new() { CheepId = _nextCheepId++, UserId = newMessage.Author.UserId, Author = newMessage.Author, Text = newMessage.Text, TimeStamp = DateTime.Now };
-        var queryResult = await _dbContext.Cheeps.AddAsync(message); // does not write to the database!
+        Author cheepAuthor = ReadAuthorById(newMessage.AuthorID).Result;
+        
+        Cheep message = new() { CheepId = _nextCheepId++, UserId = newMessage.AuthorID, Text = newMessage.Text, TimeStamp = DateTime.Now, Author = cheepAuthor};
+        var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
+        cheepAuthor.Cheeps.Add(message);
         
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         
-        newMessage.Author.Cheeps.Add(message);
-
+        Console.WriteLine($"Store Cheep message = {message.Text} and AuthorId = {message.Author.UserId}");
+        
         return queryResult.Entity.CheepId;
     }
 
@@ -35,13 +38,13 @@ public class CheepRepository : ICheepRepository
         if (UserId != null)
         {
             query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId).Select(message => new CheepDTO()
-                    { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
+                    { Text = message.Text, AuthorID = message.Author.UserId, AuthorName = message.Author.Name, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
                 .Skip((page - 1) * 32).Take(32);
         }
         else
         {
             query = _dbContext.Cheeps.Select(message => new CheepDTO()
-                    { Text = message.Text, Author = message.Author, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
+                    { Text = message.Text, AuthorID = message.Author.UserId, AuthorName = message.Author.Name, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
                 .Skip((page - 1) * 32).Take(32);
         }
 
@@ -64,7 +67,7 @@ public class CheepRepository : ICheepRepository
         return message.CheepId;
     }
 
-    public async Task<AuthorDTO> ReadAuthorById(int id)
+    public async Task<AuthorDTO> ReadAuthorDTOById(int id)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
             .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
@@ -72,6 +75,14 @@ public class CheepRepository : ICheepRepository
         return await query.FirstOrDefaultAsync();
     }
 
+    public async Task<Author> ReadAuthorById(int id)
+    {
+        IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
+            .Select(author => author)
+            .Take(1);
+        return await query.FirstOrDefaultAsync();
+    }
+    
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
