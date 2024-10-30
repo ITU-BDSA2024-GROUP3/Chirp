@@ -121,6 +121,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 //var user = await _repository.CreateAuthor(name, "", id);
                 var user = CreateUser();
 
+                user.Name = Input.Name;
+                user.Email = Input.Email;
+
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
