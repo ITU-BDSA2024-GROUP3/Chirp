@@ -13,6 +13,8 @@
 <div>
     <h2> @Model.Author.Name's Timeline </h2>
 
+    @await Html.PartialAsync("Shared/_Cheepbox")
+    
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
