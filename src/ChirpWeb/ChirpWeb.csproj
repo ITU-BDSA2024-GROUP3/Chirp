@@ -61,4 +61,9 @@
     <_ContentIncludedByDefault Remove="UnitTest\obj\UnitTest.csproj.nuget.dgspec.json" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <AdditionalFiles Include="Pages\UserTimeline.cshtml" />
+  </ItemGroup>
+
 </Project>

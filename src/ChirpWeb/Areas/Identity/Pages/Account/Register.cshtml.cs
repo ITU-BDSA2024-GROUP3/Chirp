@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -30,20 +31,28 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Author> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        
+        //private readonly ICheepRepository _repository;
+
 
         public RegisterModel(
             UserManager<Author> userManager,
             IUserStore<Author> userStore,
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender
+            //,ICheepRepository repository
+            )
         {
+            
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            
+            //_repository = repository;
         }
 
         /// <summary>
@@ -123,6 +132,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
                 user.Name = Input.Name;
                 user.Email = Input.Email;
+                user.Cheeps = new List<Cheep>();
+                /*int id = await _repository.GetAuthorCount() + 1;
+                user.UserId = id;*/
 
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

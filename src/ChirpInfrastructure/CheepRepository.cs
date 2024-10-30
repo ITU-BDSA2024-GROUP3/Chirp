@@ -73,7 +73,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId  })
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId})
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }

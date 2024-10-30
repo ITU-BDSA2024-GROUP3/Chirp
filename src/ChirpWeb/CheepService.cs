@@ -10,6 +10,8 @@ public interface ICheepService
     public Task<AuthorDTO> GetAuthor(int id);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail);
+    public Task<AuthorDTO> ReadAuthorByName(string userName);
+
 }
 
 public class CheepService : ICheepService
@@ -34,6 +36,11 @@ public class CheepService : ICheepService
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail)
     {
         return _repository.ReadAuthorByEmail(userEmail);
+    }
+    
+    public Task<AuthorDTO> ReadAuthorByName(string username)
+    {
+        return _repository.ReadAuthorByName(username);
     }
     
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page)
