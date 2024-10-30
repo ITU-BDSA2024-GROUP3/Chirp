@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using ChirpCore.DomainModel;
 using ChirpWeb;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,11 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
 
+    [BindProperty]
+    [Required]
+    [MaxLength(160)]
+    public string Text { get; set; }
+    
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
@@ -42,5 +48,23 @@ public class UserTimelineModel : PageModel
         }
 
         return Page();
+    }
+    
+    public async Task<ActionResult> OnPostAsync()
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToPage("Public");
+        }
+        
+        if (!ModelState.IsValid)
+        {
+            // do something   
+            return RedirectToPage("Public");
+        }
+        
+        // Create cheep
+        
+        return RedirectToPage("Public");
     }
 }

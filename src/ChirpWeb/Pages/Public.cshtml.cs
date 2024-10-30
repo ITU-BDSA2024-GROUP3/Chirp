@@ -2,6 +2,7 @@
 using ChirpWeb;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChirpWeb.Pages;
 
@@ -10,6 +11,11 @@ public class PublicModel : PageModel
     private readonly ICheepService _service;
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
+    
+    [BindProperty]
+    [Required]
+    [MaxLength(160)]
+    public string Text { get; set; }
     
     public PublicModel(ICheepService service)
     {
@@ -27,5 +33,23 @@ public class PublicModel : PageModel
         }
 
         return Page();
+    }
+
+    public async Task<ActionResult> OnPost()
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToPage("Public");
+        }
+        
+        if (!ModelState.IsValid)
+        {
+            //do something
+            return RedirectToPage("Public");
+        }
+
+        // Create cheep
+        
+        return RedirectToPage("Public");
     }
 }
