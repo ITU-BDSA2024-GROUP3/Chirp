@@ -135,11 +135,10 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 
                 user.Cheeps = new List<Cheep>();
+                user.Name = Input.Name;
+                user.Email = Input.Email;
                 var id = await _service.GetAuthorCount();
                 user.UserId =  id + 1;
-                
-                _chirpContext.Authors.Add(user);
-                _chirpContext.SaveChanges();
                 
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
