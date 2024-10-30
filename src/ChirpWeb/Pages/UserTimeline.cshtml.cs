@@ -22,11 +22,6 @@ public class UserTimelineModel : PageModel
     {
         var authorTask = await _service.ReadAuthorByName(author);
         
-        Console.WriteLine("page: "+page);
-        Console.WriteLine("UserId: "+authorTask);
-        Console.WriteLine("UserId: "+authorTask.UserId);
-
-        
         var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
 
         //await Task.WhenAll(authorTask, cheepsTask);

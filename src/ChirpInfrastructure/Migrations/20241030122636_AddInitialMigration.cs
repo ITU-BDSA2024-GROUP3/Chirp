@@ -212,12 +212,6 @@ namespace ChirpIntegration.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Email",
-                table: "AspNetUsers",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Name",
                 table: "AspNetUsers",
                 column: "Name",

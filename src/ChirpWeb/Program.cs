@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("ChirpDBContextConnection");
 
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 

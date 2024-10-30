@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChirpIntegration.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241029125325_AddInitialMigration")]
+    [Migration("20241030122636_AddInitialMigration")]
     partial class AddInitialMigration
     {
         /// <inheritdoc />
@@ -81,9 +81,6 @@ namespace ChirpIntegration.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.HasIndex("Name")
                         .IsUnique();
