@@ -18,15 +18,21 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public async Task<ActionResult> OnGetAsync(int userId, [FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync(string author, [FromQuery] int page)
     {
-        var authorTask = _service.GetAuthor(userId);
-        var cheepsTask = _service.GetCheepsFromAuthor(userId, page);
-
-        await Task.WhenAll(authorTask, cheepsTask);
+        var authorTask = await _service.ReadAuthorByName(author);
         
-        Author = authorTask.Result;
-        Cheeps = cheepsTask.Result;
+        Console.WriteLine("page: "+page);
+        Console.WriteLine("UserId: "+authorTask);
+        Console.WriteLine("UserId: "+authorTask.UserId);
+
+        
+        var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
+
+        //await Task.WhenAll(authorTask, cheepsTask);
+        
+        Author = authorTask;
+        Cheeps = cheepsTask;
         
         currentPage = page;
 

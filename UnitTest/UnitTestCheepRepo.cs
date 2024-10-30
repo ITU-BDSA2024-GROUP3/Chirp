@@ -26,13 +26,13 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-      var author = new Author() { AuthorId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
         
       var cheep = new Cheep
       {
          CheepId = 1,
          Author = author,
-         AuthorId = author.AuthorId,
+         UserId = author.UserId,
          Text = "messageData",
          TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime // Ensure this matches the format in your model
       };

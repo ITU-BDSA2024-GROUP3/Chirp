@@ -1,10 +1,13 @@
 ﻿using ChirpCore;
 using ChirpCore.DomainModel;
+using ChirpInfrastructure;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChirpInfrastructure;
 
-public class ChirpDBContext : DbContext
+public class ChirpDBContext : IdentityDbContext<Author>
 {
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
@@ -25,7 +28,7 @@ public class ChirpDBContext : DbContext
             .HasIndex(c => c.Email)
             .IsUnique();
         modelBuilder.Entity<Author>()
-            .HasIndex(c => c.AuthorId)
+            .HasIndex(c => c.UserId)
             .IsUnique();
     }
 }

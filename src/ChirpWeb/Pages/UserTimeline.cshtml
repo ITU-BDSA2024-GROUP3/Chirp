@@ -1,11 +1,10 @@
-﻿@page "/{userId}"
+﻿@page "/{author}/"
 @using ChirpWeb
 @model ChirpWeb.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("userId");
-    
+    var routeName = HttpContext.GetRouteValue("author");
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
@@ -23,7 +22,7 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author.AuthorId">@cheep.Author.Name</a>
+                            <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
