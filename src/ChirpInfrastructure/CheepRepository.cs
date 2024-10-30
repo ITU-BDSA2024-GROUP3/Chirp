@@ -7,17 +7,19 @@ namespace ChirpInfrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _dbContext;
+    
+    private int _nextCheepId;
 
     public CheepRepository(ChirpDBContext context)
     {
         _dbContext = context;
+        _nextCheepId = 0;
     }
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Cheep message = new() { Text = newMessage.Text, Author = newMessage.Author, TimeStamp = DateTime.Now };
+        Cheep message = new() { CheepId = _nextCheepId++, UserId = newMessage.Author.UserId, Author = newMessage.Author, Text = newMessage.Text, TimeStamp = DateTime.Now };
         var queryResult = await _dbContext.Cheeps.AddAsync(message); // does not write to the database!
-        
         
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
         

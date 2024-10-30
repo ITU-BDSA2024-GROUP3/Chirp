@@ -49,6 +49,9 @@ public class PublicModel : PageModel
         }
 
         // Create cheep
+        //Author author = (User.Identity.Name)
+        CheepDTO newCheep = new CheepDTO() { Text = Text, Author = _service.GetAuthor(1).Result };
+        _service.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
     }
