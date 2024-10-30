@@ -7,7 +7,7 @@ namespace ChirpInfrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _dbContext;
-    
+
     private int _nextCheepId;
 
     public CheepRepository(ChirpDBContext context)
@@ -19,15 +19,19 @@ public class CheepRepository : ICheepRepository
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
         Author cheepAuthor = ReadAuthorById(newMessage.AuthorID).Result;
-        
-        Cheep message = new() { CheepId = _nextCheepId++, UserId = newMessage.AuthorID, Text = newMessage.Text, TimeStamp = DateTime.Now, Author = cheepAuthor};
+
+        Cheep message = new()
+        {
+            CheepId = _nextCheepId++, UserId = newMessage.AuthorID, Text = newMessage.Text, TimeStamp = DateTime.Now,
+            Author = cheepAuthor
+        };
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
         cheepAuthor.Cheeps.Add(message);
-        
+
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
-        
+
         Console.WriteLine($"Store Cheep message = {message.Text} and AuthorId = {message.Author.UserId}");
-        
+
         return queryResult.Entity.CheepId;
     }
 
@@ -37,19 +41,37 @@ public class CheepRepository : ICheepRepository
         IQueryable<CheepDTO> query;
         if (UserId != null)
         {
-            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId).Select(message => new CheepDTO()
-                    { Text = message.Text, AuthorID = message.Author.UserId, AuthorName = message.Author.Name, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
-                .Skip((page - 1) * 32).Take(32);
+            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
+                .Select(message => new CheepDTO() {
+                        Text = message.Text, 
+                        AuthorID = message.Author.UserId, 
+                        AuthorName = message.Author.Name,
+                        TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                    })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable()
+                .Skip((page - 1) * 32)
+                .Take(32);
         }
         else
         {
-            query = _dbContext.Cheeps.Select(message => new CheepDTO()
-                    { Text = message.Text, AuthorID = message.Author.UserId, AuthorName = message.Author.Name, TimeStamp = message.TimeStamp.ToUnixTimeSeconds() })
-                .Skip((page - 1) * 32).Take(32);
+            query = _dbContext.Cheeps
+                .Select(message => new CheepDTO() {
+                    Text = message.Text,
+                    AuthorID = message.Author.UserId,
+                    AuthorName = message.Author.Name,
+                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable()
+                .Skip((page - 1) * 32)
+                .Take(32);
         }
 
         // Execute the query
-        var result = await query.ToListAsync();
+        var result = query.ToList();
 
         return result;
     }
@@ -82,11 +104,11 @@ public class CheepRepository : ICheepRepository
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-    
+
     public async Task<AuthorDTO> ReadAuthorByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId})
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -94,7 +116,7 @@ public class CheepRepository : ICheepRepository
     public async Task<AuthorDTO> ReadAuthorByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId  })
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -105,13 +127,14 @@ public class CheepRepository : ICheepRepository
         var queryResult = await _dbContext.Authors.AddAsync(author); // does not write to the database!
 
         await _dbContext.SaveChangesAsync();
-        
+
         return queryResult.Entity;
     }
 
     public async Task<int> GetAuthorCount()
     {
-        IQueryable<AuthorDTO> query = _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId});
+        IQueryable<AuthorDTO> query =
+            _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
         return await query.CountAsync();
     }
 }
