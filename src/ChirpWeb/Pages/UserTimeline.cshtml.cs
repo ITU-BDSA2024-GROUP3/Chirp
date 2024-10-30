@@ -2,27 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using ChirpCore.DomainModel;
 using ChirpWeb;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChirpWeb.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel : CheepPostPage
 {
-    private readonly ICheepService _service;
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
-
-    [BindProperty]
-    [Required]
-    [MaxLength(160)]
-    public string Text { get; set; }
     
-    public UserTimelineModel(ICheepService service)
-    {
-        _service = service;
-    }
+    public UserTimelineModel(ICheepService service) : base(service) { }
 
     public async Task<ActionResult> OnGetAsync(string author, [FromQuery] int page)
     {
@@ -48,23 +40,5 @@ public class UserTimelineModel : PageModel
         }
 
         return Page();
-    }
-    
-    public async Task<ActionResult> OnPostAsync()
-    {
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToPage("Public");
-        }
-        
-        if (!ModelState.IsValid)
-        {
-            // do something   
-            return RedirectToPage("Public");
-        }
-        
-        // Create cheep
-        
-        return RedirectToPage("Public");
     }
 }
