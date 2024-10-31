@@ -9,6 +9,7 @@ public static class DbInitializer
     {
         if (!(Queryable.Any<Author>(chirpContext.Authors) && Queryable.Any<Cheep>(chirpContext.Cheeps)))
         {
+            //configure and create authors that is then added to a list
             var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
             var a3 = new Author() { AuthorId = 3, Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
@@ -24,6 +25,7 @@ public static class DbInitializer
 
             var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
 
+            //configure cheeps and create cheeps (by existing authors), for each author a list of their cheeps is stored
             var c1 = new Cheep() { CheepId = 1, AuthorId = a10.AuthorId, Author = a10, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { CheepId = 2, AuthorId = a10.AuthorId, Author = a10, Text = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
             var c3 = new Cheep() { CheepId = 3, AuthorId = a10.AuthorId, Author = a10, Text = "In various enchanted attitudes, like the Sperm Whale.", TimeStamp = DateTime.Parse("2023-08-01 13:14:58") };
