@@ -13,7 +13,7 @@ public class ChirpDBContext : DbContext
     {
         
     }
-    
+    //model of Author
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
