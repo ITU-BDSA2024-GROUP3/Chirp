@@ -78,7 +78,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     private async Task<string> SetPrivate(string author, int id)
     {
         _output.WriteLine($"Author: {author}, Id: {id}");
-        var response = await _client.GetAsync($"/{id}");
+        var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return content;
@@ -87,7 +87,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     private async Task<string> SetPrivatePage(int page, string author, int id)
     {
         _output.WriteLine($"Author: {author}, Id: {id}");
-        var response = await _client.GetAsync($"/{id}/?page={page}");
+        var response = await _client.GetAsync($"/{author}/?page={page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return content;
@@ -153,8 +153,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData(
-        "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.")]
-    [InlineData("At last we came back!")]
+        "That must have come to you.")]
+    [InlineData("It was a sawed-off shotgun; so he fell back dead.")]
 
     public async void CanSeePublicTimelineText(string message)
     {
@@ -164,8 +164,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("The shores of the middle of it, and you can imagine, it was probable, from the hall.", 2)]
-    [InlineData("I left the room.", 12)]
+    [InlineData("I wrote it rather fine, said Holmes, imperturbably.", 2)]
+    [InlineData("Once again I had observed the proceedings from my mind.", 12)]
     public async void CanSeePublicTimelineTestDifferentPages(string message, int page)
     {
         var content = await SetPublicPage(page);
@@ -184,7 +184,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("At the same height.", "Jacqualine Gilcoine", 10, 2)]
+    [InlineData("What a relief it was the place examined.", "Jacqualine Gilcoine", 10, 2)]
     public async void CanSeePrivateTimelineTestDifferentPages(string message, string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -375,15 +375,15 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     {
         var content = await SetPrivatePage(page, author, id);
         bool windows1 = content.Contains(    
-            $"<button class=\"btn\">\r\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
+            $"<button class=\"btn\">\r\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
         bool linux1 = content.Contains( 
-            $"<button class=\"btn\">\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
+            $"<button class=\"btn\">\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
         bool windows2 =
             content.Contains(
-                $"<Button class=\"btn\">\r\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
+                $"<Button class=\"btn\">\r\n        <a href=\"/{author}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
         bool linux2 =
             content.Contains(
-                $"<Button class=\"btn\">\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
+                $"<Button class=\"btn\">\n        <a href=\"/{author}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
         
         Assert.True((windows1 && windows2) || (linux2 && linux1));
         
@@ -430,7 +430,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData(1, 2,
-        "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.",
+        "That must have come to you.",
         "Jacqualine Gilcoine", 10)]
 
     public async void CheepChangeWhenPagesChangePrivate(int page1, int page2, string message, string author, int id)
@@ -442,8 +442,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("08/01/23 11.14.58")]
-    [InlineData("08/01/23 11.14.11")]
+    [InlineData("08/01/23 11.17.14")]
+    [InlineData("08/01/23 11.17.02")]
     public async void TimeStampsExistsPublic(string timeStamp)
     {
         var content = await SetPublic();
@@ -451,7 +451,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("08/01/23 11.15.21", "Jacqualine Gilcoine", 10)]
+    [InlineData("08/01/23 11.16.58", "Jacqualine Gilcoine", 10)]
     public async void TimeStampsExistsPrivate(string timeStamp, string author, int id)
     {
         var content = await SetPrivate(author, id);
@@ -460,8 +460,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
-        "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.",
-        "08/01/23 11.14.37", 1)]
+        " Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
+        "08/01/23 11.17.26", 1)]
     public async void ElementsOfCheepsAreCorrectPublic(string author, int id, string message, string timestamp,
         int page)
     {
@@ -475,8 +475,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
-        "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.",
-        "08/01/23 11.14.37", 1)]
+        "That must have come to you.",
+        "08/01/23 11.17.23", 1)]
     public async void ElementsOfCheepsAreCorrectPrivate(string author, int id, string message, string timestamp,
         int page)
     {
@@ -546,7 +546,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     {
         var content = await SetPrivatePage(page, author, id);
         int first = content.Length;
-        string replace = $"<a href=\"/{id}\">";
+        string replace = $"<a href=\"/{author}\">";
         string content2 = content.Replace(replace, "");
         
         if (id > 9)
@@ -567,7 +567,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void AuthorLinksExistPublic(string author, int id, int page)
     {
         var content = await SetPublicPage(page);
-        Assert.Contains($"<a href=\"/{id}/?page=1\">{author}</a>", content);//should this be kept?
+        Assert.Contains($"<a href=\"/{author}?page=1\">{author}</a>", content);//should this be kept?
     }
 
     [Theory]
@@ -577,7 +577,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void AuthorLinksExistPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains($"<a href=\"/{id}\">{author}</a>", content);
+        Assert.Contains($"<a href=\"/{author}\">{author}</a>", content);
     }
 
     [Theory]
