@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 
 namespace ChirpWeb.Areas.Identity.Pages.Account
@@ -136,13 +137,15 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 
                 user.Cheeps = new List<Cheep>();
                 user.Name = Input.Name;
-                user.Email = Input.Email;
                 var id = await _service.GetAuthorCount();
                 user.UserId =  id + 1;
                 
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.Email = Input.Email;
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                
 
                 if (result.Succeeded)
                 {
