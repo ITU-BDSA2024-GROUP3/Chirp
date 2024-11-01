@@ -26,13 +26,13 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { AuthorId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
 
       var cheep = new Cheep
       {
          CheepId = 1,
          Author = author,
-         AuthorId = author.AuthorId,
+         UserId = author.UserId,
          Text = "messageData",
          TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569)
             .UtcDateTime // Ensure this matches the format in your model
@@ -66,13 +66,13 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
       ICheepRepository repo = new CheepRepository(context);
 
-      var authorDto = await repo.ReadAuthorById(id);
+      var authorDto = await repo.ReadAuthorDTOById(id);
       Assert.NotNull(author);
       Assert.Equal(name, authorDto.Name);
    }
@@ -89,7 +89,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
@@ -112,7 +112,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { AuthorId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
@@ -180,17 +180,18 @@ public class UnitTestCheepRepo : IDisposable
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
       
       //create author and add to database
-      var author = new Author() { AuthorId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
       context.Authors.Add(author);
       await context.SaveChangesAsync();
-      //MAKE THE DATABSE WITH AUHTOR
+      //MAKE THE DATABASE WITH AUTHOR
       ICheepRepository repo = new CheepRepository(context);
       
       //dto cheep that will be created by our author
       var cheepDataTransferObject = new CheepDTO
       {
          Text = "Something",
-         Author = author,
+         AuthorID = author.UserId,
+         AuthorName = author.Name,
          TimeStamp = 1728643569
       };
       
