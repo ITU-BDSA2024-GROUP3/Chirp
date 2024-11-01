@@ -35,8 +35,10 @@ public class CheepPostPage : PageModel
             return RedirectToPage("Public");
         }
 
-        CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = 1};
-        _service.CreateCheep(newCheep);
+        AuthorDTO author = _service.ReadAuthorByName(User.Identity.Name).Result;
+        
+        CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = author.UserId};
+        await _service.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
     }
