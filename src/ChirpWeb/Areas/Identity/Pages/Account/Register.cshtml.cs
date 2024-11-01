@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ChirpCore;
 using ChirpCore.DomainModel;
+using ChirpInfrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 
 namespace ChirpWeb.Areas.Identity.Pages.Account
@@ -33,6 +35,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         
         private readonly ICheepService _service;
+        private readonly ChirpDBContext _chirpContext;
 
 
         public RegisterModel(
@@ -41,7 +44,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender
-            ,ICheepService service
+            ,ICheepService service,
+            ChirpDBContext chirpContext
             )
         {
             
@@ -53,6 +57,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             
             _service = service;
+            _chirpContext = chirpContext;
         }
 
         /// <summary>
@@ -129,16 +134,16 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             {
                 //var user = await _service.CreateAuthor(name, "", id);
                 var user = CreateUser();
-
-                user.Name = Input.Name;
-                user.Email = Input.Email;
+                
                 user.Cheeps = new List<Cheep>();
+                user.Name = Input.Name;
                 var id = await _service.GetAuthorCount();
                 user.UserId =  id + 1;
-                //user.UserId = new Random().Next(); //This needs to be changed
-
+                
                 await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.Email = Input.Email;
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
 

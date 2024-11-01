@@ -79,9 +79,6 @@ namespace ChirpIntegration.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.HasIndex("Name")
                         .IsUnique();
 
