@@ -22,16 +22,13 @@ public class CheepPostPage : PageModel
     
     public async Task<ActionResult> OnPost()
     {
-        /*
         if (!User.Identity.IsAuthenticated)
         {
             return RedirectToPage("Public");
         }
-        */
         
         if (!ModelState.IsValid)
         {
-            //do something
             return RedirectToPage("Public");
         }
 
