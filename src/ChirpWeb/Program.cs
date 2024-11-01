@@ -2,8 +2,6 @@ using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpInfrastructure;
 using ChirpWeb;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<ICheepService, CheepService>();
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-//builder.Services.AddSession(); This might need to be added when testing
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 
 string? connectionString = builder.Configuration.GetConnectionString("ChirpDBContextConnection");
@@ -35,19 +30,6 @@ builder.Services.AddDefaultIdentity<Author>(options =>
 
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = "GitHub";
-    })
-    .AddCookie()
-    .AddGitHub(o =>
-    {
-        o.ClientId = builder.Configuration["GitHub:ClientID"];
-        o.ClientSecret = builder.Configuration["GitHub:ClientSecret"];
-        o.CallbackPath = "/signin-github";
-    });
 
 //
 // remaining configuration not show
@@ -68,11 +50,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//WHAT U ARE
 app.UseAuthentication();
-//WHAT U CAN DO, DEPENDING ON WHO YOU ARE
 app.UseAuthorization();
-//app.UseSession(); This might need to be added when testing, not sure of it's exact function
 
 app.MapRazorPages();
 

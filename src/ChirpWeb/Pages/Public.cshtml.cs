@@ -1,6 +1,5 @@
 ﻿using ChirpCore.DomainModel;
 using ChirpWeb;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -28,13 +27,5 @@ public class PublicModel : PageModel
         }
 
         return Page();
-    }
-    
-    public IActionResult OnGetLogin()
-    {
-        return Challenge(new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        }, "GitHub");
     }
 }
