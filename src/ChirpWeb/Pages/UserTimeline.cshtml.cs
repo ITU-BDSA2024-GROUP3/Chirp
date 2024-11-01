@@ -1,32 +1,31 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using ChirpCore.DomainModel;
 using ChirpWeb;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChirpWeb.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel : CheepPostPage
 {
-    private readonly ICheepService _service;
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
+    
+    public UserTimelineModel(ICheepService service) : base(service) { }
 
-    public UserTimelineModel(ICheepService service)
+    public async Task<ActionResult> OnGetAsync(string author, [FromQuery] int page)
     {
-        _service = service;
-    }
-
-    public async Task<ActionResult> OnGetAsync(int userId, [FromQuery] int page)
-    {
-        var authorTask = _service.GetAuthor(userId);
-        var cheepsTask = _service.GetCheepsFromAuthor(userId, page);
-
-        await Task.WhenAll(authorTask, cheepsTask);
+        var authorTask = await _service.ReadAuthorByName(author);
         
-        Author = authorTask.Result;
-        Cheeps = cheepsTask.Result;
+        var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
+
+        //await Task.WhenAll(authorTask, cheepsTask);
+        
+        Author = authorTask;
+        Cheeps = cheepsTask;
         
         currentPage = page;
 

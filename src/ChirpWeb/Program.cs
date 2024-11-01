@@ -1,7 +1,9 @@
 using ChirpCore;
+using ChirpCore.DomainModel;
 using ChirpInfrastructure;
 using ChirpWeb;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,16 +11,29 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("ChirpDBContextConnection");
+
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddDefaultIdentity<Author>(options =>
+{
+    //options.SignIn.RequireConfirmedAccount = true;
+    //options.Lockout.AllowedForNewUsers = true;
+    options.Password.RequiredLength = 12;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+}).AddEntityFrameworkStores<ChirpDBContext>();
+
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
+//
+// remaining configuration not show
+//
 
 var app = builder.Build();
 
@@ -35,6 +50,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
@@ -48,4 +66,6 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
+
 public partial class Program { }
+

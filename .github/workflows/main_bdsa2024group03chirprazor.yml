@@ -22,10 +22,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build src/Chirp.Razor/ --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/Chirp.Razor/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -51,9 +51,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CF6BF727CA4C47AD8575421767E84828 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DA3A228D84084E44981074EFFE0DC70F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FC6A9B4CD3DB423BBC7F8474E642DC03 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DC236D25E23946A0928C4F50B63FA160 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EAAD3B2E7A8C496FA56EEC760BDB5812 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D7B0B7ED9959411093D96196B2C9EB46 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

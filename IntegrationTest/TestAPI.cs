@@ -1,5 +1,5 @@
 using System.Data.Common;
-
+using System.Diagnostics;
 using ChirpInfrastructure;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -352,12 +352,20 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void ButtonLinksCorrectlyPublic(int page)
     {
         var content = await SetPublicPage(page);
-        Assert.Contains(
-            $"<button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r",
-            content);
-        Assert.Contains(
-            $"<Button class=\"btn\">\r\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r",
-            content);
+        bool windows1 = content.Contains(
+            $"<button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r"
+        );
+        bool windows2 = content.Contains(
+                $"<Button class=\"btn\">\r\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
+        bool linux1 = content.Contains(
+            $"<button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>"
+        );
+        bool linux2 = content.Contains(
+            $"<Button class=\"btn\">\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
+
+        
+        
+        Assert.True((windows1 && windows2)||(linux1 && linux2));
     }
 
     [Theory]
@@ -366,12 +374,27 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     public async void ButtonLinksCorrectlyPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains(
+        bool windows1 = content.Contains(    
+            $"<button class=\"btn\">\r\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
+        bool linux1 = content.Contains( 
+            $"<button class=\"btn\">\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
+        bool windows2 =
+            content.Contains(
+                $"<Button class=\"btn\">\r\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
+        bool linux2 =
+            content.Contains(
+                $"<Button class=\"btn\">\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
+        
+        Assert.True((windows1 && windows2) || (linux2 && linux1));
+        
+        
+        
+        /*Assert.Contains(
             $"<button class=\"btn\">\r\n        <a href=\"/{id}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r",
             content);
         Assert.Contains(
             $"<Button class=\"btn\">\r\n        <a href=\"/{id}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r",
-            content);
+            content);*/
     }
 
     [Fact]
@@ -443,10 +466,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         int page)
     {
         var content = await SetPublicPage(1);
-        Assert.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}/?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n",
-            content);
-
+        bool windows = content.Contains(
+            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}/?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+        bool linux = content.Contains(
+            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{id}/?page=1\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+        Assert.True(windows || linux);
     }
 
     [Theory]
@@ -457,9 +481,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n",
-            content);
+        bool windows= content.Contains(
+            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+        bool linux= content.Contains(
+            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{id}\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+        Assert.True(windows || linux);
     }
 
     [Theory]
