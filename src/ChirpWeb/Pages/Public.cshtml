@@ -12,7 +12,15 @@
 
 <div>
     <h2> Public Timeline </h2>
-
+    
+    <div class="cheepbox">
+        <h3>What's on your mind @(User.Identity.Name)?</h3>
+        <form method="post">
+            <input style="float: left" type="text" asp-for="Text">
+            <input type="submit" value="Share">
+        </form>
+    </div>
+    
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -21,7 +29,7 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author.AuthorId/?page=1">@cheep.Author.Name</a>
+                            <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>

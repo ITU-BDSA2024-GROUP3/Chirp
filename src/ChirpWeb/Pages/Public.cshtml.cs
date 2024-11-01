@@ -2,19 +2,17 @@
 using ChirpWeb;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using ChirpWeb.Pages.Shared;
 
 namespace ChirpWeb.Pages;
 
-public class PublicModel : PageModel
+public class PublicModel : CheepPostPage
 {
-    private readonly ICheepService _service;
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
     
-    public PublicModel(ICheepService service)
-    {
-        _service = service;
-    }
+    public PublicModel(ICheepService service) : base(service) { }
 
     public async Task<ActionResult> OnGetAsync([FromQuery] int page)
     {

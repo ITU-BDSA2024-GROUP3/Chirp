@@ -1,18 +1,25 @@
-﻿@page "/{userId}"
+﻿@page "/{author}/"
 @using ChirpWeb
 @model ChirpWeb.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("userId");
-    
+    var routeName = HttpContext.GetRouteValue("author");
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
 
 <div>
     <h2> @Model.Author.Name's Timeline </h2>
-
+    
+    <div class="cheepbox">
+        <h3>What's on your mind @(User.Identity.Name)?</h3>
+        <form method="post">
+            <input style="float: left" type="text" asp-for="Text">
+            <input type="submit" value="Share">
+        </form>
+    </div>
+    
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -21,7 +28,7 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author.AuthorId">@cheep.Author.Name</a>
+                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
