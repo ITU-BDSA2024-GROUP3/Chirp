@@ -42,8 +42,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             IUserStore<Author> userStore,
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender
-            ,ICheepService service,
+            IEmailSender emailSender,
+            ICheepService service,
             ChirpDBContext chirpContext
             )
         {
