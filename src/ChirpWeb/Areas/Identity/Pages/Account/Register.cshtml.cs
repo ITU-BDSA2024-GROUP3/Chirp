@@ -143,7 +143,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     var id = await _service.GetAuthorCount();
                     user.UserId = id + 1;
 
-                    await _userStore.SetUserNameAsync(user, Input.Name, CancellationToken.None);
+                    await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                     user.Email = Input.Email;
 

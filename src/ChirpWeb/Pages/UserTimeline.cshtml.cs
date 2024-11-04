@@ -19,9 +19,9 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public async Task<ActionResult> OnGetAsync(string author, [FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync(string email, [FromQuery] int page)
     {
-        var authorTask = await _service.ReadAuthorByName(author);
+        var authorTask = await _service.ReadAuthorByEmail(email);
         
         var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
 
