@@ -414,11 +414,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData(1, 2,
-        "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.")]
-    [InlineData(1, 2, "At last we came back!")]
+    
+    [InlineData(1, 2, "That must have come to you.")]
     [InlineData(21, 22, "Hej, velkommen til kurset.")]
-    [InlineData(20, 21, "The one is very hard, and yesterday evening in an open door leading to the staple fuel.")]
+    [InlineData(20, 21, "But if I can be perfectly frank.")]
 
     public async void CheepsChangeWhenPagesChangePublic(int page1, int page2, string message)//duplicate cheeps?
     {
@@ -460,16 +459,17 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
-        " Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
+        "Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
         "08/01/23 11.17.26", 1)]
     public async void ElementsOfCheepsAreCorrectPublic(string author, int id, string message, string timestamp,
         int page)
     {
         var content = await SetPublicPage(1);
         bool windows = content.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}/?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{author}?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>");
+
         bool linux = content.Contains(
-            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{id}/?page=1\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{author}?page=1\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>");
         Assert.True(windows || linux);
     }
 
@@ -482,9 +482,9 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     {
         var content = await SetPrivatePage(page, author, id);
         bool windows= content.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{id}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{author}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
         bool linux= content.Contains(
-            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{id}\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{author}\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
         Assert.True(windows || linux);
     }
 
@@ -520,6 +520,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         var content = await SetPublicPage(page);
         Assert.DoesNotContain("<a href=\"//?page=1\"></a>", content);
     }
+    [Theory]
     [InlineData("Jacqualine Gilcoine", 10, 1)]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     public async void AuthorAlwaysExistsPrivate(string author, int id, int page)
@@ -549,16 +550,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         string replace = $"<a href=\"/{author}\">";
         string content2 = content.Replace(replace, "");
         
-        if (id > 9)
-        {
-            Assert.Equal(32*(18-4), first-content2.Length);
-        }
-        else
-        {
-            Assert.Equal(32*(18-5), first-content2.Length);
-
-        }
-        
+      
+        Assert.Equal(32*(22-10+author.Length), first-content2.Length);
+       
+      
         
 
     }
