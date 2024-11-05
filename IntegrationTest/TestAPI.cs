@@ -157,8 +157,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData(
-        "That must have come to you.")]
+    [InlineData("That must have come to you.")]
     [InlineData("It was a sawed-off shotgun; so he fell back dead.")]
     [InlineData("But what was behind the barricade.")]
     [InlineData(" I was particularly agitated.")]
@@ -190,8 +189,15 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
 
     [Theory]
-    [InlineData("Hello, BDSA students!", "Helge", 11)] //Change to ids to find page
-    [InlineData("Hej, velkommen til kurset.", "Adrian", 12)] //change messages
+    [InlineData("Hello, BDSA students!", "Helge", 11)] 
+    [InlineData("Hej, velkommen til kurset.", "Adrian", 12)] 
+    [InlineData("I whisked round to you, Mr. Holmes, to glance out of her which forms the great docks of Antwerp, in Napoleon&#x27;&#x27;s time.", "Mellie Yost", 6)]
+    [InlineData("He walked slowly back the lid.", "Mellie Yost", 6)]
+    [InlineData("Now, gentlemen, perhaps you expect to hear that he rushed in, and drew me over this, are you?", "Wendell Ballan", 3)]
+    [InlineData("Unless we succeed in establishing ourselves in some monomaniac way whatever significance might lurk in them.", "Quintin Sitts", 5)]
+    [InlineData("She was enveloped in a flooded world.", "Quintin Sitts", 5)]
+    [InlineData("Mr. Thaddeus Sholto WAS with his methods of work, Mr. Mac.", "Octavio Wagganer", 8)]
+    [InlineData("We would think that you should soar above it.", "Johnnie Calixto", 8)]
     public async void CanSeePrivateTimelineText(string message, string author, int id)
     {
         var content = await SetPrivate(author, id);
@@ -200,6 +206,16 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("What a relief it was the place examined.", "Jacqualine Gilcoine", 10, 2)]
+    [InlineData("Yes, for strangers to the ground.", "Jacqualine Gilcoine", 10, 5)]
+    [InlineData("He is not my commander&#x27;&#x27;s vengeance.", "Jacqualine Gilcoine", 10, 5)]
+    [InlineData("Yet so vast a being than the main road if a certain juncture of this poor fellow to my ears, clear, resonant, and unmistakable.", "Jacqualine Gilcoine", 10, 4)]
+    [InlineData("She stood with her indignation.", "Jacqualine Gilcoine", 10, 4)]
+    [InlineData("Have you made anything out yet? she asked.", "Roger Histand", 1, 2)]
+    [InlineData("Immense as whales, the Commodore was pleased at the Museum of the whale.", "Roger Histand", 1,2)]
+    [InlineData("I really don&#x27;&#x27;t think I&#x27;&#x27;ll get him every particular that I tell.", "Quintin Sitts", 5,2)]
+    [InlineData("I have the particular page to which points were essential and what a very small, dark fellow, with his pipe.", "Quintin Sitts", 5,2)]
+    [InlineData("The message was as well live in this way-- SHERLOCK HOLMES--his limits.", "Quintin Sitts", 5,2)]
+    [InlineData("She is, as you or the Twins.", "Quintin Sitts", 5,3)]
     public async void CanSeePrivateTimelineTestDifferentPages(string message, string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
