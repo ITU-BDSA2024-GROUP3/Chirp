@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChirpWeb", "src\ChirpWeb\Ch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChirpInfrastructure", "src\ChirpInfrastructure\ChirpInfrastructure.csproj", "{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaywrightTests", "PlaywrightTests\PlaywrightTests.csproj", "{05DDE574-F68F-4F1E-8F12-AD497B880070}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFF3C6C1-DEEA-4A8D-88C4-2F5C2D1EF6D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05DDE574-F68F-4F1E-8F12-AD497B880070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05DDE574-F68F-4F1E-8F12-AD497B880070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05DDE574-F68F-4F1E-8F12-AD497B880070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05DDE574-F68F-4F1E-8F12-AD497B880070}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{449507CB-C180-459A-842F-6C4A91996077} = {C0467B57-0A24-4962-9511-01A6B0734979}
