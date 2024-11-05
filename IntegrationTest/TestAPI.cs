@@ -176,10 +176,13 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Once again I had observed the proceedings from my mind.", 12)]
     [InlineData("And yet I dare say eh?", 5)]
     [InlineData("Here in London whom he loved.", 5)]
-    [InlineData("The worst man in that gale, the but half fancy being committed this crime, what possible reason for not knowing what it was he.", 5)]
-    [InlineData("But now, tell me, Stubb, do you propose to begin breaking into the matter up.",11)]
+    [InlineData(
+        "The worst man in that gale, the but half fancy being committed this crime, what possible reason for not knowing what it was he.",
+        5)]
+    [InlineData("But now, tell me, Stubb, do you propose to begin breaking into the matter up.", 11)]
     [InlineData("At first he had only exchanged one trouble for another.", 11)]
-    [InlineData("It was he at last climbs up the paper is Sir Charles&#x27;&#x27;s death, we had no very unusual affair.",11)]
+    [InlineData(
+        "It was he at last climbs up the paper is Sir Charles&#x27;&#x27;s death, we had no very unusual affair.", 11)]
     public async void CanSeePublicTimelineTestDifferentPages(string message, int page)
     {
         var content = await SetPublicPage(page);
@@ -189,12 +192,17 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
 
     [Theory]
-    [InlineData("Hello, BDSA students!", "Helge", 11)] 
-    [InlineData("Hej, velkommen til kurset.", "Adrian", 12)] 
-    [InlineData("I whisked round to you, Mr. Holmes, to glance out of her which forms the great docks of Antwerp, in Napoleon&#x27;&#x27;s time.", "Mellie Yost", 6)]
+    [InlineData("Hello, BDSA students!", "Helge", 11)]
+    [InlineData("Hej, velkommen til kurset.", "Adrian", 12)]
+    [InlineData(
+        "I whisked round to you, Mr. Holmes, to glance out of her which forms the great docks of Antwerp, in Napoleon&#x27;&#x27;s time.",
+        "Mellie Yost", 6)]
     [InlineData("He walked slowly back the lid.", "Mellie Yost", 6)]
-    [InlineData("Now, gentlemen, perhaps you expect to hear that he rushed in, and drew me over this, are you?", "Wendell Ballan", 3)]
-    [InlineData("Unless we succeed in establishing ourselves in some monomaniac way whatever significance might lurk in them.", "Quintin Sitts", 5)]
+    [InlineData("Now, gentlemen, perhaps you expect to hear that he rushed in, and drew me over this, are you?",
+        "Wendell Ballan", 3)]
+    [InlineData(
+        "Unless we succeed in establishing ourselves in some monomaniac way whatever significance might lurk in them.",
+        "Quintin Sitts", 5)]
     [InlineData("She was enveloped in a flooded world.", "Quintin Sitts", 5)]
     [InlineData("Mr. Thaddeus Sholto WAS with his methods of work, Mr. Mac.", "Octavio Wagganer", 8)]
     [InlineData("We would think that you should soar above it.", "Johnnie Calixto", 8)]
@@ -208,14 +216,19 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("What a relief it was the place examined.", "Jacqualine Gilcoine", 10, 2)]
     [InlineData("Yes, for strangers to the ground.", "Jacqualine Gilcoine", 10, 5)]
     [InlineData("He is not my commander&#x27;&#x27;s vengeance.", "Jacqualine Gilcoine", 10, 5)]
-    [InlineData("Yet so vast a being than the main road if a certain juncture of this poor fellow to my ears, clear, resonant, and unmistakable.", "Jacqualine Gilcoine", 10, 4)]
+    [InlineData(
+        "Yet so vast a being than the main road if a certain juncture of this poor fellow to my ears, clear, resonant, and unmistakable.",
+        "Jacqualine Gilcoine", 10, 4)]
     [InlineData("She stood with her indignation.", "Jacqualine Gilcoine", 10, 4)]
     [InlineData("Have you made anything out yet? she asked.", "Roger Histand", 1, 2)]
-    [InlineData("Immense as whales, the Commodore was pleased at the Museum of the whale.", "Roger Histand", 1,2)]
-    [InlineData("I really don&#x27;&#x27;t think I&#x27;&#x27;ll get him every particular that I tell.", "Quintin Sitts", 5,2)]
-    [InlineData("I have the particular page to which points were essential and what a very small, dark fellow, with his pipe.", "Quintin Sitts", 5,2)]
-    [InlineData("The message was as well live in this way-- SHERLOCK HOLMES--his limits.", "Quintin Sitts", 5,2)]
-    [InlineData("She is, as you or the Twins.", "Quintin Sitts", 5,3)]
+    [InlineData("Immense as whales, the Commodore was pleased at the Museum of the whale.", "Roger Histand", 1, 2)]
+    [InlineData("I really don&#x27;&#x27;t think I&#x27;&#x27;ll get him every particular that I tell.",
+        "Quintin Sitts", 5, 2)]
+    [InlineData(
+        "I have the particular page to which points were essential and what a very small, dark fellow, with his pipe.",
+        "Quintin Sitts", 5, 2)]
+    [InlineData("The message was as well live in this way-- SHERLOCK HOLMES--his limits.", "Quintin Sitts", 5, 2)]
+    [InlineData("She is, as you or the Twins.", "Quintin Sitts", 5, 3)]
     public async void CanSeePrivateTimelineTestDifferentPages(string message, string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -228,9 +241,13 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(5)]
     [InlineData(10)]
     [InlineData(16)]
+    [InlineData(15)]
+    [InlineData(13)]
+    [InlineData(12)]
+    [InlineData(17)]
 
 
-    public async void CorrectNumberOfCheepsPerPagePublic(int page)
+public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPublicPage(page);
         int first = content.Length;
@@ -242,11 +259,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Jacqualine Gilcoine", 10, 1)]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Jacqualine Gilcoine", 10, 3)]
+    [InlineData("Jacqualine Gilcoine", 10, 4)]
     [InlineData("Roger Histand", 1, 1)]
     [InlineData("Quintin Sitts", 5, 2)]
-
-
-
+    
+    
     public async void CorrectNumberOfCheepsPerPagePrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -281,6 +298,9 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Roger Histand", 1, 2)]
     [InlineData("Adrian", 12, 1)]
     [InlineData("Helge", 11, 1)]
+    [InlineData("Malcolm Janski", 7,1)]
+    [InlineData("Quintin Sitts", 5,3)]
+    [InlineData("Luanna Muro", 2,1)]
     public async void SometimesThereAreLessThan32CheepsPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -305,6 +325,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(4)]
     [InlineData(5)]
     [InlineData(45)]
+    [InlineData(25)]
+    [InlineData(38)]
+    [InlineData(31)]
+
 
 
 
@@ -320,6 +344,15 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Jacqualine Gilcoine", 10, 3)]
     [InlineData("Jacqualine Gilcoine", 10, 45)]
+    [InlineData("Jacqualine Gilcoine", 10, 123)]
+    [InlineData("Jacqualine Gilcoine", 10, 31)]
+    [InlineData("Jacqualine Gilcoine", 10, 15)]
+    [InlineData("Quintin Sitts", 5, 3)]
+    [InlineData("Quintin Sitts", 5, 13)]
+    [InlineData("Quintin Sitts", 5, 213)]
+    [InlineData("Quintin Sitts", 5, 2)]
+    [InlineData("Quintin Sitts", 5, 21)]
+
 
 
     public async void PagesCanChangePrivate(string author, int id, int page)
@@ -341,6 +374,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10)]
+    [InlineData("Quintin Sitts", 5)]
+    [InlineData("Nathan Sirmon", 4)]
+    [InlineData("Helge", 11)]
+    [InlineData("Adrian", 12)]
 
     public async void ButtonsExistMainPrivate(string author, int id)
     {
@@ -354,6 +391,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
+    [InlineData(10)]
+    [InlineData(12)]
+    [InlineData(42)]
+    [InlineData(52)]
+    [InlineData(23)]
 
 
     public async void ButtonsExistPublic(int page)
@@ -367,6 +409,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Jacqualine Gilcoine", 10, 3)]
     [InlineData("Jacqualine Gilcoine", 10, 4)]
+    [InlineData("Quintin Sitts", 5,2)]
+    [InlineData("Quintin Sitts", 5,3)]
+    [InlineData("Nathan Sirmon", 4,2)]
+    [InlineData("Helge", 11,2)]
+    [InlineData("Adrian", 12,2)]
     public async void ButtonsExistPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -379,6 +426,9 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(2)]
     [InlineData(4)]
     [InlineData(10)]
+    [InlineData(12)]
+    [InlineData(42)]
+
 
     public async void ButtonLinksCorrectlyPublic(int page)
     {
