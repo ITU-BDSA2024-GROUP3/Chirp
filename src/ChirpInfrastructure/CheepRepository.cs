@@ -35,6 +35,15 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity.CheepId;
     }
 
+    public async Task<string> GetNameByEmail(string emailAddress)
+    {
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == emailAddress)
+            .Select(author => new AuthorDTO() { Name = author.UserName, UserId = author.UserId })
+            .Take(1);
+        return query.FirstOrDefaultAsync().Result.Name;
+    }
+
+
     public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core

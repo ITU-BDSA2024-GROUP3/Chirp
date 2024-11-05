@@ -12,6 +12,8 @@ public interface ICheepService
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail);
     public Task<AuthorDTO> ReadAuthorByName(string userName);
+    public Task<string> GetNameByEmail(string emailAddress);
+
     
     public Task<int> GetAuthorCount();
 
@@ -24,6 +26,12 @@ public class CheepService : ICheepService
     public CheepService(ICheepRepository repository)
     {
         _repository = repository;
+    }
+
+    public Task<string> GetNameByEmail(string emailAddress)
+    {
+        return _repository.GetNameByEmail(emailAddress);
+
     }
 
     public Task<int> CreateCheep(CheepDTO newMessage)

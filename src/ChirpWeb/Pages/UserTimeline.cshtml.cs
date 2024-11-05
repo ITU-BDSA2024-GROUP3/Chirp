@@ -20,14 +20,14 @@ public class UserTimelineModel : CheepPostPage
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
         var authorTask = await _service.ReadAuthorByName(name);
-        
+
         var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
 
         //await Task.WhenAll(authorTask, cheepsTask);
-        
+
         Author = authorTask;
         Cheeps = cheepsTask;
-        
+
         currentPage = page;
 
         if (currentPage < 1)
@@ -37,6 +37,4 @@ public class UserTimelineModel : CheepPostPage
 
         return Page();
     }
-    
-    
 }

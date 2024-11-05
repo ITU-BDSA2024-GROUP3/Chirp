@@ -32,7 +32,17 @@ public class CheepPostPage : PageModel
             return RedirectToPage("Public");
         }
 
-        AuthorDTO author = _service.ReadAuthorByName(User.Identity.Name).Result;
+        AuthorDTO author = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+
+        if (author.UserId == null)
+        {
+         Console.WriteLine("Userid is null");   
+        }
+        
+        if (Text == null)
+        {
+            Console.WriteLine("Text is null");   
+        }
         
         CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = author.UserId};
         await _service.CreateCheep(newCheep);
