@@ -17,9 +17,9 @@ public class UserTimelineModel : CheepPostPage
     
     public UserTimelineModel(ICheepService service) : base(service) { }
 
-    public async Task<ActionResult> OnGetAsync(string email, [FromQuery] int page)
+    public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
-        var authorTask = await _service.ReadAuthorByEmail(email);
+        var authorTask = await _service.ReadAuthorByName(name);
         
         var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
 
@@ -38,11 +38,5 @@ public class UserTimelineModel : CheepPostPage
         return Page();
     }
     
-    public IActionResult OnGetLogin()
-    {
-        return Challenge(new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        }, "GitHub");
-    }
+    
 }

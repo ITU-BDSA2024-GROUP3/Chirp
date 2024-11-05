@@ -28,11 +28,5 @@ public class PublicModel : CheepPostPage
         return Page();
     }
     
-    public IActionResult OnGetLogin()
-    {
-        return Challenge(new AuthenticationProperties
-        {
-            RedirectUri = "/"
-        }, "GitHub");
-    }
+    
 }
