@@ -16,7 +16,7 @@ public class ChirpDBContext : IdentityDbContext<Author>
     {
         
     }
-    
+    //set the model of Author
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

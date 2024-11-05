@@ -6,6 +6,7 @@ namespace ChirpWeb;
 
 public interface ICheepService
 {
+    public Task<int> CreateCheep(CheepDTO newMessage);
     public Task<List<CheepDTO>> GetCheeps(int page);
     public Task<AuthorDTO> GetAuthor(int id);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
@@ -24,7 +25,12 @@ public class CheepService : ICheepService
     {
         _repository = repository;
     }
-    
+
+    public Task<int> CreateCheep(CheepDTO newMessage)
+    {
+        return _repository.CreateCheep(newMessage);
+    }
+
     public Task<List<CheepDTO>> GetCheeps(int page)
     {
         return _repository.ReadCheeps(page, null);
@@ -32,7 +38,7 @@ public class CheepService : ICheepService
 
     public Task<AuthorDTO> GetAuthor(int id)
     {
-        return _repository.ReadAuthorById(id);
+        return _repository.ReadAuthorDTOById(id);
     }
     
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail)
@@ -57,17 +63,6 @@ public class CheepService : ICheepService
         return _repository.ReadCheeps(page, userId);
     }
 
-    public async Task<int> SendCheep(CheepDTO cheep, string name) //Remake this, bad
-    {
-        if (cheep.Author != null)
-        {
-
-            int id = await _repository.GetAuthorCount() + 1;
-            cheep.Author = await _repository.CreateAuthor(name, "", id);
-        }
-        return await _repository.CreateCheep(cheep);
-    }
-    
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch

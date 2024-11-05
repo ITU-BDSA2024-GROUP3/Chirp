@@ -1,23 +1,21 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using ChirpCore.DomainModel;
 using ChirpWeb;
 using Microsoft.AspNetCore.Authentication;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChirpWeb.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel : CheepPostPage
 {
-    private readonly ICheepService _service;
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
-
-    public UserTimelineModel(ICheepService service)
-    {
-        _service = service;
-    }
+    
+    public UserTimelineModel(ICheepService service) : base(service) { }
 
     public async Task<ActionResult> OnGetAsync(string email, [FromQuery] int page)
     {
