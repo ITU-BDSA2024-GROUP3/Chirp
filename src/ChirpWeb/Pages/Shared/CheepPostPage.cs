@@ -5,18 +5,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChirpWeb.Pages.Shared;
 
-public class CheepPostPage : PageModel
+public class CheepPostPage : BasePage
 {
-    protected readonly ICheepService _service;
-    
     [BindProperty]
     [Required]
     [MaxLength(160)]
     public string Text { get; set; }
-    
-    public CheepPostPage(ICheepService service)
+  
+    public CheepPostPage(ICheepService service) : base(service)
     {
-        _service = service;   
     }
     
     

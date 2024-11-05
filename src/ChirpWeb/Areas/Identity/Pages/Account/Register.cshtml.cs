@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpInfrastructure;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ChirpWeb.Areas.Identity.Pages.Account
 {
+    
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Author> _signInManager;
@@ -33,8 +35,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Author> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        
-        private readonly ICheepService _service;
+        string username { get; set; }
+        private ICheepService _service;
         private readonly ChirpDBContext _chirpContext;
 
 
@@ -46,7 +48,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             IEmailSender emailSender,
             ICheepService service,
             ChirpDBContext chirpContext
-            )
+            ) 
         {
             
             _userManager = userManager;
@@ -55,7 +57,6 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            
             _service = service;
             _chirpContext = chirpContext;
         }
@@ -122,6 +123,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            username = "something";
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -130,6 +132,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            Console.WriteLine("Boolean: " + ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 var userExist = await _userManager.FindByEmailAsync(Input.Email);

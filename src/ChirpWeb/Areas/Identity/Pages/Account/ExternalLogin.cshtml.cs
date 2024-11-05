@@ -10,6 +10,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using ChirpCore.DomainModel;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +23,7 @@ using Microsoft.Extensions.Logging;
 namespace ChirpWeb.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class ExternalLoginModel : PageModel
+    public class ExternalLoginModel : BasePage
     {
         private readonly SignInManager<Author> _signInManager;
         private readonly UserManager<Author> _userManager;
@@ -31,7 +32,6 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
         
-        private readonly ICheepService _service;
 
 
         public ExternalLoginModel(
@@ -41,7 +41,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
             ICheepService service
-            )
+            ) : base(service)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -50,7 +50,6 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             
-            _service = service;
         }
 
         /// <summary>
@@ -101,6 +100,11 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
+
+        public async void OnGetAsync()
+        {
+            setUsername();
+        }
 
         public IActionResult OnPost(string provider, string returnUrl = null)
         {

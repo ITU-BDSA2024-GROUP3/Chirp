@@ -38,7 +38,7 @@ public class CheepRepository : ICheepRepository
     public async Task<string> GetNameByEmail(string emailAddress)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == emailAddress)
-            .Select(author => new AuthorDTO() { Name = author.UserName, UserId = author.UserId })
+            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return query.FirstOrDefaultAsync().Result.Name;
     }

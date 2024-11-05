@@ -17,9 +17,9 @@ public class PublicModel : CheepPostPage
 
     public async Task<ActionResult> OnGetAsync([FromQuery] int page)
     {
+        setUsername();
         currentPage = page;
         Cheeps = await _service.GetCheeps(currentPage);
-
         if (currentPage < 1)
         {
             currentPage = 1;
