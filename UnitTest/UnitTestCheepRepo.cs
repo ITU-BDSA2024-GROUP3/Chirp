@@ -197,9 +197,38 @@ public class UnitTestCheepRepo : IDisposable
       
       var result = await repo.CreateCheep(cheepDataTransferObject);
       Assert.Equal(1, result);
-         
-      //return queryResult.Entity.CheepId;
-      // check that the cheeps is added to the database
+   }
+
+   [Fact]
+   public async void TestUpdateCheep()
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      //create author and add to database
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      //MAKE THE DATABASE WITH AUTHOR
+      ICheepRepository repo = new CheepRepository(context);
+      
+      var c1 = new Cheep()
+      {
+         CheepId = 1, 
+         UserId = author.UserId,
+         Author = author, 
+         Text = "The two went past me.", 
+         TimeStamp = DateTime.Parse("2023-08-01 13:14:37")
+      };
+      
+      context.Cheeps.Add(c1);
+      await context.SaveChangesAsync();
+      Assert.Equal(1, await repo.UpdateCheep(c1));
    }
 
 
@@ -211,13 +240,6 @@ public async void TestReadCheepText()
 {
 
 }
-
-
-
-
-
-
-Testupdatecheep
 
 */
    
