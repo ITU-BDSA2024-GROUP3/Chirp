@@ -137,7 +137,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     public async void CanSeeCheepsPublic(int page)
     {
-        var content = await SetPublicPage(1);
+        var content = await SetPublicPage(page);
         Assert.DoesNotContain("There are no cheeps so far.", content);
     }
 
@@ -148,6 +148,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Roger Histand", 1)]
     [InlineData("Quintin Sitts", 5)]
     [InlineData("Wendell Ballan", 3)]
+    [InlineData("Nathan Sirmon", 4)]
     public async void CanSeeCheepsPrivate(string author, int id)
     {
         var content = await SetPrivate(author, id);
@@ -159,6 +160,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [InlineData(
         "That must have come to you.")]
     [InlineData("It was a sawed-off shotgun; so he fell back dead.")]
+    [InlineData("But what was behind the barricade.")]
+    [InlineData(" I was particularly agitated.")]
+    [InlineData("Until then I thought it was my companion&#x27;&#x27;s quiet and didactic manner.")]
+    [InlineData(" But ere I could not find it a name that I come from.")]
 
     public async void CanSeePublicTimelineText(string message)
     {
@@ -170,6 +175,12 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [Theory]
     [InlineData("I wrote it rather fine, said Holmes, imperturbably.", 2)]
     [InlineData("Once again I had observed the proceedings from my mind.", 12)]
+    [InlineData("And yet I dare say eh?", 5)]
+    [InlineData("Here in London whom he loved.", 5)]
+    [InlineData("The worst man in that gale, the but half fancy being committed this crime, what possible reason for not knowing what it was he.", 5)]
+    [InlineData("But now, tell me, Stubb, do you propose to begin breaking into the matter up.",11)]
+    [InlineData("At first he had only exchanged one trouble for another.", 11)]
+    [InlineData("It was he at last climbs up the paper is Sir Charles&#x27;&#x27;s death, we had no very unusual affair.",11)]
     public async void CanSeePublicTimelineTestDifferentPages(string message, int page)
     {
         var content = await SetPublicPage(page);
@@ -462,13 +473,13 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Jacqualine Gilcoine", 10,
+    [InlineData("Jacqualine Gilcoine", 
         "Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
         "08/01/23 11.17.26", 1)]
-    public async void ElementsOfCheepsAreCorrectPublic(string author, int id, string message, string timestamp,
+    public async void ElementsOfCheepsAreCorrectPublic(string author, string message, string timestamp,
         int page)
     {
-        var content = await SetPublicPage(1);
+        var content = await SetPublicPage(page);
         bool windows = content.Contains(
             $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{author}?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>");
 
@@ -534,10 +545,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Adrian", 12, 21)]
-    [InlineData("Helge", 11, 21)]
-    [InlineData("Jacqualine Gilcoine", 10, 1)]
-    public async void AuthorsExistPublic(string author, int id, int page)
+    [InlineData("Adrian",  21)]
+    [InlineData("Helge",  21)]
+    [InlineData("Jacqualine Gilcoine",  1)]
+    public async void AuthorsExistPublic(string author, int page)
     {
         var content = await SetPublicPage(page);
         Assert.Contains(author, content);
@@ -562,8 +573,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
     }
     [Theory]
-    [InlineData("Adrian", 12, 21)]
-    public async void AuthorLinksExistPublic(string author, int id, int page)
+    [InlineData("Adrian",  21)]
+    public async void AuthorLinksExistPublic(string author,  int page)
     {
         var content = await SetPublicPage(page);
         Assert.Contains($"<a href=\"/{author}?page=1\">{author}</a>", content);//should this be kept?
@@ -572,6 +583,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Adrian", 12, 1)]
+    [InlineData("Jacqualine Gilcoine", 12, 4)]
+
 
     public async void AuthorLinksExistPrivate(string author, int id, int page)
     {
