@@ -132,7 +132,6 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            Console.WriteLine("Boolean: " + ModelState.IsValid);
             if (ModelState.IsValid)
             {
                 var userExist = await _userManager.FindByEmailAsync(Input.Email);
