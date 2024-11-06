@@ -15,15 +15,15 @@
             <div>
                 <a href="/@(Model.username)">my timeline</a> |
                 <a href="/">public timeline</a> |
-                <a href="/Identity/Account/Logout" >logout [@(Model.username)]</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" >logout [@(Model.username)]</a> 
             </div>
         }
         else
         {
             <div>
                 <a href="/">public timeline</a> |
-                <a href="/Identity/Account/Register">register</a>
-                <a href="/Identity/Account/Login">login</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a> |
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
             </div>
         }
     </div>
