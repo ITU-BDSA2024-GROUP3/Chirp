@@ -12,9 +12,7 @@ public class EndToEndTests: PageTest{
     public async Task Setup()
     {
        //does not work properluy
-       //_serverProcess = await EndToEndTestsUtility.StartServer();
-       
-       
+       _serverProcess = await EndToEndTestsUtility.StartServer();
     }
 
     [TearDown]
@@ -27,27 +25,6 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task UITest()
     {
-        
-        _serverProcess = new Process();
-
-        ProcessStartInfo startInfo = new ProcessStartInfo()
-        {
-            FileName = "dotnet",
-            Arguments = "run", //--project ./../../../../../src/ChirpWeb",
-            WorkingDirectory = "./../../../../src/ChirpWeb",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-        
-        //_serverProcess.StartInfo.WorkingDirectory = "C:\\Users\\Ninja\\Repos\\Uni\\Semester 3\\Software Architecture\\Chirp\\src\\ChirpWeb";
-
-        _serverProcess.StartInfo = startInfo;
-        _serverProcess.Start();
-        
-        await Task.Delay(10000);
-        
         await Page.GotoAsync("http://localhost:5273/");
         
         /*
