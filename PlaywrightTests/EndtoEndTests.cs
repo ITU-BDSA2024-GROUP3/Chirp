@@ -34,7 +34,11 @@ public class EndToEndTests: PageTest{
         _serverProcess.StartInfo.FileName = filename;
         _serverProcess.StartInfo.Arguments = cli;
         _serverProcess.StartInfo.WorkingDirectory =
-            "C:\\Users\\Ninja\\Repos\\Uni\\Semester 3\\Software Architecture\\Chirp\\src\\ChirpWeb";
+            "C:\\Users\\theresiaravn\\Desktop\\C#\\Chirp\\src\\ChirpWeb";
+        _serverProcess.StartInfo.CreateNoWindow = true;
+        _serverProcess.StartInfo.UseShellExecute = false;
+        _serverProcess.StartInfo.RedirectStandardOutput = true;
+        _serverProcess.StartInfo.RedirectStandardError = true;
         _serverProcess.Start();
         
         Thread.Sleep(10000);
@@ -78,14 +82,15 @@ public class EndToEndTests: PageTest{
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         */
     }
-
+/*
     [Test]
     public async Task gobacktofrontpage()
     {
-        /*
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
         await Page.GetByText("Jacqualine Gilcoine Starbuck").ClickAsync();
         await Page.GetByText("— 08/01/23 11.17.39").ClickAsync();
-        */
+        
     }
+    */
 }
