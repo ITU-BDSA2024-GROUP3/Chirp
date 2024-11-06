@@ -27,26 +27,28 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task UITest()
     {
-        _serverProcess = new Process();
         
-        var filename = "ChirpWeb";
-        var cli = "dotnet run";
-        _serverProcess.StartInfo.FileName = filename;
-        _serverProcess.StartInfo.Arguments = cli;
-        _serverProcess.StartInfo.WorkingDirectory =
-            "C:\\Users\\theresiaravn\\Desktop\\C#\\Chirp\\src\\ChirpWeb";
-        _serverProcess.StartInfo.CreateNoWindow = true;
-        _serverProcess.StartInfo.UseShellExecute = false;
-        _serverProcess.StartInfo.RedirectStandardOutput = true;
-        _serverProcess.StartInfo.RedirectStandardError = true;
+        _serverProcess = new Process();
+
+        ProcessStartInfo startInfo = new ProcessStartInfo()
+        {
+            FileName = "dotnet",
+            Arguments = "run", //--project ./../../../../../src/ChirpWeb",
+            WorkingDirectory = "./../../../../src/ChirpWeb",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        
+        //_serverProcess.StartInfo.WorkingDirectory = "C:\\Users\\Ninja\\Repos\\Uni\\Semester 3\\Software Architecture\\Chirp\\src\\ChirpWeb";
+
+        _serverProcess.StartInfo = startInfo;
         _serverProcess.Start();
         
-        Thread.Sleep(10000);
+        await Task.Delay(10000);
         
         await Page.GotoAsync("http://localhost:5273/");
-
-        Thread.Sleep(5000);
-
         
         /*
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Icon1Chirp!" }).ClickAsync();
@@ -82,15 +84,14 @@ public class EndToEndTests: PageTest{
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         */
     }
-/*
+
     [Test]
     public async Task gobacktofrontpage()
     {
-        
+        /*
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
         await Page.GetByText("Jacqualine Gilcoine Starbuck").ClickAsync();
         await Page.GetByText("— 08/01/23 11.17.39").ClickAsync();
-        
+        */
     }
-    */
 }
