@@ -11,13 +11,14 @@ public class EndToEndTests: PageTest{
     [SetUp]
     public async Task Setup()
     {
-       //does not work properluy
+       //run process that enables "dotnet run" of the project
        _serverProcess = await EndToEndTestsUtility.StartServer();
     }
 
     [TearDown]
     public async Task TearDown()
     {
+        //ensures that every process is closed again
         _serverProcess.Kill();
         _serverProcess.Dispose();
     }
