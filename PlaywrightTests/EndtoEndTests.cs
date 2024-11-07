@@ -28,15 +28,28 @@ public class EndToEndTests: PageTest{
     public async Task HomePageTest()
     {
         await Page.GotoAsync("http://localhost:5273/");
-        
-        
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Icon1Chirp!" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }).ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).ClickAsync();
+       
+        await Expect(Page
+                .GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
+            .ToBeVisibleAsync();
+        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
+        await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
+    }
+
+    [Test]
+    public async Task UserTimelineTest()
+    {
+        await Page.GotoAsync("http://localhost:5273/");
         await Page.GetByText("Jacqualine Gilcoine Starbuck").ClickAsync();
         await Page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link)
             .ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).ClickAsync();
+        
+        await Expect(Page
+                .GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" }))
+            .ToBeVisibleAsync();
+        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/Jacqualine%20Gilcoine?page=1"));
+        
+        //can return to public timeline
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
         await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Mellie Yost" }).ClickAsync();
