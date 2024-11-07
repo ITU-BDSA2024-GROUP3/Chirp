@@ -82,14 +82,33 @@ public class EndToEndTests: PageTest{
     public async Task loginPageTest()
     {
         await Page.GotoAsync("http://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        
+        await Expect(Page).ToHaveTitleAsync(new Regex("Log in"));
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Login");
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in", Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Use a local account to log in." })).ToBeVisibleAsync();
+        await Expect(Page.GetByPlaceholder("name")).ToBeVisibleAsync();
+        await Expect(Page.GetByPlaceholder("password")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Remember me?")).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Log in" })).ToBeVisibleAsync();
+        
+        //correct redirection
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Forgot your password?" }).ClickAsync();
+        await Expect(Page).ToHaveTitleAsync("Forgot your password?");
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/ForgotPassword");
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Log in", Exact = true }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Use a local account to log in." }).ClickAsync();
-        await Page.GetByPlaceholder("name").ClickAsync();
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByText("Remember me?").ClickAsync();
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await Expect(Page).ToHaveTitleAsync(new Regex("Log in"));
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register as a new user" }).ClickAsync();
+        await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Register?returnUrl=%2F");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Resend email confirmation" }).ClickAsync();
+        await Expect(Page).ToHaveTitleAsync("Resend email confirmation");
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/ResendEmailConfirmation");
+        
     }
 }
