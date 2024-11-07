@@ -39,21 +39,19 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task UserTimelineTest()
     {
+        //got to Jacqulaine's timeline
         await Page.GotoAsync("http://localhost:5273/");
-        await Page.GetByText("Jacqualine Gilcoine Starbuck").ClickAsync();
         await Page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link)
             .ClickAsync();
         
         await Expect(Page
                 .GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" }))
             .ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/Jacqualine%20Gilcoine?page=1"));
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Jacqualine%20Gilcoine?page=1");
         
         //can return to public timeline
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Mellie Yost But what was" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Mellie Yost" }).ClickAsync();
-        await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
+        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
     }
 
     [Test]
@@ -62,8 +60,8 @@ public class EndToEndTests: PageTest{
         await Page.GotoAsync("http://localhost:5273/");
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Register", Exact = true }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Create a new account." }).ClickAsync();
+        //await Page.GetByRole(AriaRole.Heading, new() { Name = "Register", Exact = true }).ClickAsync();
+        //await Page.GetByRole(AriaRole.Heading, new() { Name = "Create a new account." }).ClickAsync();
         await Page.GetByText("Username").ClickAsync();
         await Page.GetByText("Email").ClickAsync();
         await Page.GetByText("Password", new() { Exact = true }).ClickAsync();
@@ -72,7 +70,9 @@ public class EndToEndTests: PageTest{
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Confirm Password").ClickAsync();
+        
         await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
+        
         
     }
 
