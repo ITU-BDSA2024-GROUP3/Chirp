@@ -1,5 +1,6 @@
 ﻿using ChirpCore.DomainModel;
 using ChirpWeb;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
@@ -16,9 +17,9 @@ public class PublicModel : CheepPostPage
 
     public async Task<ActionResult> OnGetAsync([FromQuery] int page)
     {
+        setUsername();
         currentPage = page;
         Cheeps = await _service.GetCheeps(currentPage);
-
         if (currentPage < 1)
         {
             currentPage = 1;
@@ -26,4 +27,6 @@ public class PublicModel : CheepPostPage
 
         return Page();
     }
+    
+    
 }

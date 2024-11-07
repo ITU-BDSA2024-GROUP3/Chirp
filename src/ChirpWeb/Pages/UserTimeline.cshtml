@@ -1,10 +1,10 @@
-﻿@page "/{author}/"
+﻿@page "/{name}/"
 @using ChirpWeb
 @model ChirpWeb.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("author");
+    var routeName = HttpContext.GetRouteValue("name");
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
@@ -15,7 +15,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <div class="cheepbox">
-            <h3>What's on your mind @(User.Identity.Name)?</h3>
+            <h3>What's on your mind @(Model.username)?</h3>
             <form method="post">
                 <input style="float: left" type="text" asp-for="Text">
                 <input type="submit" value="Share">

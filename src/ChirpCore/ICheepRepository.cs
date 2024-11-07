@@ -12,4 +12,5 @@ public interface ICheepRepository
     public Task<AuthorDTO> ReadAuthorByEmail(string email);
     public Task<Author> CreateAuthor(string name, string email, int userId);
     public Task<int> GetAuthorCount();
+    public Task<string> GetNameByEmail(string emailAddress);
 }
