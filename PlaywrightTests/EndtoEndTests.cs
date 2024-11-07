@@ -59,21 +59,23 @@ public class EndToEndTests: PageTest{
     {
         await Page.GotoAsync("http://localhost:5273/");
         
+        //go to register page
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
-        //await Page.GetByRole(AriaRole.Heading, new() { Name = "Register", Exact = true }).ClickAsync();
-        //await Page.GetByRole(AriaRole.Heading, new() { Name = "Create a new account." }).ClickAsync();
-        await Page.GetByText("Username").ClickAsync();
-        await Page.GetByText("Email").ClickAsync();
-        await Page.GetByText("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByText("Confirm Password").ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        
+       
         await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Register");
         
+        await Expect(Page.GetByText("Username")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Email")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Password", new() { Exact = true })).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Confirm Password")).ToBeVisibleAsync();
         
+        //Click register button
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        
+        await Expect(Page.GetByText("Username The UserName field is required.")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Email The Email field is required.")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Password The Password field is required.")).ToBeVisibleAsync();
     }
 
     [Test]
