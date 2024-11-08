@@ -134,7 +134,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var userExist = await _userManager.FindByEmailAsync(Input.Email);
+                var userExist = await _userManager.FindByNameAsync(Input.Email);
                 if (userExist == null)
                 {
                     //var user = await _service.CreateAuthor(name, "", id);
