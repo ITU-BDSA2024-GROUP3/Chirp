@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ChirpInfrastructure;
@@ -633,10 +634,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         
       
         Assert.Equal(32*(22-10+author.Length), first-content2.Length);
-       
-      
-        
-
     }
     [Theory]
     [InlineData("Adrian",  21)]
@@ -680,6 +677,19 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         Assert.Contains("<link href=\"/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />", content);
+    }
+
+    [Fact]
+    public async void LoginRedirectsCorrectly()
+    {
+        // Arrange
+
+        // Act
+        var resp = await _client.GetAsync("/Identity/Account/Logout");
+        string content = await resp.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.Contains("<title>Log in</title>", content);
     }
     
     /*
