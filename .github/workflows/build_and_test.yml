@@ -21,11 +21,11 @@ jobs:
       with:
         dotnet-version: 8.x
     - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet restore src/ChirpWeb/ChirpWeb.csproj
+      
+    - name: Build web
+      run: dotnet build src/ChirpWeb/ChirpWeb.csproj --no-restore
+
 
   unit_test:
     needs: build
