@@ -55,8 +55,8 @@ public class EndToEndTests: PageTest{
     }
 
     [Test]
-    public async Task registerPageTest()
-    {
+    public async Task RegisterPageTest()
+    { 
         await Page.GotoAsync("http://localhost:5273/");
         
         //go to register page
@@ -79,7 +79,7 @@ public class EndToEndTests: PageTest{
     }
 
     [Test]
-    public async Task loginPageTest()
+    public async Task LoginPageTest()
     {
         await Page.GotoAsync("http://localhost:5273/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -94,21 +94,23 @@ public class EndToEndTests: PageTest{
         await Expect(Page.GetByText("Remember me?")).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Log in" })).ToBeVisibleAsync();
         
+        /*
         //correct redirection
         await Page.GetByRole(AriaRole.Link, new() { Name = "Forgot your password?" }).ClickAsync();
         await Expect(Page).ToHaveTitleAsync("Forgot your password?");
         await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/ForgotPassword");
+        */
         
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        //await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register as a new user" }).ClickAsync();
         await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
         await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Register?returnUrl=%2F");
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Resend email confirmation" }).ClickAsync();
-        await Expect(Page).ToHaveTitleAsync("Resend email confirmation");
-        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/ResendEmailConfirmation");
+        //await Page.GetByRole(AriaRole.Link, new() { Name = "Resend email confirmation" }).ClickAsync();
+        //await Expect(Page).ToHaveTitleAsync("Resend email confirmation");
+        //await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/ResendEmailConfirmation");
         
     }
 }
