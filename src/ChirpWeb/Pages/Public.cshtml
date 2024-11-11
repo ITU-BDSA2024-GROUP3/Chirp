@@ -45,11 +45,12 @@
     {
         <em>There are no cheeps so far.</em>
     }
-
+    @if (Model.currentPage > 1){
     <Button class="btn">
         <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
     </Button>
-    <button class="btn">
+    }
+    <Button class="btn">
         <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
-    </button>
+    </Button>
 </div>

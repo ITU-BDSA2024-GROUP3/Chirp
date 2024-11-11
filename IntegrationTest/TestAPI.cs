@@ -435,12 +435,12 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPublicPage(page);
         bool windows1 = content.Contains(
-            $"<button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r"
+            $"<Button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </Button>\r"
         );
         bool windows2 = content.Contains(
                 $"<Button class=\"btn\">\r\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
         bool linux1 = content.Contains(
-            $"<button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>"
+            $"<Button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>"
         );
         bool linux2 = content.Contains(
             $"<Button class=\"btn\">\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
@@ -457,9 +457,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         bool windows1 = content.Contains(    
-            $"<button class=\"btn\">\r\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
+            $"<Button class=\"btn\">\r\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </Button>\r");
         bool linux1 = content.Contains( 
-            $"<button class=\"btn\">\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
+            $"<Button class=\"btn\">\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>");
         bool windows2 =
             content.Contains(
                 $"<Button class=\"btn\">\r\n        <a href=\"/{author}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
