@@ -22,10 +22,10 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Build with dotnet
-        run: dotnet build src/ChirpWeb/ChirpWeb.csproj --configuration Release
+        run: dotnet build src/ChirpWeb --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/ChirpWeb/ChirpWeb.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish src/ChirpWeb -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
