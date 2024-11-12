@@ -22,8 +22,8 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 <ItemGroup>
-  <ProjectReference Include="..\src\ChirpInfrastructure\ChirpInfrastructure.csproj" />
-  <ProjectReference Include="..\src\ChirpWeb\ChirpWeb.csproj" />
+  <ProjectReference Include="..\..\src\ChirpInfrastructure\ChirpInfrastructure.csproj" />
+  <ProjectReference Include="..\..\src\ChirpWeb\ChirpWeb.csproj" />
 </ItemGroup>
 
 
