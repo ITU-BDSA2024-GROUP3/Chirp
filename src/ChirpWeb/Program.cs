@@ -37,12 +37,12 @@ builder.Services.AddAuthentication()
     .AddCookie()
     .AddGitHub(o =>
     {
-        if (builder.Configuration["GitHub:ClientID"] == null )
+        if (builder.Configuration["GitHubClientID"] == null )
         {
             Console.Error.WriteLine("You must provide a client ID.");
         }
         
-        if (builder.Configuration["GitHub:ClientSecret"] == null )
+        if (builder.Configuration["GitHubClientSecret"] == null )
         {
             Console.Error.WriteLine("You must provide a client Secret.");
         }

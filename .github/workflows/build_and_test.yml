@@ -13,16 +13,33 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      TZ: "Europe/Copenhagen"
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
+
+    - name: Restore dependencies for Integration Tests
+      run: dotnet restore test/IntegrationTest/IntegrationTest.csproj
+      
+    - name: Build web
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run Unit Tests
+      env:
+        AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
+        AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
+      run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
+      
+    - name: Run integration Test
+      env:
+        AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
+        AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
+      run: dotnet test IntegrationTest/IntegrationTest.csproj --verbosity normal
+      
+    

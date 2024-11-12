@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ChirpInfrastructure;
@@ -434,12 +435,12 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPublicPage(page);
         bool windows1 = content.Contains(
-            $"<button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r"
+            $"<Button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </Button>\r"
         );
         bool windows2 = content.Contains(
                 $"<Button class=\"btn\">\r\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
         bool linux1 = content.Contains(
-            $"<button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>"
+            $"<Button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>"
         );
         bool linux2 = content.Contains(
             $"<Button class=\"btn\">\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
@@ -456,9 +457,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         bool windows1 = content.Contains(    
-            $"<button class=\"btn\">\r\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </button>\r");
+            $"<Button class=\"btn\">\r\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </Button>\r");
         bool linux1 = content.Contains( 
-            $"<button class=\"btn\">\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </button>");
+            $"<Button class=\"btn\">\n        <a href=\"/{author}?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>");
         bool windows2 =
             content.Contains(
                 $"<Button class=\"btn\">\r\n        <a href=\"/{author}?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
@@ -633,10 +634,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         
       
         Assert.Equal(32*(22-10+author.Length), first-content2.Length);
-       
-      
-        
-
     }
     [Theory]
     [InlineData("Adrian",  21)]
@@ -680,6 +677,19 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         Assert.Contains("<link href=\"/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />", content);
+    }
+
+    [Fact]
+    public async void LoginRedirectsCorrectly()
+    {
+        // Arrange
+
+        // Act
+        var resp = await _client.GetAsync("/Identity/Account/Logout");
+        string content = await resp.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.Contains("<title>Log in</title>", content);
     }
     
     /*

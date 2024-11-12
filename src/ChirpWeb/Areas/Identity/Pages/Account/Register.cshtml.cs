@@ -135,8 +135,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var userExist = await _userManager.FindByNameAsync(Input.Email);
-                
-                if (userExist == null)
+                var NameExist = await _service.ReadAuthorByName(Input.Name);
+                Console.WriteLine(NameExist);
+                if (userExist == null /*&& NameExist.Name != Input.Name*/)
                 {
                     //var user = await _service.CreateAuthor(name, "", id);
                     var user = CreateUser();
@@ -149,10 +150,28 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                     user.Email = Input.Email;
-                    
-                    var result = await _userManager.CreateAsync(user, Input.Password);
-                    
-                    if (result.Succeeded)
+
+                    var success = false;
+
+                    IdentityResult result;
+
+                    try
+                    {
+                        result = await _userManager.CreateAsync(user, Input.Password);
+                        if (result.Succeeded)
+                        {
+                            success = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        result = IdentityResult.Failed(new IdentityError { Description = "Name is already taken" });
+                        Console.Error.WriteLine(ex.Message);
+                        success = false;
+                    }
+
+
+                    if (success)
                     {
                         _logger.LogInformation("User created a new account with password.");
 
