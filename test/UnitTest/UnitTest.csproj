@@ -29,9 +29,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\ChirpWeb\ChirpWeb.csproj" />
-        <ProjectReference Include="..\src\ChirpCore\ChirpCore.csproj" />
-        <ProjectReference Include="..\src\ChirpInfrastructure\ChirpInfrastructure.csproj" />
+        <ProjectReference Include="..\..\src\ChirpWeb\ChirpWeb.csproj" />
+        <ProjectReference Include="..\..\src\ChirpCore\ChirpCore.csproj" />
+        <ProjectReference Include="..\..\src\ChirpInfrastructure\ChirpInfrastructure.csproj" />
 
     </ItemGroup>
 
