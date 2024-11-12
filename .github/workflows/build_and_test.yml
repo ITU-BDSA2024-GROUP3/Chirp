@@ -25,9 +25,6 @@ jobs:
       
     - name: Build web
       run: dotnet build src/ChirpWeb/ChirpWeb.csproj --no-restore
-    - name: Run Github references
-      env:
-          AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
-          AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
+    
     - name: test
       run: dotnet test
