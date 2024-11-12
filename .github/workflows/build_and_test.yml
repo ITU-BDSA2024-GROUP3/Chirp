@@ -28,8 +28,16 @@ jobs:
       
     - name: Build web
       run: dotnet build --no-restore
-    - name: Run Test
+    - name: Run Unit Tests
       env:
         AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
         AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
-      run: dotnet test --no-build
+      run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
+      
+    - name: Run integration Test
+      env:
+        AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
+        AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
+      run: dotnet test IntegrationTest/IntegrationTest.csproj --verbosity normal
+      
+    
