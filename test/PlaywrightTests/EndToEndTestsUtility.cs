@@ -17,7 +17,7 @@ public class EndToEndTestsUtility
             {
                 FileName = "dotnet",
                 Arguments = "run", //--project ./../../../../../src/ChirpWeb",
-                WorkingDirectory = "./../../../../src/ChirpWeb",
+                WorkingDirectory = "./../../../../../src/ChirpWeb",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
