@@ -25,10 +25,8 @@ jobs:
       
     - name: Build web
       run: dotnet build --no-restore
-    - name: Run Integration Tests
+    - name: Run Test
       env:
         AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
         AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
-        
-    - name: test
       run: dotnet test --no-build
