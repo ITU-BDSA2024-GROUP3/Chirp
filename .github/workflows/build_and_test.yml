@@ -21,10 +21,10 @@ jobs:
       with:
         dotnet-version: 8.x
     - name: Restore dependencies
-      run: dotnet restore src/ChirpWeb/ChirpWeb.csproj
+      run: dotnet restore
       
     - name: Build web
-      run: dotnet build src/ChirpWeb/ChirpWeb.csproj --no-restore
+      run: dotnet build --no-restore
     
     - name: test
-      run: dotnet test
+      run: dotnet test --no-build
