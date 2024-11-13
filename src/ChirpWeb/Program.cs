@@ -25,7 +25,7 @@ builder.Services.AddDefaultIdentity<Author>(options =>
 {
     //options.SignIn.RequireConfirmedAccount = true;
     //options.Lockout.AllowedForNewUsers = true;
-    options.Password.RequiredLength = 12;
+    //options.Password.RequiredLength = 12;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<ChirpDBContext>();
