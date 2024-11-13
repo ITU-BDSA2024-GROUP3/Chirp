@@ -140,6 +140,7 @@ div.page ul.cheeps li {
 
 div.page ul.cheeps p {
   margin: 0;
+  word-wrap: break-word;
 }
 
 div.page ul.cheeps li img {
@@ -294,4 +295,3 @@ ul.nav li a:hover {
     font-size: 16px;
     cursor: pointer;
 }
-
