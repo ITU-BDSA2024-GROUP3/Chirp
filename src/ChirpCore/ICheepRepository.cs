@@ -13,6 +13,7 @@ public interface ICheepRepository
     public Task<Author> CreateAuthor(string name, string email, int userId);
     public Task<int> GetAuthorCount();
     public Task<string> GetNameByEmail(string emailAddress);
-    public Task Follow(Author wantToBeFollowed, Author wantToFollow);
+    public Task Follow(Author wantToFollow, Author wantToBeFollowed);
+    public Task Unfollow( Author wantsToUnfollow, Author wantsToBeUnfollowed);
     
 }
