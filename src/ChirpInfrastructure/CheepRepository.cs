@@ -146,4 +146,8 @@ public class CheepRepository : ICheepRepository
             _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
         return await query.CountAsync();
     }
+    public async Task Follow(Author wantToBeFollowed, Author wantToFollow)
+    {
+        
+    }
 }
