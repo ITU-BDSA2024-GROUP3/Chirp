@@ -9,4 +9,6 @@ public class Author : IdentityUser
     public string Name { get; set; }
     public string Email { get; set; }
     public ICollection<Cheep> Cheeps { get; set; }
+    
+    public ICollection<Author> FollowingList { get; set; }
 }
