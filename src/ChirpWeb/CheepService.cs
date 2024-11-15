@@ -13,6 +13,8 @@ public interface ICheepService
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail);
     public Task<AuthorDTO> ReadAuthorByName(string userName);
     public Task<string> GetNameByEmail(string emailAddress);
+    public Task Follow(Author wantToFollow, Author wantToBeFollowed);
+    public Task Unfollow( Author wantToUnfollow, Author wantToBeUnfollowed);
 
     
     public Task<int> GetAuthorCount();
@@ -69,6 +71,16 @@ public class CheepService : ICheepService
         // filter by the provided author name
 
         return _repository.ReadCheeps(page, userId);
+    }
+
+    public Task Follow(Author wantToFollow, Author wantToBeFollowed)
+    {
+        return _repository.Follow(wantToFollow, wantToBeFollowed);
+    }
+
+    public Task Unfollow(Author wantToUnfollow, Author wantToBeUnfollowed)
+    {
+        return _repository.Unfollow(wantToUnfollow, wantToBeUnfollowed);
     }
 
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
