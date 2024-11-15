@@ -122,17 +122,25 @@ public class CheepRepository : ICheepRepository
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<AuthorDTO> ReadAuthorByEmail(string email)
+    public async Task<AuthorDTO> ReadAuthorDTOByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
             .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
+    
+    public async Task<Author> ReadAuthorByEmail(string email)
+    {
+        IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
+            .Select(author => author)
+            .Take(1);
+        return await query.FirstOrDefaultAsync();
+    }
 
     public async Task<Author> CreateAuthor(string name, string email, int UserId)
     {
-        Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>() };
+        Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>(), FollowingList = new List<Author>()};
         var queryResult = await _dbContext.Authors.AddAsync(author); // does not write to the database!
 
         await _dbContext.SaveChangesAsync();
