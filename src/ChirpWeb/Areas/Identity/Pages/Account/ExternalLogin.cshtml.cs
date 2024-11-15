@@ -134,6 +134,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
+                returnUrl = Url.Content("~/"+info.Principal.Identity.Name);
+
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
@@ -194,6 +196,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                         {
                             return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
                         }
+                        returnUrl = Url.Content("~/"+Input.Name);
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);
