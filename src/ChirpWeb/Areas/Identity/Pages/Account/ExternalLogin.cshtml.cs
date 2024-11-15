@@ -122,6 +122,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
+    
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -142,19 +143,23 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             }
             else
             {
-                // If the user does not have an account, then ask the user to create an account.
+                // If the user does not have an account, set up the InputModel with data from the claims.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+
+                var emailClaim = info.Principal.FindFirst(ClaimTypes.Email);
+                var nameClaim = info.Principal.FindFirst(ClaimTypes.Name);
+
+                Input = new InputModel
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
+                    Email = emailClaim?.Value ?? string.Empty, // Default to empty if claim is missing
+                    Name = nameClaim?.Value ?? string.Empty   // Default to empty if claim is missing
+                };
+
                 return Page();
             }
         }
+
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
