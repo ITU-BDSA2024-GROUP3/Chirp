@@ -56,6 +56,30 @@ builder.Services.AddAuthentication()
         o.Scope.Add("user:email");
 
         o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+        o.Events = new OAuthEvents
+        {
+            OnTicketReceived = async context =>
+            {
+                // Retrieve the authenticated user's GitHub login (username)
+                var identity = context.Principal.Identity as ClaimsIdentity;
+                var username = identity?.FindFirst(ClaimTypes.Name)?.Value;
+
+                if (!string.IsNullOrEmpty(username))
+                {
+                    // Redirect to the user's specific page
+                    context.Response.Redirect($"/{username}");
+                    context.HandleResponse(); // Prevent default redirection
+                }
+                else
+                {
+                    // Fallback redirection if username is not found
+                    context.Response.Redirect("/");
+                    context.HandleResponse();
+                }
+
+                await Task.CompletedTask;
+            }
+        };
     });
 
 
