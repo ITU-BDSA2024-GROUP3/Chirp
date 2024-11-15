@@ -10,18 +10,18 @@
 
 <p id="external-login-description" class="text-info">
     You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address and username for this site below and click the Register button to finish
+    Unfortunately, your email or username is already in use, please pick another email and/or username which has not been taken.
     logging in.
 </p>
 <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
 
 <div class="form-floating mb-3">
-    <input asp-for="Input.Name" class="form-control" autocomplete="email" readonly />
+    <input asp-for="Input.Name" class="form-control" autocomplete="Username" />
     <label asp-for="Input.Name" class="form-label"></label>
     <span asp-validation-for="Input.Name" class="text-danger"></span>
 </div>
 <div class="form-floating mb-3">
-    <input asp-for="Input.Email" class="form-control" autocomplete="email" readonly />
+    <input asp-for="Input.Email" class="form-control" autocomplete="email" />
     <label asp-for="Input.Email" class="form-label"></label>
     <span asp-validation-for="Input.Email" class="text-danger"></span>
 </div>
