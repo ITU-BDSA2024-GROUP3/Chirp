@@ -11,6 +11,7 @@ namespace ChirpWeb.Pages;
 
 public class UserTimelineModel : CheepPostPage
 {
+    public Author? author { get; set; }
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
@@ -18,6 +19,14 @@ public class UserTimelineModel : CheepPostPage
 
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
+        author = await _service.ReadAuthorByEmail(User.Identity.Name);
+        
+        // We think, that if FollowingList is empty, it will be read as null from the database
+        if (author.FollowingList == null)
+        {
+            author.FollowingList = new List<Author>();
+        }
+        
         setUsername();
         var authorTask = await _service.ReadAuthorByName(name);
 

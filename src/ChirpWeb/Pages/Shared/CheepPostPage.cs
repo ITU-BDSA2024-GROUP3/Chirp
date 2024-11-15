@@ -11,11 +11,10 @@ public class CheepPostPage : BasePage
     [Required]
     [MaxLength(160)]
     public string Text { get; set; }
-  
+    
     public CheepPostPage(ICheepService service) : base(service)
     {
     }
-    
     
     public async Task<ActionResult> OnPost()
     {
@@ -29,7 +28,7 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        AuthorDTO author = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+        AuthorDTO author = _service.ReadAuthorDTOByEmail(User.Identity.Name).Result;
 
         if (author.UserId == null)
         {
@@ -45,5 +44,11 @@ public class CheepPostPage : BasePage
         await _service.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
+    }
+    
+    public async Task<ActionResult> OnPostToggleFollowAsync([FromQuery] string authorName)
+    {
+        Thread.Sleep(3000);
+        return NotFound();
     }
 }

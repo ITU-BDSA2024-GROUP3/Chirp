@@ -9,12 +9,11 @@ public class BasePage : PageModel
 {
     protected readonly ICheepService _service;
     
-    
     public string username { get; set; }
     
     public BasePage(ICheepService service)
     {
-        _service = service;   
+        _service = service;
     }
 
     public async void setUsername()
@@ -24,6 +23,9 @@ public class BasePage : PageModel
             username = await _service.GetNameByEmail(User.Identity.Name);
         }
     }
-    
-    
+
+    public Author GetAuthorByEmail(string authorName)
+    {
+        return _service.ReadAuthorByEmail(authorName).Result;
+    }
 }

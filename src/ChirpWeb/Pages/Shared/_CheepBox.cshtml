@@ -1,0 +1,21 @@
+﻿<li>
+    <p>
+        <div>
+            <div style="display: flex; align-items: center">
+                <strong>
+                    <a href="/@ViewData["AuthorName"]?page=1">@ViewData["AuthorName"]</a>
+                </strong>
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <partial name="_FollowBtn"/>
+                    }
+                }
+            </div>
+            <br>
+            @ViewData["CheepText"]
+            <br>
+            <small>@ViewData["Timestamp"]</small>
+        </div>
+    </p>
+</li>
