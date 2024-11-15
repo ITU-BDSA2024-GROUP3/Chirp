@@ -31,11 +31,15 @@
             {
                 <li>
                     <p>
-                        <strong>
-                            <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+                        <div>
+                            <strong>
+                                <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
+                            </strong>
+                            <br>
+                            @cheep.Text
+                            <br>
+                            <small>@CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+                        </div>
                     </p>
                 </li>
             }
