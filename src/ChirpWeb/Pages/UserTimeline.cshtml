@@ -27,15 +27,12 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
-                    </p>
-                </li>
+                ViewData["AuthorName"] = cheep.AuthorName;
+                ViewData["CheepText"] = cheep.Text;
+                ViewData["Timestamp"] = CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp);
+                ViewData["Followed"] = true;
+                
+                <partial name="Shared/_CheepBox"/>
             }
         </ul>
     }
