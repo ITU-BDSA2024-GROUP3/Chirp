@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpInfrastructure;
@@ -50,6 +51,31 @@ builder.Services.AddAuthentication()
         o.ClientId = builder.Configuration["GitHubClientID"];
         o.ClientSecret = builder.Configuration["GitHubClientSecret"];
         o.CallbackPath = "/signin-github";
+        
+        o.Events = new OAuthEvents
+        {
+            OnTicketReceived = async context =>
+            {
+                // Retrieve the authenticated user's GitHub login (username)
+                var identity = context.Principal.Identity as ClaimsIdentity;
+                var username = identity?.FindFirst(ClaimTypes.Name)?.Value;
+
+                if (!string.IsNullOrEmpty(username))
+                {
+                    // Redirect to the user's specific page
+                    context.Response.Redirect($"/{username}");
+                    context.HandleResponse(); // Prevent default redirection
+                }
+                else
+                {
+                    // Fallback redirection if username is not found
+                    context.Response.Redirect("/");
+                    context.HandleResponse();
+                }
+
+                await Task.CompletedTask;
+            }
+        };
     });
 
 
