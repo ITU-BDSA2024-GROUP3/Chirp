@@ -24,6 +24,4 @@ public class BasePage : PageModel
             username = await _service.GetNameByEmail(User.Identity.Name);
         }
     }
-    
-    
 }

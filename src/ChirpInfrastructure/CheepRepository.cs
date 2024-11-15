@@ -1,4 +1,5 @@
-﻿using ChirpCore;
+﻿using System.Runtime.InteropServices.JavaScript;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,10 +38,30 @@ public class CheepRepository : ICheepRepository
 
     public async Task<string> GetNameByEmail(string emailAddress)
     {
-        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == emailAddress)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
-            .Take(1);
-        return query.FirstOrDefaultAsync().Result.Name;
+        //Check if email exists
+        var emailExist = await ReadAuthorByEmail(emailAddress);
+        if (emailExist == null)
+        {
+            Console.Error.WriteLine("Error: GetNameByEmail: Email address does not exist.");
+        }
+        else
+        {
+            //Check if email has name tied to it
+            IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == emailAddress)
+                .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+                .Take(1);
+            var authordto = await query.FirstOrDefaultAsync();
+            if (authordto == null)
+            {
+                Console.Error.WriteLine("Error: GetNameByEmail: Email address has no corresponding name");
+            }
+            else
+            {
+                return authordto.Name;
+            }
+        }
+        //Don't want to be here
+        return null;
     }
 
 

@@ -231,6 +231,28 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal(1, await repo.UpdateCheep(c1));
    }
 
+   [Fact]
+   public async void TestGetNameByEmail()
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      //create author and add to database
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      
+      ICheepRepository repo = new CheepRepository(context);
+      
+      Assert.Equal("Tom", await repo.GetNameByEmail("mymail"));
+      Assert.Null(await repo.GetNameByEmail("notmail"));
+   }
+
 
 
 
