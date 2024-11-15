@@ -149,13 +149,13 @@ public class CheepRepository : ICheepRepository
 
     public async Task Follow(Author wantToFollow, Author wantToBeFollowed)
     {
-        
+        wantToFollow.FollowingList.Add(wantToBeFollowed);
     }
 
 
-    public async Task Unfollow(Author wantsToUnfollow, Author wantsToBeUnfollowed)
+    public async Task Unfollow(Author wantToUnfollow, Author wantToBeUnfollowed)
     {
-        
+        wantToUnfollow.FollowingList.Remove(wantToBeUnfollowed);
     }
 
 }
