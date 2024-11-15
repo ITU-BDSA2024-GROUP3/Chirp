@@ -671,8 +671,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Adrian", 12, 1)]
     [InlineData("Helge", 11, 1)]
-
-
     public async void CorrectStyleSheetUsedPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -690,6 +688,29 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
 
         // Assert
         Assert.Contains("<title>Log in</title>", content);
+    }
+    
+    [Fact]
+    public async void FollowButtonTesting1()
+    {
+        // Arrange
+
+        // Act
+
+
+        // Assert
+        
+    }
+    
+    [Fact]
+    public async void UnFollowButtonTesting1()
+    {
+        // Arrange
+
+        // Act
+        
+        // Assert
+        
     }
     
     /*

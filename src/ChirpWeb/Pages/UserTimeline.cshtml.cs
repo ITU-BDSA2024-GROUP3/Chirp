@@ -22,11 +22,14 @@ public class UserTimelineModel : CheepPostPage
         author = await _service.ReadAuthorByEmail(User.Identity.Name);
         
         // We think, that if FollowingList is empty, it will be read as null from the database
-        if (author.FollowingList == null)
+        if (User.Identity.IsAuthenticated)
         {
-            author.FollowingList = new List<Author>();
+            if (author.FollowingList == null)
+            {
+                author.FollowingList = new List<Author>();
+            }
         }
-        
+
         setUsername();
         var authorTask = await _service.ReadAuthorByName(name);
 

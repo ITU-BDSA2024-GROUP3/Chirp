@@ -231,7 +231,55 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal(1, await repo.UpdateCheep(c1));
    }
 
+   [Fact]
+   public async void FollowButtonTesting1()
+   {
+      // Arrange
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      //create author and add to database
+      var author1 = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author2 = new Author() { UserId= 1, Cheeps = null, Email = "hismail", Name = "Ben" };
+      context.Authors.Add(author1);
+      context.Authors.Add(author2);
+      await context.SaveChangesAsync();
+      //MAKE THE DATABASE WITH AUTHOR
+      ICheepRepository repo = new CheepRepository(context);
+      // Act
+      repo.Follow(await repo.ReadAuthorById(author1.UserId), await repo.ReadAuthorById(author2.UserId));
+      // Assert
+      Assert.Equal(new List<Author>(){author2},author1.FollowingList);
+   }
+    
+   [Fact]
+   public async void UnFollowButtonTesting1()
+   {
+      // Arrange
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      //create author and add to database
+      var author1 = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom"};
+      var author2 = new Author() { UserId= 1, Cheeps = null, Email = "hismail", Name = "Ben", FollowingList = new List<Author>(){author1}};
+      context.Authors.Add(author1);
+      context.Authors.Add(author2);
+      await context.SaveChangesAsync();
+      //MAKE THE DATABASE WITH AUTHOR
+      ICheepRepository repo = new CheepRepository(context);
+      // Act
+      repo.Unfollow(await repo.ReadAuthorById(author1.UserId), await repo.ReadAuthorById(author2.UserId));
+      // Assert
+      Assert.Equal(new List<Author>() { }, author1.FollowingList);
+   }
 
 
 /*

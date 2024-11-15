@@ -9,6 +9,8 @@ public interface ICheepRepository
     public Task<int> UpdateCheep(Cheep updatedMessage);
     public Task<AuthorDTO> ReadAuthorDTOById(int id);
     public Task<AuthorDTO> ReadAuthorByName(string name);
+    
+    public Task<Author> ReadAuthorById(int id);
     public Task<AuthorDTO> ReadAuthorDTOByEmail(string email);
     public Task<Author> ReadAuthorByEmail(string email);
     public Task<Author> CreateAuthor(string name, string email, int userId);
