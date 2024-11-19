@@ -691,14 +691,16 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     }
     
     [Fact]
-    public async void FollowButtonTesting1()
+    public async void DoesOtherCheepsAppear()
     {
         // Arrange
-
+        var content = await SetPrivatePage(1, "Adrian", 12);
+        
         // Act
 
-
+        //Builds on the assumption that Helge, then Adrian has been added to the database, and Adrian follows Helge
         // Assert
+        Assert.Contains("<a href=\"/Helge\">Helge</a>\n", content);
         
     }
     
