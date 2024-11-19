@@ -48,7 +48,29 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync([FromQuery] string authorName)
     {
-        Thread.Sleep(3000);
-        return NotFound();
+        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+        Author followAuthor = _service.ReadAuthorByName(authorName).Result;
+
+        if (loggedInAuthor == null || followAuthor == null)
+        {
+            throw new Exception("OnPostToggleFollowAsync Exception");
+        }
+        
+        if (loggedInAuthor.FollowingList == null)
+        {
+            loggedInAuthor.FollowingList = new List<Author>();
+        }
+        
+        if (loggedInAuthor.FollowingList.Contains(followAuthor))
+        {
+            _service.Unfollow(loggedInAuthor, followAuthor);
+
+        }
+        else
+        {
+            _service.Follow(loggedInAuthor, followAuthor);
+        }
+
+        return Page();
     }
 }

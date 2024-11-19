@@ -35,9 +35,9 @@
 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var cheepAuthor = Model.GetAuthorByEmail(User.Identity.Name);
-                    
-                    ViewData["Followed"] = Model.author.FollowingList.Contains(cheepAuthor);
+                    var cheepAuthor = Model.GetAuthorByEmail(cheep.AuthorName);
+
+                    ViewData["Followed"] = false; //Model.author.FollowingList.Contains(cheepAuthor);
                 }
                 
                 <partial name="Shared/_CheepBox"/>
