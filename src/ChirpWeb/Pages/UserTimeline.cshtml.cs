@@ -37,7 +37,7 @@ public class UserTimelineModel : CheepPostPage
 
         //await Task.WhenAll(authorTask, cheepsTask);
 
-        Author = authorTask;
+        Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};
         Cheeps = cheepsTask;
 
         currentPage = page;

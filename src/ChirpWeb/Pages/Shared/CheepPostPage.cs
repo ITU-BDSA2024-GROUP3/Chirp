@@ -46,13 +46,16 @@ public class CheepPostPage : BasePage
         return RedirectToPage("Public");
     }
     
-    public async Task<ActionResult> OnPostToggleFollowAsync([FromQuery] string authorName)
+    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
-        Author followAuthor = _service.ReadAuthorByName(authorName).Result;
+        Author loggedInAuthor = await _service.ReadAuthorByEmail(User.Identity.Name);
+        Console.WriteLine("please be correct: " + AuthorName);
+        Author followAuthor = await _service.ReadAuthorByName(AuthorName);
 
         if (loggedInAuthor == null || followAuthor == null)
         {
+            Console.WriteLine(loggedInAuthor.Name + " exists");
+            Console.WriteLine(followAuthor.Name + " exists");
             throw new Exception("OnPostToggleFollowAsync Exception");
         }
         

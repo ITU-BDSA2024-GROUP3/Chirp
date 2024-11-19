@@ -114,10 +114,10 @@ public class CheepRepository : ICheepRepository
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<AuthorDTO> ReadAuthorByName(string name)
+    public async Task<Author> ReadAuthorByName(string name)
     {
-        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+        IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
+            .Select(author => author)
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
