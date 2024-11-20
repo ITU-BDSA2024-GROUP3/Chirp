@@ -15,6 +15,7 @@
             <div>
                 <a href="/@(Model.username)">my timeline</a> |
                 <a href="/">public timeline</a> |
+                <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage @User.Identity?.Name's account</a> |
                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" >logout [@(Model.username)]</a> 
             </div>
         }
