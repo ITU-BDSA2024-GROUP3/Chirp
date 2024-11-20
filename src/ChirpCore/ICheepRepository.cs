@@ -16,7 +16,7 @@ public interface ICheepRepository
     public Task<Author> CreateAuthor(string name, string email, int userId);
     public Task<int> GetAuthorCount();
     public Task<string> GetNameByEmail(string emailAddress);
-    public Task Follow(Author wantToFollow, Author wantToBeFollowed);
-    public Task Unfollow( Author wantToUnfollow, Author wantToBeUnfollowed);
+    public Task<int> Follow(Author wantToFollow, Author wantToBeFollowed);
+    public Task<int> Unfollow( Author wantToUnfollow, Author wantToBeUnfollowed);
     
 }

@@ -155,15 +155,23 @@ public class CheepRepository : ICheepRepository
         return await query.CountAsync();
     }
 
-    public async Task Follow(Author wantToFollow, Author wantToBeFollowed)
+    public async Task<int> Follow(Author wantToFollow, Author wantToBeFollowed)
     {
-        wantToFollow.FollowingList.Add(wantToBeFollowed);
+        var idk = ReadAuthorById(wantToFollow.UserId).Result;
+        var idk2 = ReadAuthorById(wantToBeFollowed.UserId).Result;
+        Console.WriteLine(wantToFollow + " adds ");
+        idk.FollowingList.Add(idk2);
+        Console.WriteLine("I want to give up: " + wantToFollow.FollowingList.Count);
+        return await _dbContext.SaveChangesAsync();
+        Console.WriteLine("I want to give up 2.0: " + wantToFollow.FollowingList.Count);
+
     }
 
 
-    public async Task Unfollow(Author wantToUnfollow, Author wantToBeUnfollowed)
+    public async Task<int> Unfollow(Author wantToUnfollow, Author wantToBeUnfollowed)
     {
         wantToUnfollow.FollowingList.Remove(wantToBeUnfollowed);
+        return await _dbContext.SaveChangesAsync();
     }
 
 }

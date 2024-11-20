@@ -48,32 +48,43 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        Author loggedInAuthor = await _service.ReadAuthorByEmail(User.Identity.Name);
-        Console.WriteLine("please be correct: " + AuthorName);
-        Author followAuthor = await _service.ReadAuthorByName(AuthorName);
-
+        
+        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+        Console.WriteLine("please be correct: " + loggedInAuthor.Name);
+        Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
+        Console.WriteLine("please be correct 2: " + followAuthor.Name);
+        Console.WriteLine("why is my life like this: ");
+        Console.WriteLine(followAuthor.FollowingList==null);
         if (loggedInAuthor == null || followAuthor == null)
         {
-            Console.WriteLine(loggedInAuthor.Name + " exists");
-            Console.WriteLine(followAuthor.Name + " exists");
             throw new Exception("OnPostToggleFollowAsync Exception");
         }
         
         if (loggedInAuthor.FollowingList == null)
         {
+            Console.WriteLine("test");
             loggedInAuthor.FollowingList = new List<Author>();
         }
-        
+        Console.WriteLine(loggedInAuthor.FollowingList.Count);
+        foreach (var huh in loggedInAuthor.FollowingList)
+        {
+            Console.WriteLine(huh.Name);
+        }
         if (loggedInAuthor.FollowingList.Contains(followAuthor))
         {
-            _service.Unfollow(loggedInAuthor, followAuthor);
+            Console.WriteLine("Unfollowing time");
+            Console.WriteLine(loggedInAuthor.FollowingList.Count);
+            await _service.Unfollow(loggedInAuthor, followAuthor);
 
         }
         else
         {
-            _service.Follow(loggedInAuthor, followAuthor);
+            await _service.Follow(loggedInAuthor, followAuthor);
+            Console.WriteLine("uhhhhhhhhhhh " + loggedInAuthor.FollowingList.Count);
+            Console.WriteLine(loggedInAuthor.UserName==User.Identity.Name);
+            
         }
-
-        return Page();
+        
+        return RedirectToPage("Public");
     }
 }

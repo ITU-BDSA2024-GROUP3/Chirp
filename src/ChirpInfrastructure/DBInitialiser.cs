@@ -695,6 +695,19 @@ public static class DbInitializer
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };
+            a1.FollowingList = new List<Author>();
+            a2.FollowingList = new List<Author>();
+            a3.FollowingList = new List<Author>();
+            a4.FollowingList = new List<Author>();
+            a5.FollowingList = new List<Author>();
+            a6.FollowingList = new List<Author>();
+            a7.FollowingList = new List<Author>();
+            a8.FollowingList = new List<Author>();
+            a9.FollowingList = new List<Author>();
+            a10.FollowingList = new List<Author>();
+            a11.FollowingList = new List<Author>();
+            a12.FollowingList = new List<Author>();
+
 
             chirpContext.Authors.AddRange(authors);
             chirpContext.Cheeps.AddRange(cheeps);

@@ -25,13 +25,11 @@ public class PublicModel : CheepPostPage
             author = await _service.ReadAuthorByEmail(User.Identity.Name);
             
             // We think, that if FollowingList is empty, it will be read as null from the database
-            if (author.FollowingList == null)
-            {
-                author.FollowingList = new List<Author>();
-            }
+            
         }        
         
         setUsername();
+        
         currentPage = page;
         Cheeps = await _service.GetCheeps(currentPage);
         if (currentPage < 1)
