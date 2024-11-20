@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ChirpCore.DomainModel;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,14 +17,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 {
-    public class DownloadPersonalDataModel : PageModel
+    public class DownloadPersonalDataModel : BasePage
     {
         private readonly UserManager<Author> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
 
         public DownloadPersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<DownloadPersonalDataModel> logger)
+            ILogger<DownloadPersonalDataModel> logger, ICheepService service) : base(service)
         {
             _userManager = userManager;
             _logger = logger;

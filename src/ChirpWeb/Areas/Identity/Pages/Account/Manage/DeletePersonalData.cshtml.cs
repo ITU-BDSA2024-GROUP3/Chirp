@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using ChirpCore.DomainModel;
+using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 {
-    public class DeletePersonalDataModel : PageModel
+    public class DeletePersonalDataModel : BasePage
     {
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
@@ -22,7 +23,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger, ICheepService service) : base(service)
         {
             _userManager = userManager;
             _signInManager = signInManager;
