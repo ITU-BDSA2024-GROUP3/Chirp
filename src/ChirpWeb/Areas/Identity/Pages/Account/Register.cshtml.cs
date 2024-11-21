@@ -143,7 +143,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     var user = CreateUser();
 
                     user.Cheeps = new List<Cheep>();
-                    user.FollowingList = new List<Author>();
+                    user.FollowingList = new List<int>();
                     //user.FollowingList.Add(user);
                     user.Name = Input.Name;
                     var id = await _service.GetAuthorCount();

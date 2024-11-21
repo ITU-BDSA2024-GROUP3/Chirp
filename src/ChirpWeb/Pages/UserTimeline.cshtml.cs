@@ -26,7 +26,7 @@ public class UserTimelineModel : CheepPostPage
         {
             if (author.FollowingList == null)
             {
-                author.FollowingList = new List<Author>();
+                author.FollowingList = new List<int>();
             }
         }
 

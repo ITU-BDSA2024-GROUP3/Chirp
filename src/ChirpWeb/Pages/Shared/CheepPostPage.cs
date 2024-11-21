@@ -48,38 +48,38 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        
         Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
-        Console.WriteLine("please be correct: " + loggedInAuthor.Name);
+        //Console.WriteLine("please be correct: " + loggedInAuthor.Name);
         Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
-        Console.WriteLine("please be correct 2: " + followAuthor.Name);
-        Console.WriteLine("why is my life like this: ");
-        Console.WriteLine(followAuthor.FollowingList==null);
+        //Console.WriteLine("please be correct 2: " + followAuthor.Name);
+        //Console.WriteLine("why is my life like this: ");
+        //Console.WriteLine(followAuthor.FollowingList==null);
         if (loggedInAuthor == null || followAuthor == null)
         {
             throw new Exception("OnPostToggleFollowAsync Exception");
         }
+        foreach (var huh in loggedInAuthor.FollowingList.ToList()) // Use ToList() to create a copy
+        {
+            Console.WriteLine(huh);
+        }
         
         if (loggedInAuthor.FollowingList == null)
         {
-            Console.WriteLine("test");
-            loggedInAuthor.FollowingList = new List<Author>();
+            Console.WriteLine("following list er null");
+            loggedInAuthor.FollowingList = new List<int>();
         }
-        Console.WriteLine(loggedInAuthor.FollowingList.Count);
-        foreach (var huh in loggedInAuthor.FollowingList)
-        {
-            Console.WriteLine(huh.Name);
-        }
-        if (loggedInAuthor.FollowingList.Contains(followAuthor))
+        
+        if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
             Console.WriteLine("Unfollowing time");
             Console.WriteLine(loggedInAuthor.FollowingList.Count);
-            await _service.Unfollow(loggedInAuthor, followAuthor);
+            await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
 
         }
         else
         {
-            await _service.Follow(loggedInAuthor, followAuthor);
+            await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
+            Console.WriteLine("following time");
             Console.WriteLine("uhhhhhhhhhhh " + loggedInAuthor.FollowingList.Count);
             Console.WriteLine(loggedInAuthor.UserName==User.Identity.Name);
             

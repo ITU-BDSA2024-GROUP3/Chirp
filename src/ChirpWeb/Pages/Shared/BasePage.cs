@@ -18,7 +18,7 @@ public class BasePage : PageModel
 
     public async void setUsername()
     {
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity.IsAuthenticated && User.Identity.Name != null)
         {
             username = await _service.GetNameByEmail(User.Identity.Name);
         }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChirpIntegration.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241115095513_AddInitialMigration")]
+    [Migration("20241121094125_AddInitialMigration")]
     partial class AddInitialMigration
     {
         /// <inheritdoc />
@@ -28,9 +28,6 @@ namespace ChirpIntegration.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -42,6 +39,10 @@ namespace ChirpIntegration.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FollowingList")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -84,8 +85,6 @@ namespace ChirpIntegration.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -266,13 +265,6 @@ namespace ChirpIntegration.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ChirpCore.DomainModel.Author", b =>
-                {
-                    b.HasOne("ChirpCore.DomainModel.Author", null)
-                        .WithMany("FollowingList")
-                        .HasForeignKey("AuthorId");
-                });
-
             modelBuilder.Entity("ChirpCore.DomainModel.Cheep", b =>
                 {
                     b.HasOne("ChirpCore.DomainModel.Author", "Author")
@@ -338,8 +330,6 @@ namespace ChirpIntegration.Migrations
             modelBuilder.Entity("ChirpCore.DomainModel.Author", b =>
                 {
                     b.Navigation("Cheeps");
-
-                    b.Navigation("FollowingList");
                 });
 #pragma warning restore 612, 618
         }

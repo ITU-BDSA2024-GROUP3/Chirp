@@ -140,7 +140,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<Author> CreateAuthor(string name, string email, int UserId)
     {
-        Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>(), FollowingList = new List<Author>()};
+        Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>(), FollowingList = new List<int>()};
         var queryResult = await _dbContext.Authors.AddAsync(author); // does not write to the database!
 
         await _dbContext.SaveChangesAsync();
@@ -155,22 +155,23 @@ public class CheepRepository : ICheepRepository
         return await query.CountAsync();
     }
 
-    public async Task<int> Follow(Author wantToFollow, Author wantToBeFollowed)
+    public async Task<int> Follow(int wantToFollow, int wantToBeFollowed)
     {
-        var idk = ReadAuthorById(wantToFollow.UserId).Result;
-        var idk2 = ReadAuthorById(wantToBeFollowed.UserId).Result;
-        Console.WriteLine(wantToFollow + " adds ");
-        idk.FollowingList.Add(idk2);
-        Console.WriteLine("I want to give up: " + wantToFollow.FollowingList.Count);
+        var idk = ReadAuthorById(wantToFollow).Result;
+        //var idk2 = ReadAuthorById(wantToBeFollowed.UserId).Result;
+        //Console.WriteLine(wantToFollow + " adds ");
+        idk.FollowingList.Add(wantToBeFollowed);
+        //Console.WriteLine("I want to give up: " + wantToFollow.FollowingList.Count);
         return await _dbContext.SaveChangesAsync();
-        Console.WriteLine("I want to give up 2.0: " + wantToFollow.FollowingList.Count);
+        //Console.WriteLine("I want to give up 2.0: " + wantToFollow.FollowingList.Count);
 
     }
 
 
-    public async Task<int> Unfollow(Author wantToUnfollow, Author wantToBeUnfollowed)
+    public async Task<int> Unfollow(int wantToUnFollow, int wantToBeUnfollowed)
     {
-        wantToUnfollow.FollowingList.Remove(wantToBeUnfollowed);
+        var idk = ReadAuthorById(wantToUnFollow).Result;
+        idk.FollowingList.Remove(wantToBeUnfollowed);
         return await _dbContext.SaveChangesAsync();
     }
 
