@@ -93,7 +93,15 @@ public class CheepRepository : ICheepRepository
         }
 
         Author author = ReadAuthorById((int)UserId).Result;
+        if (author == null)
+        {
+            throw new Exception($"No Author with ID {UserId}!");
+        } else if (author.FollowingList == null)
+        {
+            throw new Exception("No Following list provided!");
+        }
         
+        Console.WriteLine($"Following count: {author.FollowingList.Count}");
         IQueryable<CheepDTO> query = _dbContext.Cheeps
             .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Select(message => new CheepDTO() {
