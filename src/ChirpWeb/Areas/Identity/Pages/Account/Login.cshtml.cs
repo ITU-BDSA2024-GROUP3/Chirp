@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -25,13 +26,13 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         
-        protected readonly ICheepService _service;
+        protected readonly ICheepRepository _repo;
 
-        public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger, ICheepService service): base(service)
+        public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger, ICheepRepository repo): base(repo)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _service = service;
+            _repo = repo;
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 //Adrian: This needs username, had email.
-                string path = await _service.GetNameByEmail(Input.Email);
+                string path = await _repo.GetNameByEmail(Input.Email);
                 returnUrl = Url.Content("~/"+path);
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)

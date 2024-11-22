@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,7 +13,7 @@ public class CheepPostPage : BasePage
     [MaxLength(160)]
     public string Text { get; set; }
   
-    public CheepPostPage(ICheepService service) : base(service)
+    public CheepPostPage(ICheepRepository repo) : base(repo)
     {
     }
     
@@ -29,7 +30,7 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        AuthorDTO author = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+        AuthorDTO author = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
 
         if (author.UserId == null)
         {

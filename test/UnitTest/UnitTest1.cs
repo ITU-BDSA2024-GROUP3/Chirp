@@ -1,3 +1,4 @@
+using ChirpInfrastructure;
 using ChirpWeb;
 
 namespace UnitTest;
@@ -8,7 +9,7 @@ public class UnitTest1
     public void convertunixtimestamp()
     {
         int timestamp = 1728284672;
-        String time = CheepService.UnixTimeStampToDateTimeString(timestamp);
+        String time = CheepRepository.UnixTimeStampToDateTimeString(timestamp);
         Assert.Equal(time, "10/07/24 7.04.32");
         
     }

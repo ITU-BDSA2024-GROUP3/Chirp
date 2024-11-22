@@ -1,4 +1,5 @@
 ﻿@page "/{name}/"
+@using ChirpInfrastructure
 @using ChirpWeb
 @model ChirpWeb.Pages.UserTimelineModel
 @{
@@ -33,7 +34,7 @@
                             <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
                         @cheep.Text
-                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+                        <small>&mdash; @CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
                     </p>
                 </li>
             }

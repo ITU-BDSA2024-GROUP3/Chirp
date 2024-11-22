@@ -206,4 +206,12 @@ public class CheepRepository : ICheepRepository
             _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
         return await query.CountAsync();
     }
+    public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
+    {
+        // Unix timestamp is seconds past epoch
+        // returns GMT Timezone 
+        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp);
+        return dateTime.ToString("MM/dd/yy H:mm:ss");
+    }
 }
