@@ -123,7 +123,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            username = "something";
+            username = "";
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -143,6 +143,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     var user = CreateUser();
 
                     user.Cheeps = new List<Cheep>();
+                    user.FollowingList = new List<int>();
+                    //user.FollowingList.Add(user);
                     user.Name = Input.Name;
                     var id = await _repo.GetAuthorCount();
                     user.UserId = id + 1;

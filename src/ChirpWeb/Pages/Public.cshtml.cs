@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using ChirpCore;
+using System.Runtime.CompilerServices;
 using ChirpWeb.Pages.Shared;
 
 namespace ChirpWeb.Pages;
@@ -15,10 +15,22 @@ public class PublicModel : CheepPostPage
     public int currentPage;
     
     public PublicModel(ICheepRepository repo) : base(repo) { }
+    
+    public Author author { get; set; }
+    
 
     public async Task<ActionResult> OnGetAsync([FromQuery] int page)
     {
+        if (User.Identity.IsAuthenticated)
+        {
+            author = await _service.ReadAuthorByEmail(User.Identity.Name);
+            
+            // We think, that if FollowingList is empty, it will be read as null from the database
+            
+        }        
+        
         setUsername();
+        
         currentPage = page;
         Cheeps = await _repo.ReadCheeps(currentPage, null);
         if (currentPage < 1)
@@ -28,6 +40,4 @@ public class PublicModel : CheepPostPage
 
         return Page();
     }
-    
-    
 }

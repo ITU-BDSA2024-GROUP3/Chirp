@@ -10,7 +10,6 @@ public class BasePage : PageModel
 {
     protected readonly ICheepRepository _repo;
     
-    
     public string username { get; set; }
     
     public BasePage(ICheepRepository repo)
@@ -20,9 +19,16 @@ public class BasePage : PageModel
 
     public async void setUsername()
     {
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity.IsAuthenticated && User.Identity.Name != null)
         {
             username = await _repo.GetNameByEmail(User.Identity.Name);
         }
     }
+
+
+    public AuthorDTO GetAuthorById(int id)
+    {
+        return _service.GetAuthor(id).Result;
+    }
+
 }

@@ -17,7 +17,6 @@ public class CheepPostPage : BasePage
     {
     }
     
-    
     public async Task<ActionResult> OnPost()
     {
         if (!User.Identity.IsAuthenticated)
@@ -44,6 +43,31 @@ public class CheepPostPage : BasePage
         
         CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
         await _repo.CreateCheep(newCheep);
+        
+        return RedirectToPage("Public");
+    }
+    
+    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
+    {
+        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
+        Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
+        if (loggedInAuthor == null || followAuthor == null)
+        {
+            throw new Exception("OnPostToggleFollowAsync Exception");
+        }
+        
+        if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
+        {
+            
+            await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
+
+        }
+        else
+        {
+            await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
+            
+            
+        }
         
         return RedirectToPage("Public");
     }

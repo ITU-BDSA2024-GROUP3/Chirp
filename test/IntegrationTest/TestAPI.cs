@@ -671,8 +671,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     [InlineData("Adrian", 12, 1)]
     [InlineData("Helge", 11, 1)]
-
-
     public async void CorrectStyleSheetUsedPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -690,6 +688,31 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
 
         // Assert
         Assert.Contains("<title>Log in</title>", content);
+    }
+    
+    [Fact]
+    public async void DoesOtherCheepsAppear()
+    {
+        // Arrange
+        var content = await SetPrivatePage(1, "Adrian", 12);
+        
+        // Act
+
+        //Builds on the assumption that Helge, then Adrian has been added to the database, and Adrian follows Helge
+        // Assert
+        Assert.Contains("<a href=\"/Helge\">Helge</a>\n", content);
+        
+    }
+    
+    [Fact]
+    public async void UnFollowButtonTesting1()
+    {
+        // Arrange
+
+        // Act
+        
+        // Assert
+        
     }
     
     /*
