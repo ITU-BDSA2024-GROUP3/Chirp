@@ -31,7 +31,7 @@ public class CheepRepository : ICheepRepository
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
 
-        Console.WriteLine($"Store Cheep message = {message.Text} and AuthorId = {message.Author.UserId}");
+        Console.WriteLine($"Store Cheep message = {message.Text} and UserId = {message.Author.UserId}");
 
         return queryResult.Entity.CheepId;
     }
@@ -63,48 +63,7 @@ public class CheepRepository : ICheepRepository
         //Don't want to be here
         return null;
     }
-
-
-    public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
-    {
-        // Formulate the query - will be translated to SQL by EF Core
-        IQueryable<CheepDTO> query;
-        if (UserId != null)
-        {
-            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
-                .Select(message => new CheepDTO() {
-                        Text = message.Text, 
-                        AuthorID = message.Author.UserId, 
-                        AuthorName = message.Author.Name,
-                        TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
-                    })
-                .AsEnumerable()
-                .OrderByDescending(dto => dto.TimeStamp)
-                .AsQueryable()
-                .Skip((page - 1) * 32)
-                .Take(32);
-        }
-        else
-        {
-            query = _dbContext.Cheeps
-                .Select(message => new CheepDTO() {
-                    Text = message.Text,
-                    AuthorID = message.Author.UserId,
-                    AuthorName = message.Author.Name,
-                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
-                })
-                .AsEnumerable()
-                .OrderByDescending(dto => dto.TimeStamp)
-                .AsQueryable()
-                .Skip((page - 1) * 32)
-                .Take(32);
-        }
-
-        // Execute the query
-        var result = query.ToList();
-
-        return result;
-    }
+    
 
     public async Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
     {
@@ -124,13 +83,13 @@ public class CheepRepository : ICheepRepository
         
         IQueryable<CheepDTO> query = _dbContext.Cheeps
             .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
+            .AsEnumerable()
             .Select(message => new CheepDTO() {
                 Text = message.Text,
-                AuthorID = message.Author.UserId,
+                UserId = message.Author.UserId,
                 AuthorName = message.Author.Name,
                 TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
             })
-            .AsEnumerable()
             .OrderByDescending(dto => dto.TimeStamp)
             .AsQueryable()
             .Skip((page - 1) * 32)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+using ChirpCore;
 using ChirpWeb.Pages.Shared;
 
 namespace ChirpWeb.Pages;
@@ -23,7 +24,7 @@ public class PublicModel : CheepPostPage
     {
         if (User.Identity.IsAuthenticated)
         {
-            author = await _service.ReadAuthorByEmail(User.Identity.Name);
+            author = await _repo.ReadAuthorByEmail(User.Identity.Name);
             
             // We think, that if FollowingList is empty, it will be read as null from the database
             

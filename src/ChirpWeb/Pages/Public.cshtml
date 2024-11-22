@@ -32,14 +32,12 @@
             {
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
-                ViewData["Timestamp"] = CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp);
+                ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp);
 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var cheepAuthor = Model.GetAuthorById(cheep.AuthorID);
-                    var i = cheepAuthor.UserId;
                     ViewData["LoggedInUserName"] = Model.author.Name;
-                    ViewData["Followed"] = Model.author.FollowingList.Contains(i);
+                    ViewData["Followed"] = Model.author.FollowingList.Contains(cheep.UserId);
                 }
                 <partial name="Shared/_CheepBox"/>
             }

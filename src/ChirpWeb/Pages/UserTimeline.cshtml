@@ -31,7 +31,7 @@
                 ViewData["LoggedInUserName"] = Model.author.Name;
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
-                ViewData["Timestamp"] = CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp);
+                ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp);
                 ViewData["Followed"] = true;
                 
                 <partial name="Shared/_CheepBox"/>

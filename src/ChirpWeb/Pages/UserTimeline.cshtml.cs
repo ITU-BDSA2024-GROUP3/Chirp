@@ -28,7 +28,6 @@ public class UserTimelineModel : CheepPostPage
 
         //await Task.WhenAll(authorTask, cheepsTask);
 
-        Author = authorTask;
 
         //private or public timeline
         if (User.Identity.IsAuthenticated && author.Name == name)

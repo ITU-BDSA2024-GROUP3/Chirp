@@ -26,9 +26,10 @@ public class BasePage : PageModel
     }
 
 
-    public AuthorDTO GetAuthorById(int id)
+    /*public AuthorDTO GetAuthorById(int id)
     {
-        return _service.GetAuthor(id).Result;
+        return _repo.ReadAuthorById(id).Result;
     }
+    */
 
 }

@@ -29,7 +29,7 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        AuthorDTO author = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
+        Author author = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
 
         if (author.UserId == null)
         {
@@ -49,8 +49,8 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
-        Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
+        Author loggedInAuthor = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
+        Author followAuthor = _repo.ReadAuthorByName(AuthorName).Result;
         if (loggedInAuthor == null || followAuthor == null)
         {
             throw new Exception("OnPostToggleFollowAsync Exception");
@@ -59,12 +59,12 @@ public class CheepPostPage : BasePage
         if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
             
-            await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
+            await _repo.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
 
         }
         else
         {
-            await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
+            await _repo.Follow(loggedInAuthor.UserId, followAuthor.UserId);
             
             
         }
