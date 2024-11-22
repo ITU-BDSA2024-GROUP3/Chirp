@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChirpCore.DomainModel;
 
 
 public class Author : IdentityUser
 {
+    [Key]
     public int UserId { get; set; } 
     
     [PersonalData]

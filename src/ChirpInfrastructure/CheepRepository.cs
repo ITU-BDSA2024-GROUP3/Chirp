@@ -19,11 +19,11 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Author cheepAuthor = ReadAuthorById(newMessage.UserID).Result;
+        Author cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
 
         Cheep message = new()
         {
-            CheepId = _nextCheepId++, UserId = newMessage.UserID, Text = newMessage.Text, TimeStamp = DateTime.Now,
+            CheepId = _nextCheepId++, UserId = newMessage.UserId, Text = newMessage.Text, TimeStamp = DateTime.Now,
             Author = cheepAuthor
         };
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
@@ -95,7 +95,7 @@ public class CheepRepository : ICheepRepository
             query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
                 .Select(message => new CheepDTO() {
                     Text = message.Text, 
-                    UserID = message.Author.UserId, 
+                    UserId = message.Author.UserId, 
                     AuthorName = message.Author.Name,
                     TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
                 })
@@ -110,7 +110,7 @@ public class CheepRepository : ICheepRepository
             query = _dbContext.Cheeps
                 .Select(message => new CheepDTO() {
                     Text = message.Text,
-                    UserID = message.Author.UserId,
+                    UserId = message.Author.UserId,
                     AuthorName = message.Author.Name,
                     TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
                 })
@@ -137,7 +137,7 @@ public class CheepRepository : ICheepRepository
                 .Select(message => new CheepDTO()
                 {
                     Text = message.Text,
-                    UserID = message.Author.UserId,
+                    UserId = message.Author.UserId,
                     AuthorName = message.Author.Name,
                     TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
                 })
@@ -151,7 +151,7 @@ public class CheepRepository : ICheepRepository
                 .Select(message => new CheepDTO()
                 {
                     Text = message.Text,
-                    UserID = message.Author.UserId,
+                    UserId = message.Author.UserId,
                     AuthorName = message.Author.Name,
                     TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
                 })
