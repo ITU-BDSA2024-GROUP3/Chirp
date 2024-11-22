@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +20,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<Author> signInManager, ILogger<LogoutModel> logger, ICheepService service): base(service)
+        public LogoutModel(SignInManager<Author> signInManager, ILogger<LogoutModel> logger, ICheepRepository repo): base(repo)
         {
             _signInManager = signInManager;
             _logger = logger;

@@ -32,7 +32,7 @@ builder.Services.AddDefaultIdentity<Author>(options =>
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<ChirpDBContext>();
 
-builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 builder.Services.AddAuthentication()
