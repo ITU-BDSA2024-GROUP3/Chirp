@@ -85,6 +85,33 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
+    public async Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
+    {
+        if (UserId == null)
+        {
+            throw new Exception("No UserID provided!");
+        }
+        
+        IQueryable<CheepDTO> query;
+
+        Author author = ReadAuthorById((int)UserId).Result;
+        
+        query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => author.FollowingList.Contains(message.UserId))
+            .Select(message => new CheepDTO() {
+                Text = message.Text,
+                AuthorID = message.Author.UserId,
+                AuthorName = message.Author.Name,
+                TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+            })
+            .AsEnumerable()
+            .OrderByDescending(dto => dto.TimeStamp)
+            .AsQueryable()
+            .Skip((page - 1) * 32)
+            .Take(32);
+
+        return query.ToList();
+    }
+    
     public async Task<int> UpdateCheep(Cheep updatedMessage)
     {
         var message = await _dbContext.Cheeps.FindAsync(updatedMessage.CheepId);
