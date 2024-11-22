@@ -96,7 +96,7 @@ public class CheepRepository : ICheepRepository
 
         Author author = ReadAuthorById((int)UserId).Result;
         
-        query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => author.FollowingList.Contains(message.UserId))
+        query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Select(message => new CheepDTO() {
                 Text = message.Text,
                 AuthorID = message.Author.UserId,
