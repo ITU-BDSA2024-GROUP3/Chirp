@@ -53,7 +53,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             {
                 if (p.Name == "Cheeps")
                 {
-                    ICollection<Cheep> list = (List<Cheep>)p.GetRawConstantValue();
+                    ICollection<CheepDTO> list = await _service.GetAllCheepsFromAuthor(user.UserId);
                     string cheepData = null;
                     foreach (var cheep in list)
                     {
