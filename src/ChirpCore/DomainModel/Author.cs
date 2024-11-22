@@ -12,5 +12,6 @@ public class Author : IdentityUser
     
     [PersonalData]
     public string Email { get; set; }
+    [PersonalData]
     public ICollection<Cheep> Cheeps { get; set; }
 }
