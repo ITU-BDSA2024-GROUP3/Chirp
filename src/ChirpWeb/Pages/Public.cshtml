@@ -5,14 +5,14 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    
+
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
 
 <div>
     <h2> Public Timeline </h2>
-    
+
     @if (User.Identity.IsAuthenticated)
     {
         <div class="cheepbox">
@@ -35,11 +35,10 @@
 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var cheepAuthor = Model.GetAuthorByEmail(cheep.AuthorName);
-
-                    ViewData["Followed"] = false; //Model.author.FollowingList.Contains(cheepAuthor);
+                    var cheepAuthor = Model.GetAuthorById(cheep.AuthorID);
+                    var i = cheepAuthor.UserId;
+                    ViewData["Followed"] = Model.author.FollowingList.Contains(i);
                 }
-                
                 <partial name="Shared/_CheepBox"/>
             }
         </ul>
@@ -48,10 +47,11 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    @if (Model.currentPage > 1){
-    <Button class="btn">
-        <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
-    </Button>
+    @if (Model.currentPage > 1)
+    {
+        <Button class="btn">
+            <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+        </Button>
     }
     <Button class="btn">
         <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>

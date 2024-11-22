@@ -24,8 +24,8 @@ public class BasePage : PageModel
         }
     }
 
-    public Author GetAuthorByEmail(string authorName)
+    public AuthorDTO GetAuthorById(int id)
     {
-        return _service.ReadAuthorByEmail(authorName).Result;
+        return _service.GetAuthor(id).Result;
     }
 }
