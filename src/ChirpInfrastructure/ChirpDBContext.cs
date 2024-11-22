@@ -33,6 +33,7 @@ public class ChirpDBContext : IdentityDbContext<Author>
         modelBuilder.Entity<Author>()
             .HasMany(a => a.Cheeps)
             .WithOne(c => c.Author)
-            .HasForeignKey(c => c.UserId);
+            .HasForeignKey(c => c.UserId)
+            .HasPrincipalKey(c => c.UserId);
     }
 }
