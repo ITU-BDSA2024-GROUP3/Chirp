@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 using System;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public PersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<PersonalDataModel> logger, ICheepService service) : base(service)
+            ILogger<PersonalDataModel> logger, ICheepRepository repository) : base(repository)
         {
             _userManager = userManager;
             _logger = logger;
@@ -35,11 +36,11 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         {
             setUsername();
             
-            var authorTask = await _service.ReadAuthorByEmail(User.Identity.Name);
+            var authorTask = await _repo.ReadAuthorByEmail(User.Identity.Name);
 
-            var authorTaskGetAuthor = await _service.GetAuthorById(authorTask.UserId);
+            var authorTaskGetAuthor = await _repo.ReadAuthorById(authorTask.UserId);
 
-            var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
+            var cheepsTask = await _repo.ReadCheeps(page, authorTask.UserId);
         
             author = authorTaskGetAuthor;
             Cheeps = cheepsTask;

@@ -1,4 +1,5 @@
 ﻿@page
+@using ChirpInfrastructure
 @using ChirpWeb
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model PersonalDataModel
@@ -42,7 +43,7 @@
                     <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
                 </strong>
                 @cheep.Text
-                <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+                <small>&mdash; @CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
             </p>
         </li>
         }

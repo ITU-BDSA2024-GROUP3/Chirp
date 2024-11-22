@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +23,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         public IndexModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
-            ICheepService service):base(service)
+            ICheepRepository repository):base(repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;

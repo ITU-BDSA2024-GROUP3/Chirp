@@ -5,6 +5,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +24,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
-            ILogger<DeletePersonalDataModel> logger, ICheepService service) : base(service)
+            ILogger<DeletePersonalDataModel> logger, ICheepRepository repository) : base(repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;

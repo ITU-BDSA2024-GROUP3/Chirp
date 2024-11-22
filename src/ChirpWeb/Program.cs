@@ -33,7 +33,6 @@ builder.Services.AddDefaultIdentity<Author>(options =>
 }).AddEntityFrameworkStores<ChirpDBContext>();
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 builder.Services.AddAuthentication()
     .AddCookie()

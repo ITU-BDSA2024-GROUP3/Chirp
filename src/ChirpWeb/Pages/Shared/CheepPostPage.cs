@@ -43,7 +43,7 @@ public class CheepPostPage : BasePage
         }
         
         CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
-        await _service.CreateCheep(newCheep);
+        await _repo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
     }

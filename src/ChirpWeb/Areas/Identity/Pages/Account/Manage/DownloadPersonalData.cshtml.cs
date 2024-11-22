@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public DownloadPersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<DownloadPersonalDataModel> logger, ICheepService service) : base(service)
+            ILogger<DownloadPersonalDataModel> logger, ICheepRepository repository) : base(repository)
         {
             _userManager = userManager;
             _logger = logger;
@@ -53,7 +54,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             {
                 if (p.Name == "Cheeps")
                 {
-                    ICollection<CheepDTO> list = await _service.GetAllCheepsFromAuthor(user.UserId);
+                    ICollection<CheepDTO> list = await _repo.ReadAllCheeps(user.UserId);
                     string cheepData = null;
                     foreach (var cheep in list)
                     {
