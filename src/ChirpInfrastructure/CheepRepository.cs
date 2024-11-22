@@ -92,11 +92,11 @@ public class CheepRepository : ICheepRepository
             throw new Exception("No UserID provided!");
         }
         
-        IQueryable<CheepDTO> query;
 
         Author author = ReadAuthorById((int)UserId).Result;
         
-        query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
+        IQueryable<CheepDTO> query = _dbContext.Cheeps
+            .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Select(message => new CheepDTO() {
                 Text = message.Text,
                 AuthorID = message.Author.UserId,
