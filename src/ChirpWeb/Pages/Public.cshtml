@@ -37,6 +37,7 @@
                 {
                     var cheepAuthor = Model.GetAuthorById(cheep.AuthorID);
                     var i = cheepAuthor.UserId;
+                    ViewData["LoggedInUserName"] = Model.author.Name;
                     ViewData["Followed"] = Model.author.FollowingList.Contains(i);
                 }
                 <partial name="Shared/_CheepBox"/>

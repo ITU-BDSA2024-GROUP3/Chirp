@@ -49,11 +49,7 @@ public class CheepPostPage : BasePage
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
         Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
-        //Console.WriteLine("please be correct: " + loggedInAuthor.Name);
         Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
-        //Console.WriteLine("please be correct 2: " + followAuthor.Name);
-        //Console.WriteLine("why is my life like this: ");
-        //Console.WriteLine(followAuthor.FollowingList==null);
         if (loggedInAuthor == null || followAuthor == null)
         {
             throw new Exception("OnPostToggleFollowAsync Exception");
