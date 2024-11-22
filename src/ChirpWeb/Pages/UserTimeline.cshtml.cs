@@ -22,7 +22,7 @@ public class UserTimelineModel : CheepPostPage
         author = await _service.ReadAuthorByEmail(User.Identity.Name);
         setUsername();
         var authorTask = await _service.ReadAuthorByName(name);
-        
+        Console.WriteLine("what is name " + name);
         //private or public timeline
         if (User.Identity.IsAuthenticated && author.Name == name)
         {
@@ -30,7 +30,7 @@ public class UserTimelineModel : CheepPostPage
         }
         else
         {
-            Cheeps= await _service.GetCheepsFromAuthor(page, authorTask.UserId);
+            Cheeps= await _service.GetCheepsFromAuthor(authorTask.UserId, page);
         }
         
         Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};
