@@ -20,26 +20,21 @@ public class UserTimelineModel : CheepPostPage
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
         author = await _service.ReadAuthorByEmail(User.Identity.Name);
-        
-        // We think, that if FollowingList is empty, it will be read as null from the database
-        if (User.Identity.IsAuthenticated)
-        {
-            if (author.FollowingList == null)
-            {
-                author.FollowingList = new List<int>();
-            }
-        }
-
         setUsername();
         var authorTask = await _service.ReadAuthorByName(name);
-
-        var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
-
-        //await Task.WhenAll(authorTask, cheepsTask);
-
+        
+        //private or public timeline
+        if (User.Identity.IsAuthenticated && author.Name == name)
+        {
+            Cheeps = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
+        }
+        else
+        {
+            Cheeps= await _service.GetCheepsFromAuthor(authorTask.UserId, page);
+        }
+        
         Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};
-        Cheeps = cheepsTask;
-
+        
         currentPage = page;
 
         if (currentPage < 1)

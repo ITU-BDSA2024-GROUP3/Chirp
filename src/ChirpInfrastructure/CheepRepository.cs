@@ -91,7 +91,6 @@ public class CheepRepository : ICheepRepository
         {
             throw new Exception("No UserID provided!");
         }
-        
 
         Author author = ReadAuthorById((int)UserId).Result;
         
