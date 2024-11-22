@@ -122,7 +122,6 @@ public class CheepRepository : ICheepRepository
             throw new Exception("No Following list provided!");
         }
         
-        Console.WriteLine($"Following count: {author.FollowingList.Count}");
         IQueryable<CheepDTO> query = _dbContext.Cheeps
             .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Select(message => new CheepDTO() {
