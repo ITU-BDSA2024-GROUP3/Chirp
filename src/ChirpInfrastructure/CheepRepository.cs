@@ -82,14 +82,15 @@ public class CheepRepository : ICheepRepository
         }
         
         IQueryable<CheepDTO> query = _dbContext.Cheeps
-            .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
-            .AsEnumerable()
+            .Where(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
+            .Include(cheep => cheep.Author)
             .Select(message => new CheepDTO() {
                 Text = message.Text,
                 UserId = message.Author.UserId,
                 AuthorName = message.Author.Name,
                 TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
             })
+            .AsEnumerable()
             .OrderByDescending(dto => dto.TimeStamp)
             .AsQueryable()
             .Skip((page - 1) * 32)
