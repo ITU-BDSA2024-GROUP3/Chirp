@@ -191,21 +191,38 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> Follow(int wantToFollow, int wantToBeFollowed)
     {
-        var idk = ReadAuthorById(wantToFollow).Result;
-        //var idk2 = ReadAuthorById(wantToBeFollowed.UserId).Result;
-        //Console.WriteLine(wantToFollow + " adds ");
-        idk.FollowingList.Add(wantToBeFollowed);
-        //Console.WriteLine("I want to give up: " + wantToFollow.FollowingList.Count);
+        if (wantToFollow == wantToBeFollowed)
+        {
+            throw new Exception($"Cannot follow yourself!");   
+        } 
+        
+        var wantToFollowAuthor = ReadAuthorById(wantToFollow).Result;
+        
+        if(wantToFollowAuthor.FollowingList.Contains(wantToBeFollowed))
+        {
+            throw new Exception($"Already following this author!");   
+        }
+        
+        wantToFollowAuthor.FollowingList.Add(wantToBeFollowed);
         return await _dbContext.SaveChangesAsync();
-        //Console.WriteLine("I want to give up 2.0: " + wantToFollow.FollowingList.Count);
-
     }
 
 
-    public async Task<int> Unfollow(int wantToUnFollow, int wantToBeUnfollowed)
+    public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
     {
-        var idk = ReadAuthorById(wantToUnFollow).Result;
-        idk.FollowingList.Remove(wantToBeUnfollowed);
+        if (wantToUnfollow == wantToBeUnfollowed)
+        {
+            throw new Exception($"Cannot unfollow yourself!");   
+        } 
+        
+        var wantToUnfollowAuthor = ReadAuthorById(wantToUnfollow).Result;
+        
+        if(!wantToUnfollowAuthor.FollowingList.Contains(wantToBeUnfollowed))
+        {
+            throw new Exception($"Cannot unfollow - Not following this author");   
+        }
+        
+        wantToUnfollowAuthor.FollowingList.Remove(wantToBeUnfollowed);
         return await _dbContext.SaveChangesAsync();
     }
 
