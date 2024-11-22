@@ -17,6 +17,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         private readonly ILogger<PersonalDataModel> _logger;
 
         public List<CheepDTO> Cheeps { get; set; }
+        
+        public Author author { get; set; }
         public int currentPage;
 
 
@@ -31,14 +33,17 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet([FromQuery] int page)
         {
+            setUsername();
             
             var authorTask = await _service.ReadAuthorByEmail(User.Identity.Name);
 
+            var authorTaskGetAuthor = await _service.GetAuthorById(authorTask.UserId);
+
             var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
         
-            //Author = authorTask;
+            author = authorTaskGetAuthor;
             Cheeps = cheepsTask;
-
+            
             currentPage = page;
 
             if (currentPage < 1)

@@ -10,8 +10,15 @@
 
 <div class="row">
     <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
         
+        <h3>Personal information</h3>
+        <h4>Username: @Model.author.Name</h4>
+
+        <h4>Email: @Model.author.Email</h4>
+        
+        <h3>Features</h3>
+        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+
         <form id="download-data" asp-page="DownloadPersonalData" method="post">
             <button class="btn btn-primary" type="submit">Download</button>
         </form>
