@@ -8,11 +8,15 @@ public interface ICheepService
 {
     public Task<int> CreateCheep(CheepDTO newMessage);
     public Task<List<CheepDTO>> GetCheeps(int page);
+    public Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId);
     public Task<AuthorDTO> GetAuthor(int id);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
-    public Task<AuthorDTO> ReadAuthorByEmail(string userEmail);
-    public Task<AuthorDTO> ReadAuthorByName(string userName);
+    public Task<Author> ReadAuthorByEmail(string userEmail);
+    public Task<AuthorDTO> ReadAuthorDTOByEmail(string userEmail);
+    public Task<Author> ReadAuthorByName(string userName);
     public Task<string> GetNameByEmail(string emailAddress);
+    public Task<int> Follow(int wantToFollow, int wantToBeFollowed);
+    public Task<int> Unfollow( int wantToUnfollow, int wantToBeUnfollowed);
 
     
     public Task<int> GetAuthorCount();
@@ -44,22 +48,33 @@ public class CheepService : ICheepService
         return _repository.ReadCheeps(page, null);
     }
 
+    public Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
+    {
+        return _repository.ReadFollowedCheeps(page, UserId);
+    }
+
     public Task<AuthorDTO> GetAuthor(int id)
     {
         return _repository.ReadAuthorDTOById(id);
     }
     
-    public Task<AuthorDTO> ReadAuthorByEmail(string userEmail)
+    public Task<Author> ReadAuthorByEmail(string userEmail)
     {
         return _repository.ReadAuthorByEmail(userEmail);
     }
-    
+
+    public Task<AuthorDTO> ReadAuthorDTOByEmail(string userEmail)
+    {
+        return _repository.ReadAuthorDTOByEmail(userEmail);
+
+    }
+
     public Task<int> GetAuthorCount()
     {
         return _repository.GetAuthorCount();
     }
     
-    public Task<AuthorDTO> ReadAuthorByName(string username)
+    public Task<Author> ReadAuthorByName(string username)
     {
         return _repository.ReadAuthorByName(username);
     }
@@ -69,6 +84,16 @@ public class CheepService : ICheepService
         // filter by the provided author name
 
         return _repository.ReadCheeps(page, userId);
+    }
+    
+    public Task<int> Follow(int wantToFollow, int wantToBeFollowed)
+    {
+        return _repository.Follow(wantToFollow, wantToBeFollowed);
+    }
+
+    public Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
+    {
+        return _repository.Unfollow(wantToUnfollow, wantToBeUnfollowed);
     }
 
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)

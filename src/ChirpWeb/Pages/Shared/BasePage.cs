@@ -9,19 +9,25 @@ public class BasePage : PageModel
 {
     protected readonly ICheepService _service;
     
-    
     public string username { get; set; }
     
     public BasePage(ICheepService service)
     {
-        _service = service;   
+        _service = service;
     }
 
     public async void setUsername()
     {
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity.IsAuthenticated && User.Identity.Name != null)
         {
             username = await _service.GetNameByEmail(User.Identity.Name);
         }
     }
+
+
+    public AuthorDTO GetAuthorById(int id)
+    {
+        return _service.GetAuthor(id).Result;
+    }
+
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChirpIntegration.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241030122636_AddInitialMigration")]
+    [Migration("20241121094125_AddInitialMigration")]
     partial class AddInitialMigration
     {
         /// <inheritdoc />
@@ -39,6 +39,10 @@ namespace ChirpIntegration.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FollowingList")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -81,6 +85,9 @@ namespace ChirpIntegration.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("Name")
                         .IsUnique();

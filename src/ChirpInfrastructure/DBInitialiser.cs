@@ -9,18 +9,21 @@ public static class DbInitializer
     {
         if (!(Queryable.Any<Author>(chirpContext.Authors) && Queryable.Any<Cheep>(chirpContext.Cheeps)))
         {
-            var a1 = new Author() { UserId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
-            var a2 = new Author() { UserId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
-            var a3 = new Author() { UserId = 3, Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
-            var a4 = new Author() { UserId = 4, Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>() };
-            var a5 = new Author() { UserId = 5, Name = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>() };
-            var a6 = new Author() { UserId = 6, Name = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>() };
-            var a7 = new Author() { UserId = 7, Name = "Malcolm Janski", Email = "Malcolm-Janski@gmail.com", Cheeps = new List<Cheep>() };
-            var a8 = new Author() { UserId = 8, Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Cheeps = new List<Cheep>() };
-            var a9 = new Author() { UserId = 9, Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
-            var a10 = new Author() { UserId = 10, Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
+
+            var a1 = new Author() { UserId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a2 = new Author() { UserId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a3 = new Author() { UserId = 3, Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a4 = new Author() { UserId = 4, Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a5 = new Author() { UserId = 5, Name = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a6 = new Author() { UserId = 6, Name = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a7 = new Author() { UserId = 7, Name = "Malcolm Janski", Email = "Malcolm-Janski@gmail.com", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a8 = new Author() { UserId = 8, Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a9 = new Author() { UserId = 9, Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
+            var a10 = new Author() { UserId = 10, Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>(), FollowingList = new List<int>() };
            
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 };
+
+            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10};
+
 
             var c1 = new Cheep() { CheepId = 1, UserId = a10.UserId, Author = a10, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { CheepId = 2, UserId = a10.UserId, Author = a10, Text = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
@@ -689,6 +692,21 @@ public static class DbInitializer
             a6.Cheeps = new List<Cheep>() { c39, c68, c85, c117, c157, c469, c602 };
             a7.Cheeps = new List<Cheep>() { c52, c53, c59, c96, c144, c168, c177, c189, c201, c237, c292, c309, c321, c331, c352, c397, c421, c422, c455, c540, c558, c560, c578, c603, c620 };
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
+
+
+            a1.FollowingList = new List<int>();
+            a2.FollowingList = new List<int>();
+            a3.FollowingList = new List<int>();
+            a4.FollowingList = new List<int>();
+            a5.FollowingList = new List<int>();
+            a6.FollowingList = new List<int>();
+            a7.FollowingList = new List<int>();
+            a8.FollowingList = new List<int>();
+            a9.FollowingList = new List<int>();
+            a10.FollowingList = new List<int>();
+
+
+
 
             chirpContext.Authors.AddRange(authors);
             chirpContext.Cheeps.AddRange(cheeps);
