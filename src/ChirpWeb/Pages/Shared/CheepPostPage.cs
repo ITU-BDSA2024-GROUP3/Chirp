@@ -41,7 +41,7 @@ public class CheepPostPage : BasePage
             Console.WriteLine("Text is null");   
         }
         
-        CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = author.UserId};
+        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
         await _service.CreateCheep(newCheep);
         
         return RedirectToPage("Public");

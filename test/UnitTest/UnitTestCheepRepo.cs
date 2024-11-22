@@ -190,7 +190,7 @@ public class UnitTestCheepRepo : IDisposable
       var cheepDataTransferObject = new CheepDTO
       {
          Text = "Something",
-         AuthorID = author.UserId,
+         UserId = author.UserId,
          AuthorName = author.Name,
          TimeStamp = 1728643569
       };

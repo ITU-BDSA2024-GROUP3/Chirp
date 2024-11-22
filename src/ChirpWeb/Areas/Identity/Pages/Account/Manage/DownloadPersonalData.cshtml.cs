@@ -51,7 +51,24 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
                             prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
             foreach (var p in personalDataProps)
             {
-                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
+                if (p.Name == "Cheeps")
+                {
+                    ICollection<CheepDTO> list = await _service.GetAllCheepsFromAuthor(user.UserId);
+                    string cheepData = null;
+                    foreach (var cheep in list)
+                    {
+                        cheepData = cheepData + "\n Cheep Text: " + cheep.Text + ". Cheep timestamp: " +
+                                    cheep.TimeStamp.ToString();
+                    }
+                    
+                    personalData.Add(p.Name, cheepData);
+
+                }
+                else
+                {
+                    personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
+                }
+
             }
 
             var logins = await _userManager.GetLoginsAsync(user);

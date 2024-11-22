@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChirpCore.DomainModel;
 
 
 public class Author : IdentityUser
 {
+    [Key]
     public int UserId { get; set; } 
     
     [PersonalData]
@@ -12,5 +16,6 @@ public class Author : IdentityUser
     
     [PersonalData]
     public string Email { get; set; }
+    [PersonalData]
     public ICollection<Cheep> Cheeps { get; set; }
 }

@@ -104,10 +104,6 @@ namespace ChirpIntegration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(160)
@@ -121,7 +117,7 @@ namespace ChirpIntegration.Migrations
 
                     b.HasKey("CheepId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cheeps");
                 });
@@ -262,7 +258,8 @@ namespace ChirpIntegration.Migrations
                 {
                     b.HasOne("ChirpCore.DomainModel.Author", "Author")
                         .WithMany("Cheeps")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("UserId")
+                        .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -10,6 +10,7 @@ public interface ICheepService
     public Task<List<CheepDTO>> GetCheeps(int page);
     public Task<AuthorDTO> GetAuthor(int id);
     public Task<List<CheepDTO>> GetCheepsFromAuthor(int userId, int page);
+    public Task<List<CheepDTO>> GetAllCheepsFromAuthor(int userId);
     public Task<AuthorDTO> ReadAuthorByEmail(string userEmail);
     public Task<AuthorDTO> ReadAuthorByName(string userName);
     public Task<string> GetNameByEmail(string emailAddress);
@@ -74,6 +75,11 @@ public class CheepService : ICheepService
         // filter by the provided author name
 
         return _repository.ReadCheeps(page, userId);
+    }
+    
+    public Task<List<CheepDTO>> GetAllCheepsFromAuthor(int userId)
+    {
+        return _repository.ReadAllCheeps(userId);;
     }
 
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
