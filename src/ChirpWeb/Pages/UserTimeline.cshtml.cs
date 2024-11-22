@@ -22,7 +22,6 @@ public class UserTimelineModel : CheepPostPage
         author = await _service.ReadAuthorByEmail(User.Identity.Name);
         setUsername();
         var authorTask = await _service.ReadAuthorByName(name);
-        Console.WriteLine("what is name " + name);
         //private or public timeline
         if (User.Identity.IsAuthenticated && author.Name == name)
         {
