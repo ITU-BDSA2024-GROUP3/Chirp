@@ -22,9 +22,7 @@ public class UserTimelineModel : CheepPostPage
         var authorTask = await _service.ReadAuthorByName(name);
 
         var cheepsTask = await _service.GetCheepsFromAuthor(authorTask.UserId, page);
-
-        //await Task.WhenAll(authorTask, cheepsTask);
-
+        
         Author = authorTask;
         Cheeps = cheepsTask;
 

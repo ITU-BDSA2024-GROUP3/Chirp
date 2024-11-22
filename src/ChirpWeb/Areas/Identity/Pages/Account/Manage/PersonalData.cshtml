@@ -1,6 +1,11 @@
 ﻿@page
+@using ChirpWeb
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model PersonalDataModel
-
+@{
+    int nextPage = Model.currentPage + 1;
+    int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
+}
 
 
 <div class="row">
@@ -18,6 +23,36 @@
             <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
         </p>
     </div>
+    @if (Model.Cheeps.Any())
+    {
+    <h3>Here is a list of your cheeps</h3>
+    <ul id="messagelist" class="cheeps">
+        @foreach (var cheep in Model.Cheeps)
+        {
+        <li>
+            <p>
+                <strong>
+                    <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
+                </strong>
+                @cheep.Text
+                <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+            </p>
+        </li>
+        }
+    </ul>
+    }
+    else
+    {
+    <em>You have made no cheeps so far ;(</em>
+    }
+    @if (Model.currentPage > 1){
+    <Button class="btn">
+        <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+    </Button>
+    }
+    <Button class="btn">
+        <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
+    </Button>
 </div>
 
 @section Scripts {
