@@ -58,30 +58,17 @@ public class CheepPostPage : BasePage
         {
             throw new Exception("OnPostToggleFollowAsync Exception");
         }
-        foreach (var huh in loggedInAuthor.FollowingList.ToList()) // Use ToList() to create a copy
-        {
-            Console.WriteLine(huh);
-        }
-        
-        if (loggedInAuthor.FollowingList == null)
-        {
-            Console.WriteLine("following list er null");
-            loggedInAuthor.FollowingList = new List<int>();
-        }
         
         if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
-            Console.WriteLine("Unfollowing time");
-            Console.WriteLine(loggedInAuthor.FollowingList.Count);
+            
             await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
 
         }
         else
         {
             await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
-            Console.WriteLine("following time");
-            Console.WriteLine("uhhhhhhhhhhh " + loggedInAuthor.FollowingList.Count);
-            Console.WriteLine(loggedInAuthor.UserName==User.Identity.Name);
+            
             
         }
         
