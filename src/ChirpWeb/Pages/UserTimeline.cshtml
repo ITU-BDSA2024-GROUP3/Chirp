@@ -42,13 +42,16 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    @if (Model.currentPage > 1){
-    <Button class="btn">
-        <a href="/@routeName?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
-    </Button>
-    }
-    <Button class="btn">
-        <a href="/@routeName?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
-    </Button>
+
+    <div class="pagination-buttons">
+        @if (Model.currentPage > 1)
+        {
+        <Button class="btn">
+            <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+        </Button>        }
+        <Button class="btn">
+            <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
+        </Button>
+    </div>
 
 </div>
