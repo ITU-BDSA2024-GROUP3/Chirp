@@ -31,9 +31,30 @@
             <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Forget me!</a>
         </p>
     </div>
+    
+    <h3>Authors You Follow</h3>
+    
+    @if (Model.FollowingAuthors.Any())
+    {
+    
+
+    <ul>
+        @foreach (var author in Model.FollowingAuthors)
+        {
+        <li>@author.Name</li>
+        }
+    </ul>
+    }
+    else
+    {
+    <em>You are not following anyone yet ;-;.</em>
+    }
+
+    <h3>Here is a list of your cheeps</h3>
+    
     @if (Model.Cheeps.Any())
     {
-    <h3>Here is a list of your cheeps</h3>
+    
     <ul id="messagelist" class="cheeps">
         @foreach (var cheep in Model.Cheeps)
         {
@@ -53,14 +74,18 @@
     {
     <em>You have made no cheeps so far ;(</em>
     }
-    @if (Model.currentPage > 1){
-    <Button class="btn">
-        <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
-    </Button>
-    }
-    <Button class="btn">
-        <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
-    </Button>
+    
+    <div class="pagination-buttons">
+        @if (Model.currentPage > 1)
+        {
+        <Button class="btn">
+            <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+        </Button>        }
+        <Button class="btn">
+            <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
+        </Button>
+    </div>
+   
 </div>
 
 @section Scripts {

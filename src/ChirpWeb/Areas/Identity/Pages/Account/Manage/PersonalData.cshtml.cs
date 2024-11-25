@@ -20,6 +20,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         public List<CheepDTO> Cheeps { get; set; }
         
         public Author author { get; set; }
+        public List<AuthorDTO> FollowingAuthors { get; set; }
+
         public int currentPage;
 
 
@@ -41,9 +43,13 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             var authorTaskGetAuthor = await _repo.ReadAuthorById(authorTask.UserId);
 
             var cheepsTask = await _repo.ReadCheeps(page, authorTask.UserId);
+            
+            var followingTask = await _repo.ReadFollowing(authorTask.UserId);
         
             author = authorTaskGetAuthor;
             Cheeps = cheepsTask;
+            FollowingAuthors = followingTask;
+
             
             currentPage = page;
 
