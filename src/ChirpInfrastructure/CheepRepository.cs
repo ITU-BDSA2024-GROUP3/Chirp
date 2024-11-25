@@ -36,6 +36,37 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity.CheepId;
     }
 
+    public async Task<List<AuthorDTO>> ReadFollowing(int UserId)
+    {
+        if (UserId == null)
+        {
+            throw new Exception("No UserID provided!");
+        }
+
+        Author author = ReadAuthorById(UserId).Result;
+        if (author == null)
+        {
+            throw new Exception($"No Author with ID {UserId}!");
+        } else if (author.FollowingList == null)
+        {
+            throw new Exception("No Following list provided!");
+        }
+        
+        List<AuthorDTO> followers = new List<AuthorDTO>();
+
+        foreach (var followerId in author.FollowingList)
+        {
+            
+            Author tempAuthor = ReadAuthorById(followerId).Result;
+            
+            AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
+            
+            followers.Add(authorDto);
+        }
+
+        return followers;
+    }
+
     public async Task<string> GetNameByEmail(string emailAddress)
     {
         //Check if email exists
@@ -63,7 +94,6 @@ public class CheepRepository : ICheepRepository
         //Don't want to be here
         return null;
     }
-    
 
     public async Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
     {
