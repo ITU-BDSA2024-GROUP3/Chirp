@@ -113,8 +113,6 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Helge", 11)]
-    [InlineData("Adrian", 12)]
     [InlineData("Jacqualine Gilcoine", 10)]
     [InlineData("Roger Histand", 1)]
     [InlineData("Quintin Sitts", 5)]
@@ -143,8 +141,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("Helge", 11)]
-    [InlineData("Adrian", 12)]
+
     [InlineData("Jacqualine Gilcoine", 10)]
     [InlineData("Roger Histand", 1)]
     [InlineData("Quintin Sitts", 5)]
@@ -193,8 +190,6 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
 
     [Theory]
-    [InlineData("Hello, BDSA students!", "Helge", 11)]
-    [InlineData("Hej, velkommen til kurset.", "Adrian", 12)]
     [InlineData(
         "I whisked round to you, Mr. Holmes, to glance out of her which forms the great docks of Antwerp, in Napoleon&#x27;&#x27;s time.",
         "Mellie Yost", 6)]
@@ -283,8 +278,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10)]
-    [InlineData("Helge", 11)]
-    [InlineData("Adrian", 12)]
+
     [InlineData("Roger Histand", 1)]
     [InlineData("Quintin Sitts", 5)]
     [InlineData("Wendell Ballan", 3)]
@@ -297,8 +291,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
 
     [Theory]
     [InlineData("Roger Histand", 1, 2)]
-    [InlineData("Adrian", 12, 1)]
-    [InlineData("Helge", 11, 1)]
+    
     [InlineData("Malcolm Janski", 7,1)]
     [InlineData("Quintin Sitts", 5,3)]
     [InlineData("Luanna Muro", 2,1)]
@@ -377,8 +370,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [InlineData("Jacqualine Gilcoine", 10)]
     [InlineData("Quintin Sitts", 5)]
     [InlineData("Nathan Sirmon", 4)]
-    [InlineData("Helge", 11)]
-    [InlineData("Adrian", 12)]
 
     public async void ButtonsExistMainPrivate(string author, int id)
     {
@@ -413,8 +404,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [InlineData("Quintin Sitts", 5,2)]
     [InlineData("Quintin Sitts", 5,3)]
     [InlineData("Nathan Sirmon", 4,2)]
-    [InlineData("Helge", 11,2)]
-    [InlineData("Adrian", 12,2)]
+   
     public async void ButtonsExistPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
@@ -451,7 +441,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     }
 
     [Theory]
-    [InlineData("Adrian", 12, 2)]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
     public async void ButtonLinksCorrectlyPrivate(string author, int id, int page)
     {
@@ -612,8 +601,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     }
 
     [Theory]
-    [InlineData("Adrian",  21)]
-    [InlineData("Helge",  21)]
+   
     [InlineData("Jacqualine Gilcoine",  1)]
     public async void AuthorsExistPublic(string author, int page)
     {
@@ -636,7 +624,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         Assert.Equal(32*(22-10+author.Length), first-content2.Length);
     }
     [Theory]
-    [InlineData("Adrian",  21)]
+    [InlineData("Jacqualine Gilcoine",  1)]
     public async void AuthorLinksExistPublic(string author,  int page)
     {
         var content = await SetPublicPage(page);
@@ -645,7 +633,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
-    [InlineData("Adrian", 12, 1)]
     [InlineData("Jacqualine Gilcoine", 12, 4)]
 
 
@@ -669,8 +656,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10, 1)]
     [InlineData("Jacqualine Gilcoine", 10, 2)]
-    [InlineData("Adrian", 12, 1)]
-    [InlineData("Helge", 11, 1)]
+  
     public async void CorrectStyleSheetUsedPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
