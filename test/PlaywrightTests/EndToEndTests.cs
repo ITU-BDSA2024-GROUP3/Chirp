@@ -127,4 +127,39 @@ public class EndToEndTests: PageTest{
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
         await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
     }
+
+    [Test]
+    public async Task followingTest()
+    {
+        await Page.GotoAsync("http://localhost:5273/");
+        
+        //login
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@name.com").ClickAsync();
+        await Page.GetByPlaceholder("name@name.com").FillAsync("hans@grethe.com");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Abc123456789");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        
+        //follow Jacqualine Gilcone
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. 08/01/23" }).GetByRole(AriaRole.Button).ClickAsync();
+        
+        //ensure own and Jacqualine Gilcone cheeps is displayed on private timeline
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Expect(Page.GetByText("hans I exist 11/26/24")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. 08/01/23")).ToBeVisibleAsync();
+        
+        //unfollow Jacqualine Gilcone
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. 08/01/23" }).GetByRole(AriaRole.Button).ClickAsync();
+        
+        //ensure own cheeps are displayed
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Next (2)" }).ClickAsync();
+        await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
+        
+        //log out
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [hans]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+    }
 }
