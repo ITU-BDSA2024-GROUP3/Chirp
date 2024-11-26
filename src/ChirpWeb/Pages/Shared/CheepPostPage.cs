@@ -57,15 +57,11 @@ public class CheepPostPage : BasePage
         
         if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
-            
             await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
-
         }
         else
         {
             await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
-            
-            
         }
         
         return RedirectToPage("Public");
