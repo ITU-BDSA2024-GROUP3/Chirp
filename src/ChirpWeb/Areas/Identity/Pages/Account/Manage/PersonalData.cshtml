@@ -41,7 +41,14 @@
     <ul>
         @foreach (var author in Model.FollowingAuthors)
         {
-        <li>@author.Name</li>
+            <li>
+            <p>
+                <strong>
+                    <a href="/@author.Name?page=1">@author.Name</a>
+                </strong>
+            </p>
+            </li>
+            <!--<li>@author.Name</li>-->
         }
     </ul>
     }
