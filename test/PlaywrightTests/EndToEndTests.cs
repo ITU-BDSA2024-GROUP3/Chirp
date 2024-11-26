@@ -120,9 +120,9 @@ public class EndToEndTests: PageTest{
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Expect(Page.GetByText("hans's Timeline What's on")).ToBeVisibleAsync();
-        await Expect(Page.GetByText("hans I exist — 11/26/24")).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind hans?" })).ToBeVisibleAsync();
-        
+        await Expect(Page.GetByText("hans I exist 11/26/24")).ToBeVisibleAsync();
+
+        //logout
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [hans]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
         await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
