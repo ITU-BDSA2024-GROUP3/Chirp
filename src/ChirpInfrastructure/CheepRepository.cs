@@ -19,11 +19,11 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Author cheepAuthor = ReadAuthorById(newMessage.AuthorID).Result;
+        Author cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
 
         Cheep message = new()
         {
-            CheepId = _nextCheepId++, UserId = newMessage.AuthorID, Text = newMessage.Text, TimeStamp = DateTime.Now,
+            CheepId = _nextCheepId++, UserId = newMessage.UserId, Text = newMessage.Text, TimeStamp = DateTime.Now,
             Author = cheepAuthor
         };
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
@@ -31,9 +31,40 @@ public class CheepRepository : ICheepRepository
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
 
-        Console.WriteLine($"Store Cheep message = {message.Text} and AuthorId = {message.Author.UserId}");
+        Console.WriteLine($"Store Cheep message = {message.Text} and UserId = {message.Author.UserId}");
 
         return queryResult.Entity.CheepId;
+    }
+
+    public async Task<List<AuthorDTO>> ReadFollowing(int UserId)
+    {
+        if (UserId == null)
+        {
+            throw new Exception("No UserID provided!");
+        }
+
+        Author author = ReadAuthorById(UserId).Result;
+        if (author == null)
+        {
+            throw new Exception($"No Author with ID {UserId}!");
+        } else if (author.FollowingList == null)
+        {
+            throw new Exception("No Following list provided!");
+        }
+        
+        List<AuthorDTO> followers = new List<AuthorDTO>();
+
+        foreach (var followerId in author.FollowingList)
+        {
+            
+            Author tempAuthor = ReadAuthorById(followerId).Result;
+            
+            AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
+            
+            followers.Add(authorDto);
+        }
+
+        return followers;
     }
 
     public async Task<string> GetNameByEmail(string emailAddress)
@@ -64,48 +95,6 @@ public class CheepRepository : ICheepRepository
         return null;
     }
 
-
-    public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
-    {
-        // Formulate the query - will be translated to SQL by EF Core
-        IQueryable<CheepDTO> query;
-        if (UserId != null)
-        {
-            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
-                .Select(message => new CheepDTO() {
-                        Text = message.Text, 
-                        AuthorID = message.Author.UserId, 
-                        AuthorName = message.Author.Name,
-                        TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
-                    })
-                .AsEnumerable()
-                .OrderByDescending(dto => dto.TimeStamp)
-                .AsQueryable()
-                .Skip((page - 1) * 32)
-                .Take(32);
-        }
-        else
-        {
-            query = _dbContext.Cheeps
-                .Select(message => new CheepDTO() {
-                    Text = message.Text,
-                    AuthorID = message.Author.UserId,
-                    AuthorName = message.Author.Name,
-                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
-                })
-                .AsEnumerable()
-                .OrderByDescending(dto => dto.TimeStamp)
-                .AsQueryable()
-                .Skip((page - 1) * 32)
-                .Take(32);
-        }
-
-        // Execute the query
-        var result = query.ToList();
-
-        return result;
-    }
-
     public async Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
     {
         if (UserId == null)
@@ -123,10 +112,11 @@ public class CheepRepository : ICheepRepository
         }
         
         IQueryable<CheepDTO> query = _dbContext.Cheeps
-            .Where<Cheep>(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
+            .Where(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
+            .Include(cheep => cheep.Author)
             .Select(message => new CheepDTO() {
                 Text = message.Text,
-                AuthorID = message.Author.UserId,
+                UserId = message.Author.UserId,
                 AuthorName = message.Author.Name,
                 TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
             })
@@ -158,6 +148,86 @@ public class CheepRepository : ICheepRepository
             .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
             .Take(1);
         return await query.FirstOrDefaultAsync();
+    }
+
+    public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
+    {
+        // Formulate the query - will be translated to SQL by EF Core
+        IQueryable<CheepDTO> query;
+        if (UserId != null)
+        {
+            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
+                .Select(message => new CheepDTO() {
+                    Text = message.Text, 
+                    UserId = message.Author.UserId, 
+                    AuthorName = message.Author.Name,
+                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable()
+                .Skip((page - 1) * 32)
+                .Take(32);
+        }
+        else
+        {
+            query = _dbContext.Cheeps
+                .Select(message => new CheepDTO() {
+                    Text = message.Text,
+                    UserId = message.Author.UserId,
+                    AuthorName = message.Author.Name,
+                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable()
+                .Skip((page - 1) * 32)
+                .Take(32);
+        }
+
+        // Execute the query
+        var result = query.ToList();
+
+        return result;
+    }
+    
+    public async Task<List<CheepDTO>> ReadAllCheeps(int? UserId)
+    {
+        // Formulate the query - will be translated to SQL by EF Core
+        IQueryable<CheepDTO> query;
+        if (UserId != null)
+        {
+            query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
+                .Select(message => new CheepDTO()
+                {
+                    Text = message.Text,
+                    UserId = message.Author.UserId,
+                    AuthorName = message.Author.Name,
+                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable();
+        }
+        else
+        {
+            query = _dbContext.Cheeps
+                .Select(message => new CheepDTO()
+                {
+                    Text = message.Text,
+                    UserId = message.Author.UserId,
+                    AuthorName = message.Author.Name,
+                    TimeStamp = message.TimeStamp.ToUnixTimeSeconds()
+                })
+                .AsEnumerable()
+                .OrderByDescending(dto => dto.TimeStamp)
+                .AsQueryable();
+        }
+
+        // Execute the query
+        var result = query.ToList();
+
+        return result;
     }
 
     public async Task<Author> ReadAuthorById(int id)
@@ -207,6 +277,14 @@ public class CheepRepository : ICheepRepository
         IQueryable<AuthorDTO> query =
             _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
         return await query.CountAsync();
+    }
+    public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
+    {
+        // Unix timestamp is seconds past epoch
+        // returns GMT Timezone 
+        var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp);
+        return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
 
     public async Task<int> Follow(int wantToFollow, int wantToBeFollowed)

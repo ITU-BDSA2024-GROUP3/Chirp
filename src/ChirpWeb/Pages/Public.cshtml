@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using ChirpInfrastructure
 @using ChirpWeb.Pages
 @using ChirpWeb
 @model ChirpWeb.Pages.PublicModel
@@ -31,14 +32,12 @@
             {
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
-                ViewData["Timestamp"] = CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp);
+                ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp);
 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var cheepAuthor = Model.GetAuthorById(cheep.AuthorID);
-                    var i = cheepAuthor.UserId;
                     ViewData["LoggedInUserName"] = Model.author.Name;
-                    ViewData["Followed"] = Model.author.FollowingList.Contains(i);
+                    ViewData["Followed"] = Model.author.FollowingList.Contains(cheep.UserId);
                 }
                 <partial name="Shared/_CheepBox"/>
             }
@@ -48,13 +47,16 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    @if (Model.currentPage > 1)
-    {
+
+    <div class="pagination-buttons">
+        @if (Model.currentPage > 1)
+        {
         <Button class="btn">
             <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+        </Button>        }
+        <Button class="btn">
+            <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
         </Button>
-    }
-    <Button class="btn">
-        <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
-    </Button>
+    </div>
+   
 </div>
