@@ -41,8 +41,7 @@ public class EndToEndTests: PageTest{
     {
         //got to Jacqulaine's timeline
         await Page.GotoAsync("http://localhost:5273/");
-        await Page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link)
-            .ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link).ClickAsync();
         
         await Expect(Page
                 .GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" }))
