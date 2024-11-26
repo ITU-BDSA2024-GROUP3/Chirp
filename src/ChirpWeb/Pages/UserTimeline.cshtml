@@ -27,12 +27,17 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                ViewData["LoggedInUserName"] = Model.author.Name;
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["Timestamp"] = CheepService.UnixTimeStampToDateTimeString(cheep.TimeStamp);
-                ViewData["Followed"] = true;
-                
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    var cheepAuthor = Model.GetAuthorById(cheep.AuthorID);
+                    var i = cheepAuthor.UserId;
+                    ViewData["LoggedInUserName"] = Model.author.Name;
+                    ViewData["Followed"] = Model.author.FollowingList.Contains(i);
+                }
                 <partial name="Shared/_CheepBox"/>
             }
         </ul>
