@@ -294,4 +294,20 @@ ul.nav li a:hover {
     margin: 5px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    padding: 9px 19px;
+    margin: 6px;
+}
+
+#delete {
+    background: #bb0000;
+    color: white;
+    text-decoration: none;
+}
+
+#delete:hover {
+    background: #610505;
 }

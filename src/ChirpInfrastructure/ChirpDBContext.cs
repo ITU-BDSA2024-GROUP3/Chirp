@@ -30,5 +30,10 @@ public class ChirpDBContext : IdentityDbContext<Author>
         modelBuilder.Entity<Author>()
             .HasIndex(c => c.UserId)
             .IsUnique();
+        modelBuilder.Entity<Author>()
+            .HasMany(a => a.Cheeps)
+            .WithOne(c => c.Author)
+            .HasForeignKey(c => c.UserId)
+            .HasPrincipalKey(c => c.UserId);
     }
 }

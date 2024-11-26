@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChirpIntegration.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241122124855_AddInitialMigration")]
-    partial class AddInitialMigration
+    [Migration("20241122114454_PersonalData")]
+    partial class PersonalData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,10 +39,6 @@ namespace ChirpIntegration.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("FollowingList")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -111,10 +107,6 @@ namespace ChirpIntegration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(160)
@@ -128,7 +120,7 @@ namespace ChirpIntegration.Migrations
 
                     b.HasKey("CheepId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cheeps");
                 });
@@ -269,7 +261,8 @@ namespace ChirpIntegration.Migrations
                 {
                     b.HasOne("ChirpCore.DomainModel.Author", "Author")
                         .WithMany("Cheeps")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("UserId")
+                        .HasPrincipalKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
