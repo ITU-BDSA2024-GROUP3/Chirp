@@ -15,13 +15,16 @@ public class BasePage : PageModel
     public BasePage(ICheepRepository repo)
     {
 
-        _repo = repo;   
-    public async void setUsername()
+        _repo = repo;  
+    } 
+    
+    public async void setUsername() {
         if (User.Identity.IsAuthenticated && User.Identity.Name != null)
         {
             username = await _repo.GetNameByEmail(User.Identity.Name);
         }
     }
+
 
 
 
