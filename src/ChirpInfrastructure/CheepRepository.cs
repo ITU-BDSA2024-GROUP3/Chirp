@@ -302,7 +302,8 @@ public class CheepRepository : ICheepRepository
         }
         
         wantToFollowAuthor.FollowingList.Add(wantToBeFollowed);
-        return await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+        return wantToFollowAuthor.FollowingList.Count;
     }
 
 
@@ -321,7 +322,8 @@ public class CheepRepository : ICheepRepository
         }
         
         wantToUnfollowAuthor.FollowingList.Remove(wantToBeUnfollowed);
-        return await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+        return wantToUnfollowAuthor.FollowingList.Count;
     }
 
 }

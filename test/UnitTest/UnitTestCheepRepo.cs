@@ -294,6 +294,32 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal("Tom", await repo.GetNameByEmail("mymail"));
       Assert.Null(await repo.GetNameByEmail("notmail"));
    }
+
+   [Fact]
+   public async void followAndUnFolloweAuthor()
+   {
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+      
+      //create author and add to database
+      var author1 = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
+      context.Authors.Add(author1);
+      
+      var author2 = new Author() { UserId= 2, Cheeps = null, Email = "mymaile", Name = "Tommy", FollowingList = new List<int>() };
+      context.Authors.Add(author2);
+      
+      await context.SaveChangesAsync();
+      
+      ICheepRepository repo = new CheepRepository(context);
+      
+      Assert.Equal(1,repo.Follow(author1.UserId,author2.UserId).Result);
+      Assert.ThrowsAsync<AggregateException> ( () => repo.Follow(author1.UserId,author2.UserId));
+      Assert.ThrowsAsync<Exception>(() => repo.Unfollow(author1.UserId,author2.UserId));
+   }
    
    [Fact]
    public void convertunixtimestamp()
@@ -301,6 +327,7 @@ public class UnitTestCheepRepo : IDisposable
       int timestamp = 1728284672;
       String time = CheepRepository.UnixTimeStampToDateTimeString(timestamp);
       Assert.Equal(time, "10/07/24 7.04.32");
+      
         
    }
    
