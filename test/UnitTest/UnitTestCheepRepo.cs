@@ -26,7 +26,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" , FollowingList = new List<int>()};
 
       var cheep = new Cheep
       {
@@ -66,7 +66,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name, FollowingList = new List<int>()};
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
@@ -89,7 +89,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name, FollowingList = new List<int>()};
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
@@ -112,7 +112,7 @@ public class UnitTestCheepRepo : IDisposable
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name };
+      var author = new Author() { UserId = id, Cheeps = null, Email = email, Name = name, FollowingList = new List<int>()};
 
       context.Authors.Add(author);
       await context.SaveChangesAsync();
@@ -180,7 +180,7 @@ public class UnitTestCheepRepo : IDisposable
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
       
       //create author and add to database
-      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
       context.Authors.Add(author);
       await context.SaveChangesAsync();
       //MAKE THE DATABASE WITH AUTHOR
@@ -211,7 +211,7 @@ public class UnitTestCheepRepo : IDisposable
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
       
       //create author and add to database
-      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>()};
       context.Authors.Add(author);
       await context.SaveChangesAsync();
       //MAKE THE DATABASE WITH AUTHOR
@@ -243,7 +243,7 @@ public class UnitTestCheepRepo : IDisposable
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
       
       //create author and add to database
-      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
       context.Authors.Add(author);
       await context.SaveChangesAsync();
       
@@ -252,6 +252,7 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal("Tom", await repo.GetNameByEmail("mymail"));
       Assert.Null(await repo.GetNameByEmail("notmail"));
    }
+   
    [Fact]
    public void convertunixtimestamp()
    {
@@ -260,10 +261,10 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal(time, "10/07/24 7.04.32");
         
    }
-
-
-
-
+   
+   
+   //add follower, remove follower, readfollowercheeps
+   
 /*
 [Theory]
 public async void TestReadCheepText()
