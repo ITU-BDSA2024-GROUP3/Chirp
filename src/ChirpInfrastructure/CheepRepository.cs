@@ -9,7 +9,6 @@ public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _dbContext;
     private int _nextCheepId;
-    private readonly IAuthorRepository _authorRepository;
 
     public CheepRepository(ChirpDBContext context)
     {
@@ -19,7 +18,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Author cheepAuthor = _authorRepository.ReadAuthorById(newMessage.UserId).Result;
+        Author cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
 
         Cheep message = new()
         {
@@ -28,6 +27,7 @@ public class CheepRepository : ICheepRepository
         };
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
         cheepAuthor.Cheeps.Add(message);
+
 
         await _dbContext.SaveChangesAsync(); // persist the changes in the database
 
@@ -43,7 +43,7 @@ public class CheepRepository : ICheepRepository
             throw new Exception("No UserID provided!");
         }
 
-        Author author = _authorRepository.ReadAuthorById(UserId).Result;
+        Author author = ReadAuthorById(UserId).Result;
         if (author == null)
         {
             throw new Exception($"No Author with ID {UserId}!");
@@ -57,7 +57,7 @@ public class CheepRepository : ICheepRepository
         foreach (var followerId in author.FollowingList)
         {
             
-            Author tempAuthor = _authorRepository.ReadAuthorById(followerId).Result;
+            Author tempAuthor = ReadAuthorById(followerId).Result;
             
             AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
             
@@ -75,7 +75,7 @@ public class CheepRepository : ICheepRepository
             throw new Exception("No UserID provided!");
         }
 
-        Author author = _authorRepository.ReadAuthorById((int)UserId).Result;
+        Author author = ReadAuthorById((int)UserId).Result;
         if (author == null)
         {
             throw new Exception($"No Author with ID {UserId}!");
@@ -198,7 +198,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<Author> ReadAuthorById(int id)
     {
-        IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
+        IQueryable<Author> query = Queryable.Where(_dbContext.Authors, author => author.UserId == id)
             .Select(author => author)
             .Take(1);
         return await query.FirstOrDefaultAsync();
