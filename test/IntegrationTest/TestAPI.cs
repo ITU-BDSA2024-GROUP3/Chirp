@@ -6,11 +6,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ChirpInfrastructure;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using SQLitePCL;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -55,9 +57,11 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
                 {
                     var connection = container.GetRequiredService<DbConnection>();
                     options.UseSqlite(connection);
-
+                    
                 });
             });
+            builder.UseEnvironment("Development");
+            
         });
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions
             { AllowAutoRedirect = true, HandleCookies = true });
@@ -100,7 +104,10 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
 
 
-
+    [Fact]
+    public async void DatabaseExists()
+    {
+         }
 
 
     [Fact]
@@ -698,6 +705,8 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         // Assert
         
     }
+
+    
     
     /*
     
