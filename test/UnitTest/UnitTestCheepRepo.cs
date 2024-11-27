@@ -53,6 +53,48 @@ public class UnitTestCheepRepo : IDisposable
       //Assert.True(messages.Contains("messageData"));
       Assert.Contains("messageData", messages);
    }
+   
+   [Fact]
+   public async void TestReadfollowerCheep()
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+      var author1 = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" , FollowingList = new List<int>()};
+      var author2 = new Author() { UserId = 2, Cheeps = null, Email = "mymaile", Name = "Tommy" , FollowingList = new List<int>()};
+      author1.FollowingList.Add(author2.UserId);
+      
+      var cheep = new Cheep
+      {
+         CheepId = 1,
+         Author = author2,
+         UserId = author2.UserId,
+         Text = "messageData",
+         TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569)
+            .UtcDateTime // Ensure this matches the format in your model
+      };
+
+      context.Authors.Add(author1);
+      context.Authors.Add(author2);
+      context.Cheeps.Add(cheep);
+      await context.SaveChangesAsync();
+      ICheepRepository repo = new CheepRepository(context);
+      var cheeps = await repo.ReadFollowedCheeps(1, 1);
+      Assert.NotNull(cheeps);
+      var messages = new List<string>();
+      foreach (CheepDTO cheeP in cheeps)
+      {
+         messages.Add(cheeP.Text);
+      }
+
+      //Assert.True(messages.Contains("messageData"));
+      Assert.Contains("messageData", messages);
+   }
 
    [Theory]
    [InlineData(1, "Tom", "myemail")]
@@ -79,6 +121,7 @@ public class UnitTestCheepRepo : IDisposable
 
    [Theory]
    [InlineData(1, "Tom", "myemail")]
+   [InlineData(1, "Tom", "Tom")] //should not pass
    public async void TestReadAuthorByEmail(int id, string name, string email)
    {
       //var repo = await UtilFunctionsTest.CreateInMemoryDb();
@@ -144,6 +187,7 @@ public class UnitTestCheepRepo : IDisposable
 
    [Theory]
    [InlineData(1, "Tom", "myemail", 10)]
+   [InlineData(2, "Tommy", "myemail", 1)]
    public async void TestGetAuthorCount(int id, string name, string email, int authorNr)
    {
       //var repo = await UtilFunctionsTest.CreateInMemoryDb();
@@ -153,8 +197,6 @@ public class UnitTestCheepRepo : IDisposable
 
       using var context = new ChirpDBContext(builder.Options);
       await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-
-
 
       ICheepRepository repo = new CheepRepository(context);
 
