@@ -252,6 +252,14 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal("Tom", await repo.GetNameByEmail("mymail"));
       Assert.Null(await repo.GetNameByEmail("notmail"));
    }
+   [Fact]
+   public void convertunixtimestamp()
+   {
+      int timestamp = 1728284672;
+      String time = CheepRepository.UnixTimeStampToDateTimeString(timestamp);
+      Assert.Equal(time, "10/07/24 7.04.32");
+        
+   }
 
 
 
