@@ -66,6 +66,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+            
+            setUsername();
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
             return Page();
