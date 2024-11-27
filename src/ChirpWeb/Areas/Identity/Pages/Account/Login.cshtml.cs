@@ -26,13 +26,13 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         
-        protected readonly ICheepRepository _repo;
+        protected readonly IAuthorRepository _AuthorRepo;//is this needed
 
-        public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger, ICheepRepository repo): base(repo)
+        public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger, IAuthorRepository AuthorRepo, ICheepRepository CheepRepo): base(CheepRepo, AuthorRepo)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _repo = repo;
+            _AuthorRepo = AuthorRepo;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 //Adrian: This needs username, had email.
-                string path = await _repo.GetNameByEmail(Input.Email);
+                string path = await _AuthorRepo.GetNameByEmail(Input.Email);
                 returnUrl = Url.Content("~/"+path);
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)

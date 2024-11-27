@@ -25,7 +25,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public DownloadPersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<DownloadPersonalDataModel> logger, ICheepRepository repository) : base(repository)
+            ILogger<DownloadPersonalDataModel> logger, ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
         {
             _userManager = userManager;
             _logger = logger;
@@ -54,7 +54,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             {
                 if (p.Name == "Cheeps")
                 {
-                    ICollection<CheepDTO> list = await _repo.ReadAllCheeps(user.UserId);
+                    ICollection<CheepDTO> list = await _CheepRepo.ReadAllCheeps(user.UserId);
                     string cheepData = null;
                     foreach (var cheep in list)
                     {

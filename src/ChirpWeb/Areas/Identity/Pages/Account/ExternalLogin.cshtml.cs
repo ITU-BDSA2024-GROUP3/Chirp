@@ -41,8 +41,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             IUserStore<Author> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            ICheepRepository repo
-            ) : base(repo)
+            ICheepRepository CheepRepo,
+            IAuthorRepository AuthorRepo
+            ) : base(CheepRepo, AuthorRepo)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -165,7 +166,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 
                 user.Cheeps = new List<Cheep>();
                 user.Name = Input.Name;
-                var id = await _repo.GetAuthorCount();
+                var id = await _AuthorRepo.GetAuthorCount();
                 user.UserId = id + 1;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -234,7 +235,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 user.Cheeps = new List<Cheep>();
                 user.FollowingList = new List<int>();
                 user.Name = Input.Name;
-                var id = await _repo.GetAuthorCount();
+                var id = await _AuthorRepo.GetAuthorCount();
                 user.UserId = id + 1;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

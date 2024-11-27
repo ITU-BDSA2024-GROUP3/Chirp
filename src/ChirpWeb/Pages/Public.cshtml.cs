@@ -15,7 +15,7 @@ public class PublicModel : CheepPostPage
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
     
-    public PublicModel(ICheepRepository repo) : base(repo) { }
+    public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
     
     public Author author { get; set; }
     
@@ -24,7 +24,7 @@ public class PublicModel : CheepPostPage
     {
         if (User.Identity.IsAuthenticated)
         {
-            author = await _repo.ReadAuthorByEmail(User.Identity.Name);
+            author = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
             
             // We think, that if FollowingList is empty, it will be read as null from the database
             
@@ -33,7 +33,7 @@ public class PublicModel : CheepPostPage
         setUsername();
         
         currentPage = page;
-        Cheeps = await _repo.ReadCheeps(currentPage, null);
+        Cheeps = await _CheepRepo.ReadCheeps(currentPage, null);
         if (currentPage < 1)
         {
             currentPage = 1;

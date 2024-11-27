@@ -17,13 +17,13 @@ public class UserTimelineModel : CheepPostPage
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
-    public UserTimelineModel(ICheepRepository repo) : base(repo) { }
+    public UserTimelineModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
 
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
-        author = await _repo.ReadAuthorByEmail(User.Identity.Name);
+        author = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
         setUsername();
-        var authorTask = await _repo.ReadAuthorByName(name);
+        var authorTask = await _AuthorRepo.ReadAuthorByName(name);
         
 
         //await Task.WhenAll(authorTask, cheepsTask);
@@ -32,11 +32,11 @@ public class UserTimelineModel : CheepPostPage
         //private or public timeline
         if (User.Identity.IsAuthenticated && author.Name == name)
         {
-            Cheeps = await _repo.ReadFollowedCheeps(page, authorTask.UserId);
+            Cheeps = await _CheepRepo.ReadFollowedCheeps(page, authorTask.UserId);
         }
         else
         {
-            Cheeps= await _repo.ReadCheeps(page, authorTask.UserId);
+            Cheeps= await _CheepRepo.ReadCheeps(page, authorTask.UserId);
         }
         
         Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};

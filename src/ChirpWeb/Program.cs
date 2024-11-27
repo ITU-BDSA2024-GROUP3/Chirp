@@ -18,7 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
-
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddDistributedMemoryCache();
 string? connectionString = builder.Configuration.GetConnectionString("ChirpDBContextConnection");
 
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
@@ -32,7 +34,8 @@ builder.Services.AddDefaultIdentity<Author>(options =>
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<ChirpDBContext>();
 
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
+
 
 builder.Services.AddAuthentication()
     .AddCookie()

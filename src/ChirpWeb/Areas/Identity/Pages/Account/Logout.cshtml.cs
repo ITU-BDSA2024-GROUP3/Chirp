@@ -20,7 +20,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<Author> signInManager, ILogger<LogoutModel> logger, ICheepRepository repo): base(repo)
+        public LogoutModel(SignInManager<Author> signInManager, ILogger<LogoutModel> logger, ICheepRepository CheepRepo, IAuthorRepository AuthorRepo): base(CheepRepo, AuthorRepo)
         {
             _signInManager = signInManager;
             _logger = logger;

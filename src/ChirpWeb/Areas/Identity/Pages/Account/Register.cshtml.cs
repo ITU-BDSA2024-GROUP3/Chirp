@@ -36,7 +36,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         string username { get; set; }
-        private ICheepRepository _repo;
+        private IAuthorRepository _authorRepo;
         private readonly ChirpDBContext _chirpContext;
 
 
@@ -46,7 +46,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ICheepRepository repo,
+            IAuthorRepository authorRepo,
             ChirpDBContext chirpContext
             ) 
         {
@@ -57,7 +57,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _repo = repo;
+            _authorRepo = authorRepo;
             _chirpContext = chirpContext;
         }
 
@@ -135,7 +135,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var userExist = await _userManager.FindByNameAsync(Input.Email);
-                var NameExist = await _repo.ReadAuthorByName(Input.Name);
+                var NameExist = await _authorRepo.ReadAuthorByName(Input.Name);
                 Console.WriteLine(NameExist);
                 if (userExist == null /*&& NameExist.Name != Input.Name*/)
                 {
@@ -146,7 +146,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     user.FollowingList = new List<int>();
                     //user.FollowingList.Add(user);
                     user.Name = Input.Name;
-                    var id = await _repo.GetAuthorCount();
+                    var id = await _authorRepo.GetAuthorCount();
                     user.UserId = id + 1;
 
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

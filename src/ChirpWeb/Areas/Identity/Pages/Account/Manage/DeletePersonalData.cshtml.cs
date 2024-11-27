@@ -24,7 +24,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
-            ILogger<DeletePersonalDataModel> logger, ICheepRepository repository) : base(repository)
+            ILogger<DeletePersonalDataModel> logger, ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
         {
             _userManager = userManager;
             _signInManager = signInManager;

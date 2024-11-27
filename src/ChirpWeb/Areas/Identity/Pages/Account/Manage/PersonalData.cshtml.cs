@@ -27,7 +27,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public PersonalDataModel(
             UserManager<Author> userManager,
-            ILogger<PersonalDataModel> logger, ICheepRepository repository) : base(repository)
+            ILogger<PersonalDataModel> logger, ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
         {
             _userManager = userManager;
             _logger = logger;
@@ -38,13 +38,13 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         {
             setUsername();
             
-            var authorTask = await _repo.ReadAuthorByEmail(User.Identity.Name);
+            var authorTask = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
 
-            var authorTaskGetAuthor = await _repo.ReadAuthorById(authorTask.UserId);
+            var authorTaskGetAuthor = await _AuthorRepo.ReadAuthorById(authorTask.UserId);
 
-            var cheepsTask = await _repo.ReadCheeps(page, authorTask.UserId);
+            var cheepsTask = await _CheepRepo.ReadCheeps(page, authorTask.UserId);
             
-            var followingTask = await _repo.ReadFollowing(authorTask.UserId);
+            var followingTask = await _CheepRepo.ReadFollowing(authorTask.UserId);
         
             author = authorTaskGetAuthor;
             Cheeps = cheepsTask;
