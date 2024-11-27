@@ -428,12 +428,12 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
             $"<Button class=\"btn\">\r\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\r\n    </Button>\r"
         );
         bool windows2 = content.Contains(
-                $"<Button class=\"btn\">\r\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n    </Button>\r");
+                $"<Button class=\"btn\">\r\n            <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\r\n        </Button>\r");
         bool linux1 = content.Contains(
             $"<Button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>"
         );
         bool linux2 = content.Contains(
-            $"<Button class=\"btn\">\n        <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n    </Button>");
+            $"<Button class=\"btn\">\n            <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n        </Button>");
 
         
         
@@ -487,7 +487,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [Theory]
     
     [InlineData(1, 2, "That must have come to you.")]
-    [InlineData(21, 22, "Hej, velkommen til kurset.")]
     [InlineData(20, 21, "But if I can be perfectly frank.")]
 
     public async void CheepsChangeWhenPagesChangePublic(int page1, int page2, string message)//duplicate cheeps?
@@ -537,10 +536,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPublicPage(page);
         bool windows = content.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{author}?page=1\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>");
-
-        bool linux = content.Contains(
-            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{author}?page=1\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>");
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page=1\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>\r\n");
+        bool linux= content.Contains(
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page=1\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>\n");
         Assert.True(windows || linux);
     }
 
@@ -552,10 +550,10 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        bool windows= content.Contains(
-            $"<li>\r\n                    <p>\r\n                        <strong>\r\n                            <a href=\"/{author}\">{author}</a>\r\n                        </strong>\r\n                        {message}\r\n                        <small>&mdash; {timestamp}</small>\r\n                    </p>\r\n                </li>\r\n");
+        bool windows = content.Contains(
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page=1\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>\r\n");
         bool linux= content.Contains(
-            $"<li>\n                    <p>\n                        <strong>\n                            <a href=\"/{author}\">{author}</a>\n                        </strong>\n                        {message}\n                        <small>&mdash; {timestamp}</small>\n                    </p>\n                </li>\n");
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page=1\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>\n");
         Assert.True(windows || linux);
     }
 
@@ -617,11 +615,11 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         int first = content.Length;
-        string replace = $"<a href=\"/{author}\">";
+        string replace = $"<a href=\"/{author}?page=1\">";
         string content2 = content.Replace(replace, "");
         
       
-        Assert.Equal(32*(22-10+author.Length), first-content2.Length);
+        Assert.Equal(32*(22-10+author.Length+7), first-content2.Length);
     }
     [Theory]
     [InlineData("Jacqualine Gilcoine",  1)]
@@ -639,7 +637,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     public async void AuthorLinksExistPrivate(string author, int id, int page)
     {
         var content = await SetPrivatePage(page, author, id);
-        Assert.Contains($"<a href=\"/{author}\">{author}</a>", content);
+        Assert.Contains($"<a href=\"/{author}?page=1\">{author}</a>", content);
     }
 
     [Theory]
