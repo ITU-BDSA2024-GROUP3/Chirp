@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -40,8 +41,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             IUserStore<Author> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            ICheepService service
-            ) : base(service)
+            ICheepRepository repo
+            ) : base(repo)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -164,7 +165,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 
                 user.Cheeps = new List<Cheep>();
                 user.Name = Input.Name;
-                var id = await _service.GetAuthorCount();
+                var id = await _repo.GetAuthorCount();
                 user.UserId = id + 1;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -233,7 +234,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 user.Cheeps = new List<Cheep>();
                 user.FollowingList = new List<int>();
                 user.Name = Input.Name;
-                var id = await _service.GetAuthorCount();
+                var id = await _repo.GetAuthorCount();
                 user.UserId = id + 1;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

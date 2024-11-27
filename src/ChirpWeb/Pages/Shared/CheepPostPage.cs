@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ChirpCore;
 using ChirpCore.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,8 +12,8 @@ public class CheepPostPage : BasePage
     [Required]
     [MaxLength(160)]
     public string Text { get; set; }
-    
-    public CheepPostPage(ICheepService service) : base(service)
+  
+    public CheepPostPage(ICheepRepository repo) : base(repo)
     {
     }
     
@@ -28,7 +29,7 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        AuthorDTO author = _service.ReadAuthorDTOByEmail(User.Identity.Name).Result;
+        Author author = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
 
         if (author.UserId == null)
         {
@@ -40,16 +41,16 @@ public class CheepPostPage : BasePage
             Console.WriteLine("Text is null");   
         }
         
-        CheepDTO newCheep = new CheepDTO() { Text = Text, AuthorID = author.UserId};
-        await _service.CreateCheep(newCheep);
+        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
+        await _repo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
     }
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        Author loggedInAuthor = _service.ReadAuthorByEmail(User.Identity.Name).Result;
-        Author followAuthor = _service.ReadAuthorByName(AuthorName).Result;
+        Author loggedInAuthor = _repo.ReadAuthorByEmail(User.Identity.Name).Result;
+        Author followAuthor = _repo.ReadAuthorByName(AuthorName).Result;
         if (loggedInAuthor == null || followAuthor == null)
         {
             throw new Exception("OnPostToggleFollowAsync Exception");
@@ -57,13 +58,18 @@ public class CheepPostPage : BasePage
         
         if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
-            await _service.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
+            
+            await _repo.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
+
         }
         else
         {
-            await _service.Follow(loggedInAuthor.UserId, followAuthor.UserId);
+            await _repo.Follow(loggedInAuthor.UserId, followAuthor.UserId);
+            
+            
         }
         
         return RedirectToPage("Public");
     }
+    
 }
