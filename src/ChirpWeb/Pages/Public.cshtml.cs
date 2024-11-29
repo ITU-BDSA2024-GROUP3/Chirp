@@ -17,7 +17,7 @@ public class PublicModel : CheepPostPage
     
     public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
 
-    public async Task<ActionResult> OnGetAsync([FromQuery] int page)
+    public ActionResult OnGet([FromQuery] int page)
     {
         TrySetLoggedInAuthor();
         
