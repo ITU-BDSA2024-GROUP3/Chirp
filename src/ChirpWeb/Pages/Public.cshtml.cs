@@ -30,7 +30,7 @@ public class PublicModel : CheepPostPage
             
         }        
         
-        setUsername();
+        TrySetLoggedInAuthor();
         
         currentPage = page;
         Cheeps = _CheepRepo.ReadCheeps(currentPage, null);

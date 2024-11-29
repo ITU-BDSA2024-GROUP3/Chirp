@@ -105,7 +105,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
         public async void OnGetAsync()
         {
-            setUsername();
+            TrySetLoggedInAuthor();
         }
 
         public IActionResult OnPost(string provider, string returnUrl = null)

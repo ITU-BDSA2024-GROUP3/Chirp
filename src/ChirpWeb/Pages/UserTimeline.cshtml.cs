@@ -22,7 +22,7 @@ public class UserTimelineModel : CheepPostPage
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
         author = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
-        setUsername();
+        TrySetLoggedInAuthor();
         var authorTask = await _AuthorRepo.ReadAuthorByName(name);
         
 

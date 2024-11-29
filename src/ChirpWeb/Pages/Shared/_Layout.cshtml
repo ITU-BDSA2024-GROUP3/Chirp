@@ -10,13 +10,13 @@
     <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
     
     <div class=navigation>
-        @if (User.Identity.IsAuthenticated)
+        @if (User.Identity!.IsAuthenticated)
         {
             <div>
-                <a href="/@(Model.username)">my timeline</a> |
+                <a href="/@(Model.LoggedInAuthor.Name)">my timeline</a> |
                 <a href="/">public timeline</a> |
-                <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/PersonalData" title="Manage">Manage @Model.username's account</a> |
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" >logout [@(Model.username)]</a> 
+                <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/PersonalData" title="Manage">Manage @Model.LoggedInAuthor.Name's account</a> |
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" >logout [@(Model.LoggedInAuthor.Name)]</a> 
             </div>
         }
         else

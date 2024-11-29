@@ -28,7 +28,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
         public async void OnGetAsync()
         {
-            setUsername();
+            TrySetLoggedInAuthor();
         }
         
         public async Task<IActionResult> OnPost(string returnUrl = null)

@@ -36,7 +36,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet([FromQuery] int page)
         {
-            setUsername();
+            TrySetLoggedInAuthor();
             
             var authorTask = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
 
