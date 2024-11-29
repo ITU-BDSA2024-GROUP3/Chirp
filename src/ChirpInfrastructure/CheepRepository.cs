@@ -229,6 +229,23 @@ public class CheepRepository : ICheepRepository
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
+    public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
+    {
+        if (wantToUnfollow == wantToBeUnfollowed)
+        {
+            throw new Exception($"Cannot unfollow yourself!");   
+        } 
+        
+        var wantToUnfollowAuthor = ReadAuthorById(wantToUnfollow).Result;
+        
+        if(!wantToUnfollowAuthor.FollowingList.Contains(wantToBeUnfollowed))
+        {
+            throw new Exception($"Cannot unfollow - Not following this author");   
+        }
+        
+        wantToUnfollowAuthor.FollowingList.Remove(wantToBeUnfollowed);
+        return await _dbContext.SaveChangesAsync();
+    }
 
    
 
