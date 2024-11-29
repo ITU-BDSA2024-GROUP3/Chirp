@@ -19,7 +19,7 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPost()
     {
-        if (!User.Identity.IsAuthenticated)
+        if (!User.Identity!.IsAuthenticated)
         {
             return RedirectToPage("Public");
         }
@@ -56,7 +56,12 @@ public class CheepPostPage : BasePage
             throw new Exception("User not recognized!");
         }
         
-        AuthorDTO followAuthor = await _AuthorRepo.ReadAuthorDTOByName(AuthorName);
+        AuthorDTO? followAuthor = await _AuthorRepo.ReadAuthorDTOByName(AuthorName);
+
+        if (followAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
         
         if (LoggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
