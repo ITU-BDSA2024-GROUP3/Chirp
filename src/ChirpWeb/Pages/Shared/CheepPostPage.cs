@@ -29,19 +29,19 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        Author author = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
+        TrySetLoggedInAuthor();
 
-        if (author.UserId == null)
+        if (LoggedInAuthor == null)
         {
-         Console.WriteLine("Userid is null");   
+            throw new Exception("User not recognized!");
         }
         
         if (Text == null)
         {
-            Console.WriteLine("Text is null");   
+            throw new Exception("Text is required");
         }
         
-        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
+        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = LoggedInAuthor.UserId};
         await _CheepRepo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
@@ -49,24 +49,22 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
     {
-        Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
-        Author followAuthor = _AuthorRepo.ReadAuthorByName(AuthorName).Result;
-        if (loggedInAuthor == null || followAuthor == null)
+        TrySetLoggedInAuthor();
+
+        if (LoggedInAuthor == null)
         {
-            throw new Exception("OnPostToggleFollowAsync Exception");
+            throw new Exception("User not recognized!");
         }
         
-        if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
+        AuthorDTO followAuthor = await _AuthorRepo.ReadAuthorDTOByName(AuthorName);
+        
+        if (LoggedInAuthor.FollowingList.Contains(followAuthor.UserId))
         {
-            
-            await _AuthorRepo.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
-
+            await _AuthorRepo.Unfollow(LoggedInAuthor.UserId, followAuthor.UserId);
         }
         else
         {
-            await _AuthorRepo.Follow(loggedInAuthor.UserId, followAuthor.UserId);
-            
-            
+            await _AuthorRepo.Follow(LoggedInAuthor.UserId, followAuthor.UserId);
         }
         
         return RedirectToPage("Public");

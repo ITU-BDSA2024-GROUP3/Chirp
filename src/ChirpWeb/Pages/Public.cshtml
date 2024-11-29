@@ -37,7 +37,7 @@
                 if (User.Identity.IsAuthenticated)
                 {
                     ViewData["LoggedInUserName"] = Model.LoggedInAuthor!.Name;
-                    ViewData["Followed"] = Model.author.FollowingList.Contains(cheep.UserId);
+                    ViewData["Followed"] = Model.LoggedInAuthor.FollowingList.Contains(cheep.UserId);
                 }
                 <partial name="Shared/_CheepBox"/>
             }

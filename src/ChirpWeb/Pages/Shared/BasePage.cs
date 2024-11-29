@@ -25,9 +25,4 @@ public class BasePage : PageModel
             LoggedInAuthor = await _AuthorRepo.ReadAuthorDTOByEmail(User.Identity.Name!);
         }
     }
-
-
-
-
-
 }

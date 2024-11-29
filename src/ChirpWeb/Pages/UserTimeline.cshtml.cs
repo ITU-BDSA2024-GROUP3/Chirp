@@ -36,7 +36,6 @@ public class UserTimelineModel : CheepPostPage
             Cheeps= _CheepRepo.ReadCheeps(page, Author.UserId);
         }
         
-        
         currentPage = page;
 
         if (currentPage < 1)
