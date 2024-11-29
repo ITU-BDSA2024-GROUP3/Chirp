@@ -13,7 +13,9 @@ namespace ChirpWeb.Pages;
 
 public class UserTimelineModel : CheepPostPage
 {
-    public Author? author { get; set; }
+    /// <summary>
+    /// Author whose timeline is being viewed
+    /// </summary>
     public AuthorDTO Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
@@ -21,25 +23,19 @@ public class UserTimelineModel : CheepPostPage
 
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
-        author = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
         TrySetLoggedInAuthor();
-        var authorTask = await _AuthorRepo.ReadAuthorByName(name);
+        Author = await _AuthorRepo.ReadAuthorDTOByName(name);
         
-
-        //await Task.WhenAll(authorTask, cheepsTask);
-
-
-        //private or public timeline
-        if (User.Identity.IsAuthenticated && author.Name == name)
+        //Own or other user's timeline
+        if (User.Identity.IsAuthenticated && LoggedInAuthor != null && Author.Name == name)
         {
-            Cheeps = _CheepRepo.ReadFollowedCheeps(page, authorTask.UserId);
+            Cheeps = _CheepRepo.ReadFollowedCheeps(page, Author.UserId);
         }
         else
         {
-            Cheeps= _CheepRepo.ReadCheeps(page, authorTask.UserId);
+            Cheeps= _CheepRepo.ReadCheeps(page, Author.UserId);
         }
         
-        Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};
         
         currentPage = page;
 

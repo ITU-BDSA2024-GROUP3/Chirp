@@ -24,4 +24,14 @@ public class Author : IdentityUser
     public ICollection<Cheep> Cheeps { get; set; }
     
     public IList<int> FollowingList { get; set; }
+    
+    public AuthorDTO ToDTO()
+    {
+        return new AuthorDTO
+        {
+            UserId = UserId, 
+            Name = Name, 
+            FollowingList = FollowingList
+        };
+    }
 }

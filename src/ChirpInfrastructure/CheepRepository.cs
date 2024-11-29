@@ -64,7 +64,7 @@ public class CheepRepository : ICheepRepository
             }
             else
             {
-                AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
+                AuthorDTO authorDto = tempAuthor.ToDTO();
             
                 followers.Add(authorDto);   
             }

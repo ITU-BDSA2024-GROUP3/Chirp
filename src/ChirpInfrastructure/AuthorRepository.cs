@@ -28,7 +28,7 @@ public class AuthorRepository: IAuthorRepository
     public async Task<AuthorDTO?> ReadAuthorDTOById(int id)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+            .Select(author => author.ToDTO())
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -51,7 +51,7 @@ public class AuthorRepository: IAuthorRepository
     public async Task<AuthorDTO?> ReadAuthorDTOByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+            .Select(author => author.ToDTO())
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
@@ -77,7 +77,7 @@ public class AuthorRepository: IAuthorRepository
     public async Task<int> GetAuthorCount()
     {
         IQueryable<AuthorDTO> query =
-            _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
+            _dbContext.Authors.Select(author => author.ToDTO());
         return await query.CountAsync();
     }
     
@@ -128,4 +128,11 @@ public class AuthorRepository: IAuthorRepository
         return await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<AuthorDTO> ReadAuthorDTOByName(string name)
+    {
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
+            .Select(author => author.ToDTO())
+            .Take(1);
+        return await query.FirstOrDefaultAsync();
+    }
 }
