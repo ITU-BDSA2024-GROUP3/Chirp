@@ -53,15 +53,29 @@ public class CheepRepository : ICheepRepository
         }
         
         List<AuthorDTO> followers = new List<AuthorDTO>();
+        
+        List<int> removeTheseIds = new List<int>();
 
         foreach (var followerId in author.FollowingList)
         {
+            Author temAuthor = await ReadAuthorById(followerId);
+            if (temAuthor == null)
+            {
+                removeTheseIds.Add(followerId);
+            }
+            else
+            {
+                Author tempAuthor = ReadAuthorById(followerId).Result;
             
-            Author tempAuthor = ReadAuthorById(followerId).Result;
+                AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
             
-            AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
-            
-            followers.Add(authorDto);
+                followers.Add(authorDto);   
+            }
+        }
+
+        foreach (var followerId in removeTheseIds)
+        {
+            await Unfollow(author.UserId, followerId);
         }
 
         return followers;
