@@ -6,7 +6,7 @@
                     <a href="/@ViewData["AuthorName"]?page=1">@ViewData["AuthorName"]</a>
                 </strong>
                 @{
-                    if (User.Identity.IsAuthenticated && !ViewData["AuthorName"].Equals(ViewData["LoggedInUserName"]))
+                    if (User.Identity!.IsAuthenticated && !ViewData["AuthorName"]!.Equals(ViewData["LoggedInUserName"]))
                     {
                         <partial name="_FollowBtn"/>
                     }

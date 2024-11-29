@@ -128,7 +128,7 @@ public class AuthorRepository: IAuthorRepository
         return await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<AuthorDTO> ReadAuthorDTOByName(string name)
+    public async Task<AuthorDTO?> ReadAuthorDTOByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
             .Select(author => author.ToDTO())

@@ -14,5 +14,5 @@ public interface IAuthorRepository
     public Task<string?> GetNameByEmail(string emailAddress);
     public Task<int> Follow(int wantToFollow, int wantToBeFollowed);
     public Task<int> Unfollow( int wantToUnfollow, int wantToBeUnfollowed);
-    Task<AuthorDTO> ReadAuthorDTOByName(string name);
+    Task<AuthorDTO?> ReadAuthorDTOByName(string name);
 }

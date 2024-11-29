@@ -16,7 +16,7 @@ public class UserTimelineModel : CheepPostPage
     /// <summary>
     /// Author whose timeline is being viewed
     /// </summary>
-    public AuthorDTO Author { get; set; }
+    public AuthorDTO? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; }
     public int currentPage;
     public UserTimelineModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
@@ -25,9 +25,14 @@ public class UserTimelineModel : CheepPostPage
     {
         TrySetLoggedInAuthor();
         Author = await _AuthorRepo.ReadAuthorDTOByName(name);
+
+        if (Author == null)
+        {
+            throw new Exception("User not recognized");
+        }
         
         //Own or other user's timeline
-        if (User.Identity.IsAuthenticated && LoggedInAuthor != null && Author.Name == name)
+        if (User.Identity!.IsAuthenticated && LoggedInAuthor != null && Author.Name == name)
         {
             Cheeps = _CheepRepo.ReadFollowedCheeps(page, Author.UserId);
         }
