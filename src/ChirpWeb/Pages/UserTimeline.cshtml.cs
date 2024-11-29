@@ -32,11 +32,11 @@ public class UserTimelineModel : CheepPostPage
         //private or public timeline
         if (User.Identity.IsAuthenticated && author.Name == name)
         {
-            Cheeps = await _CheepRepo.ReadFollowedCheeps(page, authorTask.UserId);
+            Cheeps = _CheepRepo.ReadFollowedCheeps(page, authorTask.UserId);
         }
         else
         {
-            Cheeps= await _CheepRepo.ReadCheeps(page, authorTask.UserId);
+            Cheeps= _CheepRepo.ReadCheeps(page, authorTask.UserId);
         }
         
         Author = new AuthorDTO() { Name = authorTask.Name, UserId = authorTask.UserId};

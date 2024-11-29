@@ -33,7 +33,7 @@ public class PublicModel : CheepPostPage
         setUsername();
         
         currentPage = page;
-        Cheeps = await _CheepRepo.ReadCheeps(currentPage, null);
+        Cheeps = _CheepRepo.ReadCheeps(currentPage, null);
         if (currentPage < 1)
         {
             currentPage = 1;

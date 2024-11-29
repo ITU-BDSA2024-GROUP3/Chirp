@@ -42,9 +42,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
             var authorTaskGetAuthor = await _AuthorRepo.ReadAuthorById(authorTask.UserId);
 
-            var cheepsTask = await _CheepRepo.ReadCheeps(page, authorTask.UserId);
+            var cheepsTask = _CheepRepo.ReadCheeps(page, authorTask.UserId);
             
-            var followingTask = await _CheepRepo.ReadFollowing(authorTask.UserId);
+            var followingTask = await _CheepRepo.ReadFollowingAsync(authorTask.UserId);
         
             author = authorTaskGetAuthor;
             Cheeps = cheepsTask;

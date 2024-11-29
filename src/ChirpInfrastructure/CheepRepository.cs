@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using ChirpCore;
+﻿using ChirpCore;
 using ChirpCore.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +17,13 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
-        Author cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
+        Author? cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
 
+        if (cheepAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
+        
         Cheep message = new()
         {
             CheepId = _nextCheepId++, UserId = newMessage.UserId, Text = newMessage.Text, TimeStamp = DateTime.Now,
@@ -36,14 +40,9 @@ public class CheepRepository : ICheepRepository
         return queryResult.Entity.CheepId;
     }
 
-    public async Task<List<AuthorDTO>> ReadFollowing(int UserId)
+    public async Task<List<AuthorDTO>> ReadFollowingAsync(int UserId)
     {
-        if (UserId == null)
-        {
-            throw new Exception("No UserID provided!");
-        }
-
-        Author author = ReadAuthorById(UserId).Result;
+        Author? author = await ReadAuthorById(UserId);
         if (author == null)
         {
             throw new Exception($"No Author with ID {UserId}!");
@@ -58,15 +57,13 @@ public class CheepRepository : ICheepRepository
 
         foreach (var followerId in author.FollowingList)
         {
-            Author temAuthor = await ReadAuthorById(followerId);
-            if (temAuthor == null)
+            Author? tempAuthor = await ReadAuthorById(followerId);
+            if (tempAuthor == null)
             {
                 removeTheseIds.Add(followerId);
             }
             else
             {
-                Author tempAuthor = ReadAuthorById(followerId).Result;
-            
                 AuthorDTO authorDto = new AuthorDTO() { Name = tempAuthor.Name, UserId = followerId };
             
                 followers.Add(authorDto);   
@@ -82,14 +79,14 @@ public class CheepRepository : ICheepRepository
     }
 
     
-    public async Task<List<CheepDTO>> ReadFollowedCheeps(int page, int? UserId)
+    public List<CheepDTO> ReadFollowedCheeps(int page, int? UserId)
     {
         if (UserId == null)
         {
             throw new Exception("No UserID provided!");
         }
 
-        Author author = ReadAuthorById((int)UserId).Result;
+        Author? author = ReadAuthorById((int)UserId).Result;
         if (author == null)
         {
             throw new Exception($"No Author with ID {UserId}!");
@@ -98,7 +95,7 @@ public class CheepRepository : ICheepRepository
             throw new Exception("No Following list provided!");
         }
         
-        IQueryable<CheepDTO> query = _dbContext.Cheeps
+        var query = _dbContext.Cheeps
             .Where(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Include(cheep => cheep.Author)
             .Select(message => new CheepDTO() {
@@ -112,8 +109,8 @@ public class CheepRepository : ICheepRepository
             .AsQueryable()
             .Skip((page - 1) * 32)
             .Take(32);
-
-        return query.ToList();
+        
+        return  query.ToList();
     }
     
     public async Task<int> UpdateCheep(Cheep updatedMessage)
@@ -130,7 +127,7 @@ public class CheepRepository : ICheepRepository
     }
 
     
-    public async Task<List<CheepDTO>> ReadCheeps(int page, int? UserId)
+    public List<CheepDTO> ReadCheeps(int page, int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core
         IQueryable<CheepDTO> query;
@@ -164,14 +161,11 @@ public class CheepRepository : ICheepRepository
                 .Skip((page - 1) * 32)
                 .Take(32);
         }
-
-        // Execute the query
-        var result = query.ToList();
-
-        return result;
+        
+        return query.ToList();
     }
     
-    public async Task<List<CheepDTO>> ReadAllCheeps(int? UserId)
+    public List<CheepDTO> ReadAllCheeps(int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core
         IQueryable<CheepDTO> query;
@@ -204,22 +198,16 @@ public class CheepRepository : ICheepRepository
                 .AsQueryable();
         }
 
-        // Execute the query
-        var result = query.ToList();
-
-        return result;
+        return query.ToList();
     }
 
-    public async Task<Author> ReadAuthorById(int id)
+    public async Task<Author?> ReadAuthorById(int id)
     {
         IQueryable<Author> query = Queryable.Where(_dbContext.Authors, author => author.UserId == id)
             .Select(author => author)
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-
-    
-
     
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
     {
@@ -229,6 +217,7 @@ public class CheepRepository : ICheepRepository
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
+    
     public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
     {
         if (wantToUnfollow == wantToBeUnfollowed)
@@ -236,7 +225,12 @@ public class CheepRepository : ICheepRepository
             throw new Exception($"Cannot unfollow yourself!");   
         } 
         
-        var wantToUnfollowAuthor = ReadAuthorById(wantToUnfollow).Result;
+        Author? wantToUnfollowAuthor = ReadAuthorById(wantToUnfollow).Result;
+
+        if (wantToUnfollowAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
         
         if(!wantToUnfollowAuthor.FollowingList.Contains(wantToBeUnfollowed))
         {
@@ -247,7 +241,4 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return wantToUnfollowAuthor.FollowingList.Count;
     }
-
-   
-
 }

@@ -54,7 +54,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             {
                 if (p.Name == "Cheeps")
                 {
-                    ICollection<CheepDTO> list = await _CheepRepo.ReadAllCheeps(user.UserId);
+                    ICollection<CheepDTO> list = _CheepRepo.ReadAllCheeps(user.UserId);
                     string cheepData = null;
                     foreach (var cheep in list)
                     {
