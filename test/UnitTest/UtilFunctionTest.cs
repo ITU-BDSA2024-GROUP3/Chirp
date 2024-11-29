@@ -18,7 +18,7 @@ public class UtilFunctionsTest
         using var context = new ChirpDBContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-        var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" };
+        var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>()};
         
         var cheep = new Cheep
         {

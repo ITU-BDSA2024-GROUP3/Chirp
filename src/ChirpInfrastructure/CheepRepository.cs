@@ -244,7 +244,8 @@ public class CheepRepository : ICheepRepository
         }
         
         wantToUnfollowAuthor.FollowingList.Remove(wantToBeUnfollowed);
-        return await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+        return wantToUnfollowAuthor.FollowingList.Count;
     }
 
    
