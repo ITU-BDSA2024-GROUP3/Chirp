@@ -6,7 +6,9 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     ViewData["CurrentPage"] = Model.currentPage; 
+
     var routeName = HttpContext.GetRouteValue("name");
+    ViewData["CurrentAuthorID"] = Model.author.UserId;
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }

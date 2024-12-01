@@ -50,7 +50,7 @@ public class CheepPostPage : BasePage
         return RedirectToPage("Public");
     }
     
-    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage)
+    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage, string? CurrentAuthorID)
     {
         Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
         Author followAuthor = _AuthorRepo.ReadAuthorByName(AuthorName).Result;
@@ -71,8 +71,18 @@ public class CheepPostPage : BasePage
             
             
         }
-
+       
         string page = CurrentPage;
+        if (CurrentAuthorID != null)
+        {
+            var cheeps = await _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
+            while (cheeps.Count == 0)
+            {
+                page = (Int32.Parse(page)-1).ToString();
+                cheeps = await _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
+
+            }
+        }
         
         return Redirect($"?page={page}");//move logic up to constructor
 
