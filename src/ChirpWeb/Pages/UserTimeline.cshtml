@@ -5,14 +5,14 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    ViewData["CurrentPage"] = Model.currentPage; 
     var routeName = HttpContext.GetRouteValue("name");
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
 
 <div>
-    <h2> @Model.Author.Name's Timeline </h2>
-
+    <h2> @routeName's Timeline </h2>
     @if (User.Identity.IsAuthenticated)
     {
         <div class="cheepbox">
@@ -31,7 +31,6 @@
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp);
-                
                 if (User.Identity.IsAuthenticated)
                 {
                     ViewData["LoggedInUserName"] = Model.author.Name;

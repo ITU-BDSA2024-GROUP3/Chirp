@@ -7,16 +7,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using ChirpCore;
 using ChirpWeb.Pages.Shared;
+using SQLitePCL;
 
 namespace ChirpWeb.Pages;
 
 public class PublicModel : CheepPostPage
 {
     public List<CheepDTO> Cheeps { get; set; }
-    public int currentPage;
-    
-    public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
-    
+
+    public int currentPage { get; set; }
+    public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
+    { }
     public Author author { get; set; }
     
 
@@ -41,4 +42,5 @@ public class PublicModel : CheepPostPage
 
         return Page();
     }
+    
 }

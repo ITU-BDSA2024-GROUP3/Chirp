@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ChirpCore;
 using ChirpCore.DomainModel;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -12,6 +14,7 @@ public class CheepPostPage : BasePage
     [Required]
     [MaxLength(160)]
     public string Text { get; set; }
+
   
     public CheepPostPage(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
     {
@@ -47,7 +50,7 @@ public class CheepPostPage : BasePage
         return RedirectToPage("Public");
     }
     
-    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName)
+    public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage)
     {
         Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
         Author followAuthor = _AuthorRepo.ReadAuthorByName(AuthorName).Result;
@@ -68,8 +71,11 @@ public class CheepPostPage : BasePage
             
             
         }
+
+        string page = CurrentPage;
         
-        return RedirectToPage("Public");
+        return Redirect($"?page={page}");//move logic up to constructor
+
     }
     
 }

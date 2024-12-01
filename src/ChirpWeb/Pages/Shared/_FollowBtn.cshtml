@@ -1,4 +1,5 @@
 ﻿<form method="post" style="margin-left: 16px;">
     <input type="hidden" name="AuthorName" value="@ViewData["AuthorName"]"/>
+    <input type="hidden" name="CurrentPage" value="@ViewData["CurrentPage"]"/>
     <button type="submit" asp-page-handler="ToggleFollow" style="font-size: 12px; border-radius: 4px;">@((bool)ViewData["Followed"] ? "Unfollow" : "Follow")</button>
 </form>
