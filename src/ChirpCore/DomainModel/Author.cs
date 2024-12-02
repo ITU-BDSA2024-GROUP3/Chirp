@@ -25,11 +25,6 @@ public class Author : IdentityUser
     
     public AuthorDTO ToDTO()
     {
-        return new AuthorDTO
-        {
-            UserId = UserId, 
-            Name = Name, 
-            FollowingList = FollowingList
-        };
+        return new AuthorDTO(Name, UserId, FollowingList);
     }
 }

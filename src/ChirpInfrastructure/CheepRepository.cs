@@ -100,7 +100,7 @@ public class CheepRepository : ICheepRepository
         var query = _dbContext.Cheeps
             .Where(message => author.FollowingList.Contains(message.UserId) || message.UserId == UserId)
             .Include(cheep => cheep.Author)
-            .Select(message => new CheepDTO(message.Text, message.Author.UserId, message.Author.Name, message.TimeStamp.ToUnixTimeSeconds()))
+            .Select(message => message.ToDTO())
             .AsEnumerable()
             .OrderByDescending(dto => dto.TimeStamp)
             .AsQueryable()
@@ -131,8 +131,7 @@ public class CheepRepository : ICheepRepository
         if (UserId != null)
         {
             query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
-                .Select(message => new CheepDTO(message.Text, message.Author.UserId, message.Author.Name,
-                    message.TimeStamp.ToUnixTimeSeconds()))
+                .Select(message => message.ToDTO())
                 .AsEnumerable()
                 .OrderByDescending(dto => dto.TimeStamp)
                 .AsQueryable()
@@ -142,8 +141,7 @@ public class CheepRepository : ICheepRepository
         else
         {
             query = _dbContext.Cheeps
-                .Select(message => new CheepDTO(message.Text, message.Author.UserId, message.Author.Name,
-                    message.TimeStamp.ToUnixTimeSeconds()))
+                .Select(message => message.ToDTO())
                 .AsEnumerable()
                 .OrderByDescending(dto => dto.TimeStamp)
                 .AsQueryable()
@@ -161,8 +159,7 @@ public class CheepRepository : ICheepRepository
         if (UserId != null)
         {
             query = Queryable.Where<Cheep>(_dbContext.Cheeps, message => message.UserId == UserId)
-                .Select(message => new CheepDTO(message.Text, message.Author.UserId, message.Author.Name,
-                    message.TimeStamp.ToUnixTimeSeconds()))
+                .Select(message => message.ToDTO())
                 .AsEnumerable()
                 .OrderByDescending(dto => dto.TimeStamp)
                 .AsQueryable();
@@ -170,8 +167,7 @@ public class CheepRepository : ICheepRepository
         else
         {
             query = _dbContext.Cheeps
-                .Select(message => new CheepDTO(message.Text, message.Author.UserId, message.Author.Name,
-                    message.TimeStamp.ToUnixTimeSeconds()))
+                .Select(message => message.ToDTO())
                 .AsEnumerable()
                 .OrderByDescending(dto => dto.TimeStamp)
                 .AsQueryable();

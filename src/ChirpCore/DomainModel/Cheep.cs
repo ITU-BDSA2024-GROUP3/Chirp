@@ -11,6 +11,11 @@ public class Cheep
     public Author Author { get; set; }
     public int UserId { get; set; }
 
+    public Cheep()
+    {
+        
+    }
+    
     public CheepDTO ToDTO()
     {
         return new CheepDTO(text: Text, userId: UserId, authorName: Author.Name, timeStamp: TimeStamp.ToUnixTimeSeconds());
