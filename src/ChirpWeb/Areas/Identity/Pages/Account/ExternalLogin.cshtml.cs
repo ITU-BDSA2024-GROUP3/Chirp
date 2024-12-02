@@ -102,12 +102,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
-
-        public async void OnGetAsync()
-        {
-            TrySetLoggedInAuthor();
-        }
-
+        
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
