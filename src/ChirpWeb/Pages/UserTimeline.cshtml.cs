@@ -17,7 +17,7 @@ public class UserTimelineModel : CheepPostPage
     /// Author whose timeline is being viewed
     /// </summary>
     public AuthorDTO? Author { get; set; }
-    public List<CheepDTO> Cheeps { get; set; }
+    public List<CheepDTO>? Cheeps { get; set; }
     public int currentPage;
     public UserTimelineModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
 
