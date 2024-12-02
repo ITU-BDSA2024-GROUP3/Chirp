@@ -17,7 +17,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Author> _userManager;
         private readonly ILogger<PersonalDataModel> _logger;
 
-        public List<CheepDTO> Cheeps { get; set; }
+        public List<CheepDTO>? Cheeps { get; set; }
         
         public Author Author { get; set; }
         public List<AuthorDTO> FollowingAuthors { get; set; }
