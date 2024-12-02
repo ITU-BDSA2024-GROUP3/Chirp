@@ -71,7 +71,15 @@
                     <a href="/@cheep.AuthorName?page=1">@cheep.AuthorName</a>
                 </strong>
                 @cheep.Text
-                <small>&mdash; @CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp)</small>
+                @{
+                    string timestamp = "";
+
+                    if (cheep.TimeStamp != null)
+                    {
+                        timestamp = CheepRepository.UnixTimeStampToDateTimeString((long)cheep.TimeStamp);
+                    }
+                }
+                <small>&mdash; @timestamp</small>
             </p>
         </li>
         }

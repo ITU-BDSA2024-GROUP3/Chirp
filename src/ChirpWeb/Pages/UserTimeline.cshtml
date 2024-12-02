@@ -30,7 +30,15 @@
             {
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
-                ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString(cheep.TimeStamp);
+
+                if (cheep.TimeStamp != null)
+                {
+                    ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString((long)cheep.TimeStamp);
+                }
+                else
+                {
+                    ViewData["Timestamp"] = "";
+                }
                 
                 if (User.Identity.IsAuthenticated)
                 {

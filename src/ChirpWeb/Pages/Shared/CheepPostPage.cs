@@ -41,7 +41,7 @@ public class CheepPostPage : BasePage
             throw new Exception("Text is required");
         }
         
-        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = LoggedInAuthor.UserId};
+        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId);
         await _CheepRepo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");

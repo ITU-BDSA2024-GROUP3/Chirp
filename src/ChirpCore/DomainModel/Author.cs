@@ -17,7 +17,7 @@ public class Author : IdentityUser
     public string Name { get; set; }
     
     [PersonalData]
-    public string Email { get; set; }
+    public override string? Email { get; set; }
     [PersonalData]
     public ICollection<Cheep> Cheeps { get; set; }
     
