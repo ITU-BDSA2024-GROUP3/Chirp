@@ -18,12 +18,18 @@ public class CheepDTO
     /// The timestamp is assigned by the server according to its clock
     /// </summary>
     public long? TimeStamp { get; set; }
+    
+    public int CheepId { get; set; }
 
-    public CheepDTO(string text, int userId, string? authorName = null, long? timeStamp = null)
+    public IList<int>? AuthorLikeList { get; set; }
+
+    public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null )
     {
         Text = text;
         UserId = userId;
         AuthorName = authorName;
         TimeStamp = timeStamp;
+        CheepId = cheepId;
+        AuthorLikeList = authorLikeList;
     }
 }

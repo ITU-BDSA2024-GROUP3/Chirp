@@ -41,7 +41,7 @@ public class CheepPostPage : BasePage
             throw new Exception("Text is required");
         }
         
-        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId);
+        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId, cheepId: -1 );
         await _CheepRepo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
@@ -73,6 +73,40 @@ public class CheepPostPage : BasePage
         }
         
         return RedirectToPage("Public");
+    }
+    
+    public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId)
+    {
+
+        Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
+        Cheep cheep = await _CheepRepo.ReadCheepByCheepId(CheepId);
+        if (loggedInAuthor == null)
+        {
+            throw new Exception("OnPostToggleLikeAsync Exception: loggedInAuthor is null");
+        }
+
+        if (cheep == null)
+        {
+
+            throw new Exception("OnPostToggleLikeAsync Exception: cheep is null "+CheepId);
+        }
+
+        if (cheep.AuthorLikeList.Contains(loggedInAuthor.UserId))
+        {
+            await _CheepRepo.UnLikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+        }
+        else
+        {
+            await _CheepRepo.LikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+        }
+
+        return RedirectToPage("Public");
+    }
+
+    public async Task<int> GetCheepLike(int CheepId)
+    {
+        int temp = _CheepRepo.AmountOfLikes(CheepId).Result;
+        return temp;
     }
     
 }

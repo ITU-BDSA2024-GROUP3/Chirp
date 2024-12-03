@@ -11,7 +11,7 @@
 }
 
 <div>
-    <h2> @Model.Author!.Name's Timeline </h2>
+    <h2> @routeName's Timeline </h2>
 
     @if (User.Identity!.IsAuthenticated)
     {
@@ -30,6 +30,8 @@
             {
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
+                ViewData["CheepId"] = cheep.CheepId;
+                ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
 
                 if (cheep.TimeStamp != null)
                 {
@@ -42,6 +44,14 @@
                 
                 if (User.Identity.IsAuthenticated)
                 {
+                    var id = Model.LoggedInAuthor.UserId;
+                    var list = cheep.AuthorLikeList;
+                    if (list == null)
+                    {
+                        Console.WriteLine("MAKES NEW LISTS");
+                        list = new List<int>();
+                    } //TO DO, REMOVE THIS, SHOULD NEVER BE NULL, FROM DAVID
+                    ViewData["Liked"] = list.Contains(id);
                     ViewData["LoggedInUserName"] = Model.LoggedInAuthor!.Name;
                     ViewData["Followed"] = Model.LoggedInAuthor.FollowingList.Contains(cheep.UserId);
                 }

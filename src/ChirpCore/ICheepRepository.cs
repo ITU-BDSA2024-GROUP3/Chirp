@@ -10,7 +10,8 @@ public interface ICheepRepository
     public List<CheepDTO> ReadAllCheeps(int? userId);
     public Task<List<AuthorDTO>> ReadFollowingAsync(int UserId);
     public Task<int> UpdateCheep(Cheep updatedMessage);
-    
-  
-    
+    public Task<Cheep> ReadCheepByCheepId(int cheepid);
+    public Task<int> LikeCheep(int cheepid, int userId);
+    public Task<int> UnLikeCheep(int cheepid, int userId);
+    public Task<int> AmountOfLikes(int cheepId);
 }

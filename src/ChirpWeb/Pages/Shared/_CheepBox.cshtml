@@ -15,6 +15,13 @@
             <br>
             @ViewData["CheepText"]
             <br>
+                <p style="display:inline">Likes: @ViewData["Likes"]
+                    @{if (User.Identity.IsAuthenticated && !ViewData["AuthorName"].Equals(ViewData["LoggedInUserName"]))
+                        {
+                            <partial name="_LikeButton"/>
+                        }
+                    }
+                </p>
             <small>@ViewData["Timestamp"]</small>
         </div>
     </p>
