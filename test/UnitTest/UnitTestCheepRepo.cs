@@ -42,7 +42,7 @@ public class UnitTestCheepRepo : IDisposable
       context.Cheeps.Add(cheep);
       await context.SaveChangesAsync();
       ICheepRepository repo = new CheepRepository(context);
-      var cheeps = await repo.ReadCheeps(1, null);
+      var cheeps = repo.ReadCheeps(1, null);
       Assert.NotNull(cheeps);
       var messages = new List<string>();
       foreach (CheepDTO cheeP in cheeps)
@@ -84,7 +84,7 @@ public class UnitTestCheepRepo : IDisposable
       context.Cheeps.Add(cheep);
       await context.SaveChangesAsync();
       ICheepRepository repo = new CheepRepository(context);
-      var cheeps = await repo.ReadFollowedCheeps(1, 1);
+      var cheeps = repo.ReadFollowedCheeps(1, 1);
       Assert.NotNull(cheeps);
       var messages = new List<string>();
       foreach (CheepDTO cheeP in cheeps)
@@ -125,13 +125,12 @@ public class UnitTestCheepRepo : IDisposable
       ICheepRepository repo = new CheepRepository(context);
       
       //dto cheep that will be created by our author
-      var cheepDataTransferObject = new CheepDTO
-      {
-         Text = "Something",
-         UserId = author.UserId,
-         AuthorName = author.Name,
-         TimeStamp = 1728643569
-      };
+      var cheepDataTransferObject = new CheepDTO(
+         text: "Something",
+         userId: author.UserId,
+         cheepId: 1,
+         authorName: author.Name,
+         timeStamp: 1728643569);
       
       var result = await repo.CreateCheep(cheepDataTransferObject);
       Assert.Equal(1, result);
@@ -181,6 +180,41 @@ public class UnitTestCheepRepo : IDisposable
       Assert.Equal(time, "10/07/24 7.04.32");
       
         
+   }
+   
+   [Fact]
+   public async void likeandunlikecheeps()
+   {
+      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
+      using var connection = new SqliteConnection("Filename=:memory:");
+      await connection.OpenAsync();
+      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+      using var context = new ChirpDBContext(builder.Options);
+      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+      //create author and add to database
+      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
+      context.Authors.Add(author);
+      await context.SaveChangesAsync();
+      //MAKE THE DATABASE WITH AUTHOR
+      ICheepRepository repo = new CheepRepository(context);
+
+      //dto cheep that will be created by our author
+      var cheepDataTransferObject = new CheepDTO
+      (
+         text: "Something",
+         userId: author.UserId,
+         cheepId: 1,
+         authorName: author.Name,
+         timeStamp: 1728643569
+      );
+
+      await repo.CreateCheep(cheepDataTransferObject);
+      Assert.Equal(1,repo.LikeCheep(1, 1).Result);
+      Assert.Equal(0,repo.UnLikeCheep(1, 1).Result);
+
+
    }
    
    
