@@ -10,6 +10,42 @@
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    let gotMedia = false; 
+    
+    document.addEventListener("DOMContentLoaded", (event) => {
+        let addMediaBtn = document.getElementById("addMediaBtn");
+        let mediaSelect = document.getElementById("mediaSelect");
+
+        function toggleShowMedia(){
+            if(mediaSelect.style.display === "none") {
+                console.log("show!");
+                mediaSelect.style.display = "block";
+            } else {
+                console.log("hide!");
+                mediaSelect.style.display = "none";            
+            }
+        }
+
+        addMediaBtn.addEventListener("click", () => {
+            if (!gotMedia) {
+                gotMedia = true;
+                let xhr = $.get("http://api.giphy.com/v1/gifs/search?q=popular&api_key=a2rXkQHoww3gdF31UC1VyjL3Yvsh5lUT&limit=5");
+                xhr.done(function(data) { 
+                    console.log("success got data", data); 
+                    
+                    for (let d of data.data) {
+                        console.log(d);
+                    }                    
+                });
+            }
+            console.log("click");
+            toggleShowMedia();
+        });
+    });
+
+</script>
 
 <div>
     <h2> Public Timeline </h2>
@@ -19,9 +55,12 @@
         <div class="cheepbox">
             <h3>What's on your mind @(Model.LoggedInAuthor!.Name)?</h3>
             <form method="post">
-                <input style="float: left" type="text" asp-for="Text">
-                <input type="submit" value="Share">
+                <input style="float: left; width: 1fr" type="text" asp-for="Text">
+                <input type="submit" style="display:inline-block" value="Share">
             </form>
+            <button style="display:inline-block" id="addMediaBtn">+</button>
+        </div>
+        <div id="mediaSelect" style="background-color: gray; border-radius: 5px; position: absolute;width: 500px; height: 500px; display: none; right: auto;">
         </div>
     }
 
@@ -57,6 +96,7 @@
                     ViewData["LoggedInUserName"] = Model.LoggedInAuthor!.Name;
                     ViewData["Followed"] = Model.LoggedInAuthor.FollowingList.Contains(cheep.UserId);
                 }
+
                 <partial name="Shared/_CheepBox"/>
             }
         </ul>
@@ -69,13 +109,13 @@
     <div class="pagination-buttons">
         @if (Model.currentPage > 1)
         {
-        <Button class="btn">
-            <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
-        </Button>        
+            <Button class="btn">
+                <a href="?page=@prevPage" class="btn" id="prevBtn" style="color: white;">Previous (@prevPage)</a>
+            </Button>
         }
         <Button class="btn">
             <a href="?page=@nextPage" class="btn" id="nextBtn" style="color: white;">Next (@nextPage)</a>
         </Button>
     </div>
-   
+
 </div>
