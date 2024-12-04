@@ -37,6 +37,11 @@
                     
                     for (let d of data.data) {
                         console.log(d);
+                        var elem = document.createElement("iframe");
+                        elem.setAttribute("src", "https://giphy.com/embed/" + d.id);//d.url);
+                        elem.style["pointer-events"] = "none";
+                        
+                        mediaSelect.appendChild(elem);
                     }                    
                 });
             }
