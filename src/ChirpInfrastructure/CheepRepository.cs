@@ -225,11 +225,16 @@ public class CheepRepository : ICheepRepository
     {
         Cheep cheep = await ReadCheepByCheepId(cheepId);
         
+        
         if (cheep == null)
         {
             throw new Exception($"Cheep does not exist, AmountOfLikes in cheepRepo");
         }
 
+        if (cheep.AuthorLikeList == null)
+        {
+            cheep.AuthorLikeList = new List<int>();
+        }
         var removeThese = new List<int>();
         foreach (var authorid in cheep.AuthorLikeList)
         {
