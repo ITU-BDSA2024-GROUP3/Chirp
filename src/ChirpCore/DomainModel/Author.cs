@@ -21,7 +21,7 @@ public class Author : IdentityUser
     [PersonalData]
     public new string Email { get; set; }
     [PersonalData]
-    public ICollection<Cheep>? Cheeps { get; set; }
+    public ICollection<Cheep> Cheeps { get; set; }
     
     public IList<int> FollowingList { get; set; }
     
@@ -29,6 +29,6 @@ public class Author : IdentityUser
     {
         return new AuthorDTO(Name, UserId, FollowingList);
     }
-#pragma warning restore 8618
-
+    
+    #pragma warning restore 8618
 }
