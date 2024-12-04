@@ -223,7 +223,7 @@ public class CheepRepository : ICheepRepository
     
     public async Task<int> AmountOfLikes(int cheepId)
     {
-        Cheep cheep = await ReadCheepByCheepId(cheepId);
+        Cheep? cheep = await ReadCheepByCheepId(cheepId);
         
         if (cheep == null)
         {
@@ -299,7 +299,7 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return cheep.AuthorLikeList.Count;
     }
-    public async Task<Cheep> ReadCheepByCheepId(int cheepid)
+    public async Task<Cheep?> ReadCheepByCheepId(int cheepid)
     {
         IQueryable<Cheep> query = Queryable.Where<Cheep>(_dbContext.Cheeps, cheep => cheep.CheepId == cheepid)
             .Select(cheep => cheep)
