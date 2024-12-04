@@ -13,6 +13,8 @@ public class Cheep
     
     public IList<int> AuthorLikeList { get; set; }
     
+    // constructor called by EFCore - Author is automatically set to non-null value after constructor finishes
+    // disable warning that Author is uninitialized
     #pragma warning disable 8618
     public Cheep(int cheepId, string text, DateTimeOffset timeStamp, int userId, IList<int> authorLikeList)
     {
@@ -24,6 +26,7 @@ public class Cheep
     }
     #pragma warning restore 8618
     
+    // Constructor used by other classes
     public Cheep(int cheepId, string text, DateTimeOffset timeStamp, Author author, int userId, IList<int> authorLikeList)
     {
         CheepId = cheepId;
