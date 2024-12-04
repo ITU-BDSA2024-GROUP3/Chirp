@@ -41,9 +41,9 @@ public class EndToEndTestsUtility
     public static async Task UserLogIn(IPage page, string email, string userPassword)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
-        await page.GetByPlaceholder("email").ClickAsync();
+        await page.GetByPlaceholder("name@name.com").ClickAsync();
         await page.GetByPlaceholder("name@name.com").FillAsync(email);
-        await page.GetByPlaceholder("password").ClickAsync();
+        await page.GetByPlaceholder("name@name.com").PressAsync("Tab");
         await page.GetByPlaceholder("password").FillAsync(userPassword);
         await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         

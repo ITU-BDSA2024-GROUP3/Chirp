@@ -107,7 +107,7 @@ public class EndToEndTests: PageTest{
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Expect(Page.GetByText("hans's Timeline What's on")).ToBeVisibleAsync();
-        await Expect(Page.GetByText("hans I exist Likes: 0 12/04/24")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("hans I exist Likes: 0")).ToBeVisibleAsync();
 
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
         await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
@@ -118,20 +118,26 @@ public class EndToEndTests: PageTest{
     {
         await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
         
-        //follow Jacqualine Gilcone
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" }).GetByRole(AriaRole.Button).ClickAsync();
+        //go to public timeline after loging in
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        
+        //follow Jacqualine
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        
+        //go to my timeline
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         
         //ensure own and Jacqualine Gilcone cheeps is displayed on private timeline
-        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Expect(Page.GetByText("hans I exist Likes: 0 12/04/24")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("hans I exist Likes: 0 12-04-")).ToBeVisibleAsync();
         await Expect(Page.GetByText("Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 1")).ToBeVisibleAsync();
         
-        //unfollow Jacqualine Gilcone
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).ClickAsync();
+        //unfollow Jacqualine
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).First.ClickAsync();
         
         //ensure own cheeps are displayed
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Next (2)" }).ClickAsync();
+       
         await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
 
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
@@ -141,12 +147,80 @@ public class EndToEndTests: PageTest{
     public async Task likeTest()
     {
         await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
-        await Expect(Page.GetByText("Likes: 2")).ToBeVisibleAsync();
+
+        await Page.Locator("li")
+            .Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" })
+            .GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Likes: 2");
+        
         await Page.GetByRole(AriaRole.Button, new() { Name = "♥︎" }).ClickAsync();
-        await Expect(Page.GetByText("Likes: 1")).ToBeVisibleAsync();
+        
+        
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Likes: 1");
+        
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
+
+    }
+    
+    
+    [Test]
+    public async Task personalDataPageTest()
+    {
+        await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Manage hans's account" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "See your account information" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Username: hans" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Email: hans@grethe.com" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToBeVisibleAsync();
+        
+        await EndToEndTestsUtility.UserLogOut(Page, "hans");
+
+
+    }
+
+    [Test]
+    public async Task personalDataPageDownloadTest()
+    {
+        await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Manage hans's account" }).ClickAsync();
+        
+        var download = await Page.RunAndWaitForDownloadAsync(async () =>
+        {
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Download" }).ClickAsync();
+        });
+        
+        await EndToEndTestsUtility.UserLogOut(Page, "hans");
+
+
+    }
+
+    [Test]
+    public async Task personalDataPageDeleteTest()
+    {
+        await EndToEndTestsUtility.UserRegister(Page, "TestUser@Testing.com", "TestUser", "Test123");
+        
+        await Page.Locator("#Text").DblClickAsync();
+        await Page.Locator("#Text").FillAsync("I have posted a cheep");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Manage TestUser's account" }).ClickAsync();
+        await Expect(Page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "TestUser I have posted a" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Forget me!" }).ClickAsync();
+        await Page.GetByPlaceholder("Please enter your password.").ClickAsync();
+        await Page.GetByPlaceholder("Please enter your password.").FillAsync("Test123");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "TestUser" })).ToBeHiddenAsync();
+        
+
 
     }
 }
