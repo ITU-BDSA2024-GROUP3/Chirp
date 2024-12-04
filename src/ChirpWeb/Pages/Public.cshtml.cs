@@ -21,20 +21,12 @@ public class PublicModel : CheepPostPage
     public Author author { get; set; }
     
 
-    public async Task<ActionResult> OnGetAsync([FromQuery] int page)
+    public ActionResult OnGet([FromQuery] int page)
     {
-        if (User.Identity.IsAuthenticated)
-        {
-            author = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
-            
-            // We think, that if FollowingList is empty, it will be read as null from the database
-            
-        }        
-        
-        setUsername();
+        TrySetLoggedInAuthor();
         
         currentPage = page;
-        Cheeps = await _CheepRepo.ReadCheeps(currentPage, null);
+        Cheeps = _CheepRepo.ReadCheeps(currentPage, null);
         if (currentPage < 1)
         {
             currentPage = 1;

@@ -10,4 +10,17 @@ public class Cheep
     public DateTimeOffset TimeStamp { get; set; }
     public Author Author { get; set; }
     public int UserId { get; set; }
+    
+    public IList<int>? AuthorLikeList { get; set; }
+    
+
+    public Cheep()
+    {
+        
+    }
+    
+    public CheepDTO ToDTO()
+    {
+        return new CheepDTO(text: Text, userId: UserId, authorName: Author.Name, timeStamp: TimeStamp.ToUnixTimeSeconds(), cheepId: CheepId, authorLikeList: AuthorLikeList);
+    }
 }

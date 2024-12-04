@@ -26,9 +26,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public async void OnGetAsync()
+        public void OnGet()
         {
-            setUsername();
+            TrySetLoggedInAuthor();
         }
         
         public async Task<IActionResult> OnPost(string returnUrl = null)

@@ -26,13 +26,10 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         
-        protected readonly IAuthorRepository _AuthorRepo;//is this needed
-
         public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger, IAuthorRepository AuthorRepo, ICheepRepository CheepRepo): base(CheepRepo, AuthorRepo)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _AuthorRepo = AuthorRepo;
         }
 
         /// <summary>
@@ -102,7 +99,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            setUsername();
+            TrySetLoggedInAuthor();
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);

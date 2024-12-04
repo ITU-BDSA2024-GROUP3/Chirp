@@ -12,41 +12,28 @@ public class AuthorRepository: IAuthorRepository
     {
         _dbContext = context;
     }
-    public async Task<string> GetNameByEmail(string emailAddress)
+    
+    public async Task<string?> GetNameByEmail(string emailAddress)
     {
-        //Check if email exists
-        var emailExist = await ReadAuthorByEmail(emailAddress);
-        if (emailExist == null)
+        Author? author = await ReadAuthorByEmail(emailAddress);
+
+        if (author != null)
         {
-            Console.Error.WriteLine("Error: GetNameByEmail: Email address does not exist.");
+            return author.Name;
         }
-        else
-        {
-            //Check if email has name tied to it
-            IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == emailAddress)
-                .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
-                .Take(1);
-            var authordto = await query.FirstOrDefaultAsync();
-            if (authordto == null)
-            {
-                Console.Error.WriteLine("Error: GetNameByEmail: Email address has no corresponding name");
-            }
-            else
-            {
-                return authordto.Name;
-            }
-        }
-        //Don't want to be here
+
         return null;
     }
-    public async Task<AuthorDTO> ReadAuthorDTOById(int id)
+    
+    public async Task<AuthorDTO?> ReadAuthorDTOById(int id)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+            .Select(author => author.ToDTO())
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-    public async Task<Author> ReadAuthorById(int id)
+    
+    public async Task<Author?> ReadAuthorById(int id)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
             .Select(author => author)
@@ -54,22 +41,22 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<Author> ReadAuthorByName(string name)
+    public async Task<Author?> ReadAuthorByName(string name)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
             .Select(author => author)
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-    public async Task<AuthorDTO> ReadAuthorDTOByEmail(string email)
+    public async Task<AuthorDTO?> ReadAuthorDTOByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
-            .Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId })
+            .Select(author => author.ToDTO())
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
     
-    public async Task<Author> ReadAuthorByEmail(string email)
+    public async Task<Author?> ReadAuthorByEmail(string email)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
             .Select(author => author)
@@ -86,12 +73,14 @@ public class AuthorRepository: IAuthorRepository
 
         return queryResult.Entity;
     }
+    
     public async Task<int> GetAuthorCount()
     {
         IQueryable<AuthorDTO> query =
-            _dbContext.Authors.Select(author => new AuthorDTO() { Name = author.Name, UserId = author.UserId });
+            _dbContext.Authors.Select(author => author.ToDTO());
         return await query.CountAsync();
     }
+    
     public async Task<int> Follow(int wantToFollow, int wantToBeFollowed)
     {
         if (wantToFollow == wantToBeFollowed)
@@ -100,6 +89,11 @@ public class AuthorRepository: IAuthorRepository
         } 
         
         var wantToFollowAuthor = ReadAuthorById(wantToFollow).Result;
+
+        if (wantToFollowAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
         
         if(wantToFollowAuthor.FollowingList.Contains(wantToBeFollowed))
         {
@@ -120,6 +114,11 @@ public class AuthorRepository: IAuthorRepository
         
         var wantToUnfollowAuthor = ReadAuthorById(wantToUnfollow).Result;
         
+        if (wantToUnfollowAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
+        
         if(!wantToUnfollowAuthor.FollowingList.Contains(wantToBeUnfollowed))
         {
             throw new Exception($"Cannot unfollow - Not following this author");   
@@ -129,4 +128,11 @@ public class AuthorRepository: IAuthorRepository
         return await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<AuthorDTO?> ReadAuthorDTOByName(string name)
+    {
+        IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
+            .Select(author => author.ToDTO())
+            .Take(1);
+        return await query.FirstOrDefaultAsync();
+    }
 }

@@ -22,7 +22,7 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPost()
     {
-        if (!User.Identity.IsAuthenticated)
+        if (!User.Identity!.IsAuthenticated)
         {
             return RedirectToPage("Public");
         }
@@ -32,19 +32,19 @@ public class CheepPostPage : BasePage
             return RedirectToPage("Public");
         }
 
-        Author author = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
+        TrySetLoggedInAuthor();
 
-        if (author.UserId == null)
+        if (LoggedInAuthor == null)
         {
-         Console.WriteLine("Userid is null");   
+            throw new Exception("User not recognized!");
         }
         
         if (Text == null)
         {
-            Console.WriteLine("Text is null");   
+            throw new Exception("Text is required");
         }
         
-        CheepDTO newCheep = new CheepDTO() { Text = Text, UserId = author.UserId};
+        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId, cheepId: -1 );
         await _CheepRepo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
@@ -52,24 +52,27 @@ public class CheepPostPage : BasePage
     
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage, string? CurrentAuthorID)
     {
-        Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
-        Author followAuthor = _AuthorRepo.ReadAuthorByName(AuthorName).Result;
-        if (loggedInAuthor == null || followAuthor == null)
+        TrySetLoggedInAuthor();
+
+        if (LoggedInAuthor == null)
         {
-            throw new Exception("OnPostToggleFollowAsync Exception");
+            throw new Exception("User not recognized!");
         }
         
-        if (loggedInAuthor.FollowingList.Contains(followAuthor.UserId))
-        {
-            
-            await _AuthorRepo.Unfollow(loggedInAuthor.UserId, followAuthor.UserId);
+        AuthorDTO? followAuthor = await _AuthorRepo.ReadAuthorDTOByName(AuthorName);
 
+        if (followAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
+        
+        if (LoggedInAuthor.FollowingList.Contains(followAuthor.UserId))
+        {
+            await _AuthorRepo.Unfollow(LoggedInAuthor.UserId, followAuthor.UserId);
         }
         else
         {
-            await _AuthorRepo.Follow(loggedInAuthor.UserId, followAuthor.UserId);
-            
-            
+            await _AuthorRepo.Follow(LoggedInAuthor.UserId, followAuthor.UserId);
         }
        
         string page = CurrentPage;
@@ -86,6 +89,40 @@ public class CheepPostPage : BasePage
         
         return Redirect($"?page={page}");//move logic up to constructor
 
+    }
+    
+    public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId)
+    {
+
+        Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
+        Cheep cheep = await _CheepRepo.ReadCheepByCheepId(CheepId);
+        if (loggedInAuthor == null)
+        {
+            throw new Exception("OnPostToggleLikeAsync Exception: loggedInAuthor is null");
+        }
+
+        if (cheep == null)
+        {
+
+            throw new Exception("OnPostToggleLikeAsync Exception: cheep is null "+CheepId);
+        }
+
+        if (cheep.AuthorLikeList.Contains(loggedInAuthor.UserId))
+        {
+            await _CheepRepo.UnLikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+        }
+        else
+        {
+            await _CheepRepo.LikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+        }
+
+        return RedirectToPage("Public");
+    }
+
+    public async Task<int> GetCheepLike(int CheepId)
+    {
+        int temp = _CheepRepo.AmountOfLikes(CheepId).Result;
+        return temp;
     }
     
 }

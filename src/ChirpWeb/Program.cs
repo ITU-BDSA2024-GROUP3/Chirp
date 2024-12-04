@@ -51,8 +51,8 @@ builder.Services.AddAuthentication()
             Console.Error.WriteLine("You must provide a client Secret.");
         }
         
-        o.ClientId = builder.Configuration["GitHubClientID"];
-        o.ClientSecret = builder.Configuration["GitHubClientSecret"];
+        o.ClientId = builder.Configuration["GitHubClientID"]!;
+        o.ClientSecret = builder.Configuration["GitHubClientSecret"]!;
         o.CallbackPath = "/signin-github";
         
         o.Scope.Add("user:email");

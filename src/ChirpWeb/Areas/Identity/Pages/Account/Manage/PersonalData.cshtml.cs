@@ -17,9 +17,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Author> _userManager;
         private readonly ILogger<PersonalDataModel> _logger;
 
-        public List<CheepDTO> Cheeps { get; set; }
+        public List<CheepDTO>? Cheeps { get; set; }
         
-        public Author author { get; set; }
+        public Author Author { get; set; }
         public List<AuthorDTO> FollowingAuthors { get; set; }
 
         public int currentPage;
@@ -36,20 +36,20 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet([FromQuery] int page)
         {
-            setUsername();
-            
-            var authorTask = await _AuthorRepo.ReadAuthorByEmail(User.Identity.Name);
+            TrySetLoggedInAuthor();
 
-            var authorTaskGetAuthor = await _AuthorRepo.ReadAuthorById(authorTask.UserId);
-
-            var cheepsTask = await _CheepRepo.ReadCheeps(page, authorTask.UserId);
+            if (LoggedInAuthor == null)
+            {
+                throw new Exception("User not recognized!");
+            }
             
-            var followingTask = await _CheepRepo.ReadFollowing(authorTask.UserId);
+            var authorTaskGetAuthor = await _AuthorRepo.ReadAuthorById(LoggedInAuthor.UserId);
+            var cheepsTask = _CheepRepo.ReadCheeps(page, LoggedInAuthor.UserId);
+            var followingTask = await _CheepRepo.ReadFollowingAsync(LoggedInAuthor.UserId);
         
-            author = authorTaskGetAuthor;
+            Author = authorTaskGetAuthor!;
             Cheeps = cheepsTask;
             FollowingAuthors = followingTask;
-
             
             currentPage = page;
 

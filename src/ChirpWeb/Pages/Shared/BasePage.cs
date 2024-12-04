@@ -11,7 +11,7 @@ public class BasePage : PageModel
     protected readonly ICheepRepository _CheepRepo;
     protected readonly IAuthorRepository _AuthorRepo;
     
-    public string username { get; set; }
+    public AuthorDTO? LoggedInAuthor { get; set; }
     
     public BasePage(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo)
     {
@@ -19,15 +19,10 @@ public class BasePage : PageModel
         _AuthorRepo = AuthorRepo;
     } 
     
-    public async void setUsername() {
-        if (User.Identity.IsAuthenticated && User.Identity.Name != null)
+    public async void TrySetLoggedInAuthor() {
+        if (User.Identity!.IsAuthenticated && LoggedInAuthor == null)
         {
-            username = await _AuthorRepo.GetNameByEmail(User.Identity.Name);
+            LoggedInAuthor = await _AuthorRepo.ReadAuthorDTOByEmail(User.Identity.Name!);
         }
     }
-
-
-
-
-
 }
