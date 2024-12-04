@@ -13,7 +13,8 @@ public class CheepPostPage : BasePage
     [BindProperty]
     [Required]
     [MaxLength(160)]
-    public string Text { get; set; }
+    public string? Text { get; set; }
+    
 
   
     public CheepPostPage(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
@@ -88,15 +89,26 @@ public class CheepPostPage : BasePage
         }
         
         return Redirect($"?page={page}");//move logic up to constructor
-
     }
     
     public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId, int CurrentPage)
     {
+        TrySetLoggedInAuthor();
 
-        Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
-        Cheep cheep = await _CheepRepo.ReadCheepByCheepId(CheepId);
-        if (loggedInAuthor == null)
+        if (LoggedInAuthor == null)
+        {
+            throw new Exception("User not recognized!");
+        }
+        
+        Cheep? cheep = await _CheepRepo.ReadCheepByCheepId(CheepId);
+
+        if (cheep == null)
+        {
+            // should be handled more gracefully
+            throw new Exception("Cheep not recognized!");
+        }
+        
+        if (LoggedInAuthor == null)
         {
             throw new Exception("OnPostToggleLikeAsync Exception: loggedInAuthor is null");
         }
@@ -107,13 +119,13 @@ public class CheepPostPage : BasePage
             throw new Exception("OnPostToggleLikeAsync Exception: cheep is null "+CheepId);
         }
 
-        if (cheep.AuthorLikeList.Contains(loggedInAuthor.UserId))
+        if (cheep.AuthorLikeList!.Contains(LoggedInAuthor.UserId))
         {
-            await _CheepRepo.UnLikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+            await _CheepRepo.UnLikeCheep(cheep.CheepId, LoggedInAuthor.UserId);
         }
         else
         {
-            await _CheepRepo.LikeCheep(cheep.CheepId, loggedInAuthor.UserId);
+            await _CheepRepo.LikeCheep(cheep.CheepId, LoggedInAuthor.UserId);
         }
         
         return Redirect($"?page={CurrentPage}");//move logic up to constructor
