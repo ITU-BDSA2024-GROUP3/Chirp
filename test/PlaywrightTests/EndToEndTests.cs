@@ -14,6 +14,7 @@ public class EndToEndTests: PageTest{
     {
        //run process that enables "dotnet run" of the project
        _serverProcess = await EndToEndTestsUtility.StartServer();
+       await Page.GotoAsync("http://localhost:5273/");
     }
 
     [TearDown]
@@ -27,8 +28,6 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task HomePageTest()
     {
-        await Page.GotoAsync("http://localhost:5273/");
-       
         await Expect(Page
                 .GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
@@ -40,7 +39,6 @@ public class EndToEndTests: PageTest{
     public async Task UserTimelineTest()
     {
         //got to Jacqulaine's timeline
-        await Page.GotoAsync("http://localhost:5273/");
         await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link).ClickAsync();
         
         await Expect(Page
@@ -56,8 +54,6 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task RegisterPageTest()
     { 
-        await Page.GotoAsync("http://localhost:5273/");
-        
         //go to register page
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
        
@@ -80,7 +76,6 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task LoginPageTest()
     {
-        await Page.GotoAsync("http://localhost:5273/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         
         await Expect(Page).ToHaveTitleAsync(new Regex("Log in"));
@@ -104,9 +99,8 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task LogInUserTest()
     {
-        await Page.GotoAsync("http://localhost:5273/");
-        //login to Hans' account
-        await EndToEndTestsUtility.UserLogIn(Page, "hans", "Abc123456789");
+        await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
+        
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind hans?" })).ToBeVisibleAsync();
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Share" })).ToBeVisibleAsync();
@@ -122,10 +116,7 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task followTest()
     {
-        await Page.GotoAsync("http://localhost:5273/");
-        
-        //login
-        await EndToEndTestsUtility.UserLogIn(Page, "hans", "Abc123456789");
+        await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
         
         //follow Jacqualine Gilcone
         await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" }).GetByRole(AriaRole.Button).ClickAsync();
