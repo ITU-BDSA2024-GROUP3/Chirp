@@ -91,7 +91,7 @@ public class CheepPostPage : BasePage
 
     }
     
-    public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId)
+    public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId, int CurrentPage)
     {
 
         Author loggedInAuthor = _AuthorRepo.ReadAuthorByEmail(User.Identity.Name).Result;
@@ -115,8 +115,8 @@ public class CheepPostPage : BasePage
         {
             await _CheepRepo.LikeCheep(cheep.CheepId, loggedInAuthor.UserId);
         }
-
-        return RedirectToPage("Public");
+        
+        return Redirect($"?page={CurrentPage}");//move logic up to constructor
     }
 
     public async Task<int> GetCheepLike(int CheepId)
