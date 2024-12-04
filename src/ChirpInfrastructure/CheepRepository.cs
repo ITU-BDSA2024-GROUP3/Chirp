@@ -237,7 +237,7 @@ public class CheepRepository : ICheepRepository
         }
         foreach (var authorid in cheep.AuthorLikeList)
         {
-            Author tempAuthor = await ReadAuthorById(authorid);
+            Author? tempAuthor = await ReadAuthorById(authorid);
             if (tempAuthor == null)
             {
                 removeThese.Add(authorid);
@@ -256,32 +256,48 @@ public class CheepRepository : ICheepRepository
     
     public async Task<int> UnLikeCheep(int cheepid, int userId)
     {
-        if (ReadCheepByCheepId(cheepid).Result==null || ReadAuthorById(userId).Result == null)
+        Cheep? cheep = await ReadCheepByCheepId(cheepid);
+        Author? author = await ReadAuthorById(userId);
+        
+        if (cheep == null)
         {
-            throw new Exception($"User or cheep does not exist");
+            throw new Exception($"Cheep does not exist");
         }
-        if (!ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Contains(userId))
+        if (author == null)
+        {
+            throw new Exception($"Author does not exist");
+        }
+        if (!cheep.AuthorLikeList!.Contains(userId))
         {
             throw new Exception($"Did not like this cheep!");
         }
-        ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Remove(userId);
+        
+        cheep.AuthorLikeList.Remove(userId);
 
         await _dbContext.SaveChangesAsync();
-        return ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Count;
+        return cheep.AuthorLikeList.Count;
     }
+    
     public async Task<int> LikeCheep(int cheepid, int userId)
     {
-        if (ReadCheepByCheepId(cheepid).Result==null || ReadAuthorById(userId).Result == null)
+        Cheep? cheep = await ReadCheepByCheepId(cheepid);
+        Author? author = await ReadAuthorById(userId);
+        
+        if (cheep == null)
         {
-            throw new Exception($"User or cheep does not exist");
+            throw new Exception($"Cheep does not exist");
         }
-        if (ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Contains(userId))
+        if (author == null)
+        {
+            throw new Exception($"Author does not exist");
+        }
+        if (cheep.AuthorLikeList!.Contains(userId))
         {
             throw new Exception($"Already like this cheep!");
         }
-        ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Add(userId);
+        cheep.AuthorLikeList.Add(userId);
         await _dbContext.SaveChangesAsync();
-        return ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Count;
+        return cheep.AuthorLikeList.Count;
     }
     public async Task<Cheep> ReadCheepByCheepId(int cheepid)
     {
