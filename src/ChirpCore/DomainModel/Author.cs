@@ -14,12 +14,12 @@ public class Author : IdentityUser
     public int UserId { get; set; } 
     
     [PersonalData]
-    public string Name { get; set; }
+    public string? Name { get; set; }
     
     [PersonalData]
     public override string? Email { get; set; }
     [PersonalData]
-    public ICollection<Cheep> Cheeps { get; set; }
+    public ICollection<Cheep>? Cheeps { get; set; }
     
     public IList<int> FollowingList { get; set; }
     
