@@ -24,7 +24,7 @@ public class Cheep
         UserId = userId; 
         AuthorLikeList = authorLikeList;
     }
-    #pragma warning restore 8618
+#pragma warning restore 8618
     
     // Constructor used by other classes
     public Cheep(int cheepId, string text, DateTimeOffset timeStamp, Author author, int userId, IList<int> authorLikeList)
