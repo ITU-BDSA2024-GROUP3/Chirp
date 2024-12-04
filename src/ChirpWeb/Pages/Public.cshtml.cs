@@ -16,11 +16,13 @@ public class PublicModel : CheepPostPage
     public List<CheepDTO> Cheeps { get; set; }
 
     public int currentPage { get; set; }
+    
+    #pragma warning disable 8618
     public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
     { }
-    public Author author { get; set; }
-    
+    #pragma warning restore 8618
 
+    
     public ActionResult OnGet([FromQuery] int page)
     {
         TrySetLoggedInAuthor();

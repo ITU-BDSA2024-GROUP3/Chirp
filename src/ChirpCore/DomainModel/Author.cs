@@ -10,7 +10,7 @@ namespace ChirpCore.DomainModel;
 
 public class Author : IdentityUser
 {
-    #pragma warning disable 8618
+#pragma warning disable 8618
 
     [Key]
     public int UserId { get; set; } 
