@@ -231,6 +231,10 @@ public class CheepRepository : ICheepRepository
         }
 
         var removeThese = new List<int>();
+        if (cheep.AuthorLikeList == null)
+        {
+            cheep.AuthorLikeList = new List<int>();
+        }
         foreach (var authorid in cheep.AuthorLikeList)
         {
             Author tempAuthor = await ReadAuthorById(authorid);

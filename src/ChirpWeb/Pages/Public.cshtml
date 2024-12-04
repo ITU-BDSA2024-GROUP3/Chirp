@@ -32,7 +32,14 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                ViewData["AuthorName"] = cheep.AuthorName;
+                if (cheep == null)
+                {
+                    Console.WriteLine("HUHHHHHHHHHHHH");
+                }else if (cheep.CheepId == null)
+                {
+                    Console.WriteLine("i am still confused");
+                }    
+            ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
                 ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);

@@ -8,7 +8,7 @@
     ViewData["CurrentPage"] = Model.currentPage; 
 
     var routeName = HttpContext.GetRouteValue("name");
-    ViewData["CurrentAuthorID"] = Model.author.UserId;
+    ViewData["CurrentAuthorID"] = Model.Author.UserId;
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }

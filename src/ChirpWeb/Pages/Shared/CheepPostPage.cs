@@ -78,11 +78,11 @@ public class CheepPostPage : BasePage
         string page = CurrentPage;
         if (CurrentAuthorID != null)
         {
-            var cheeps = await _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
+            var cheeps =  _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
             while (cheeps.Count == 0)
             {
                 page = (Int32.Parse(page)-1).ToString();
-                cheeps = await _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
+                cheeps =  _CheepRepo.ReadCheeps(Int32.Parse(page), int.Parse(CurrentAuthorID));
 
             }
         }
@@ -121,7 +121,7 @@ public class CheepPostPage : BasePage
 
     public async Task<int> GetCheepLike(int CheepId)
     {
-        int temp = _CheepRepo.AmountOfLikes(CheepId).Result;
+        int temp = await _CheepRepo.AmountOfLikes(CheepId);
         return temp;
     }
     
