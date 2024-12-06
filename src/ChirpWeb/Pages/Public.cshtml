@@ -87,7 +87,7 @@
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
-                ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
+                ViewData["Likes"] = cheep.LikeCount ?? 0;  //await Model.GetCheepLike(cheep.CheepId);
                 if (cheep.TimeStamp != null)
                 {
                     ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString((long)cheep.TimeStamp);

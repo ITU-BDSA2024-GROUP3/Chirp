@@ -23,9 +23,11 @@ public class CheepDTO
 
     public IList<int>? AuthorLikeList { get; set; }
 
-    private string? GifId { get; set; }
+    public string? GifId { get; set; }
+    
+    public int? LikeCount { get; set; }
 
-    public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null, string? gifId = null )
+    public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null, string? gifId = null, int? likeCount = null )
     {
         Text = text;
         UserId = userId;
@@ -34,5 +36,6 @@ public class CheepDTO
         CheepId = cheepId;
         AuthorLikeList = authorLikeList;
         GifId = gifId;
+        LikeCount = likeCount;
     }
 }

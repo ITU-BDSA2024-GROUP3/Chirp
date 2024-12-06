@@ -11,7 +11,7 @@ public class Cheep
     public Author Author { get; set; }
     public int UserId { get; set; }
     
-    public IList<int>? AuthorLikeList { get; set; }
+    public IList<int> AuthorLikeList { get; set; }
     
 
     public Cheep()
@@ -21,6 +21,6 @@ public class Cheep
     
     public CheepDTO ToDTO()
     {
-        return new CheepDTO(text: Text, userId: UserId, authorName: Author.Name, timeStamp: TimeStamp.ToUnixTimeSeconds(), cheepId: CheepId, authorLikeList: AuthorLikeList);
+        return new CheepDTO(text: Text, userId: UserId, authorName: Author.Name, timeStamp: TimeStamp.ToUnixTimeSeconds(), cheepId: CheepId, authorLikeList: AuthorLikeList, gifId: null, likeCount: AuthorLikeList.Count);
     }
 }
