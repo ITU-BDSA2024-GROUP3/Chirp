@@ -52,9 +52,6 @@ if ((bool)arguments["read"].Value)
     var baseURL = "https://bdsagroup3chirpremotedb.azurewebsites.net/";
     //var baseURL = "http://localhost:5132";
     using HttpClient client = new();
-    /*client.DefaultRequestHeaders.Accept.Clear();
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    client.*/
     client.BaseAddress = new Uri(baseURL);
     
     // Send an asynchronous HTTP GET request and automatically construct a Cheep object from the
@@ -63,25 +60,9 @@ if ((bool)arguments["read"].Value)
     if(limit != null) requestURI += $"?limit={limit}";
     
     var cheepsRes = await client.GetAsync(requestURI);
+    List<Cheep> cheeps = await cheepsRes.Content.ReadFromJsonAsync<List<Cheep>>();
     
-    var json = await cheepsRes.Content.ReadAsStringAsync();
-    var result = string.IsNullOrEmpty(json) ? null : JsonObject.Parse(json);
-    
-    
-    //List<Cheep> cheeps = await cheepsRes.Content.ReadFromJsonAsync<List<Cheep>>();
-
-    //var cheeps = await client.GetAsync(requestURI);
-
-    /*
-    Console.WriteLine(cheepsRes.StatusCode == (HttpStatusCode)200);
-    
-    Console.WriteLine(cheeps);
-
     if (cheeps != null) UserInterface.PrintCheeps(cheeps);
-    */
-    Console.WriteLine(json);
-    Console.WriteLine(cheepsRes.ToString());
-    Console.WriteLine("json");
 
 }
 
@@ -94,16 +75,13 @@ if ((bool)(arguments["cheep"].Value))
     var baseURL = "https://bdsagroup3chirpremotedb.azurewebsites.net/";
     //var baseURL = "http://localhost:5132";
     using HttpClient client = new();
-    /*client.DefaultRequestHeaders.Accept.Clear();
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    */client.BaseAddress = new Uri(baseURL);
+    client.BaseAddress = new Uri(baseURL);
     
     var requestURI = $"/cheep";
     requestURI += "?message={message}";
     
     
     using var response = await client.PutAsJsonAsync($"/cheep", cheep);
-    //response.EnsureSuccessStatusCode();
             
     Console.WriteLine($"Post successful: {cheep.ToString()}");
     
@@ -112,7 +90,4 @@ if ((bool)(arguments["cheep"].Value))
     // following can be used to test what and if the statuscode of our cheeps is/works
     Console.WriteLine(temp.StatusCode == (HttpStatusCode)200);
     Console.WriteLine(temp.StatusCode);
-
-  
-    //cheepManager.Store(Util.CreateCheep(message));
 }

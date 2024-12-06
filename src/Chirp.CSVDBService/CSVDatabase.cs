@@ -9,12 +9,7 @@ namespace Chirp.CSVDBService;
 public class CSVDatabase<T> : IDatabaseRepository<T>
 {
     private readonly CsvConfiguration _csvConfig;
-
-
-    //idk much about readonly, rider just said it would be good
-    //private string dataPath = "/../../../../data/chirp_cli_db.csv";
-
-    //private string dataPath = makePath("data", "chirp_cli_db.csv");
+    
     private string dataPath = Path.Combine("chirp_cli_db.csv");
 
     //why is there two databases?
@@ -37,7 +32,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
             File.Create(dataPath);
             
             using (var writer = new StreamWriter(dataPath, true))
-            using (var csv = new CsvWriter(writer, _csvConfig))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 //add cheep to file then add blank character to end
                 writer.WriteLine("Author,Message,Timestamp");
@@ -52,7 +47,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
             //ensure file exists
 
             using (var reader = new StreamReader(dataPath))
-            using (var csv = new CsvReader(reader, _csvConfig))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 //Makes sure limit is not null, to avoid possible error
                 var dataRecords = new List<T>();
@@ -72,16 +67,9 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         public void Store(T record) //This works
         {
             //create streamwriter and CSVwriter with using
-            //using (var writer = new StreamWriter(dataPath, true))
             using (var writer = new StreamWriter(dataPath, true))
             using (var csv = new CsvWriter(writer, _csvConfig))
             {
-                //add cheep to file then add blank character to end
-                /*if (csvFileLenth != 0) //Checks if the file is empty
-                {
-                    writer.WriteLine("Author,Message,Timestamp");
-                }
-                */
             csv.WriteRecord(record);
             csv.NextRecord();
         }
