@@ -13,12 +13,20 @@ public class CheepPostPage : BasePage
     [MaxLength(160)]
     public string Text { get; set; }
   
+    [BindProperty]
+    public string GifId { get; set; }
+    
     public CheepPostPage(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
     {
     }
     
     public async Task<ActionResult> OnPost()
     {
+        if (!GifId.Equals(""))
+        {
+            Console.WriteLine($"GifId: {GifId}");
+        }
+        
         if (!User.Identity!.IsAuthenticated)
         {
             return RedirectToPage("Public");

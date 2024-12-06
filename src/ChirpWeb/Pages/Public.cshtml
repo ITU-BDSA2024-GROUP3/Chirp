@@ -17,6 +17,8 @@
     document.addEventListener("DOMContentLoaded", (event) => {
         let addMediaBtn = document.getElementById("addMediaBtn");
         let mediaSelect = document.getElementById("mediaSelect");
+        let gifPreview = document.getElementById("gifPreview");
+        let gifInput = document.getElementById("gifInput");
 
         function toggleShowMedia(){
             if(mediaSelect.style.display === "none") {
@@ -26,6 +28,11 @@
                 console.log("hide!");
                 mediaSelect.style.display = "none";            
             }
+        }
+
+        function setSelectedGif(id) {
+            gifPreview.setAttribute("src", "https://giphy.com/embed/" + id)
+            gifInput.value = id;
         }
 
         addMediaBtn.addEventListener("click", () => {
@@ -38,9 +45,10 @@
                     for (let d of data.data) {
                         console.log(d);
                         var elem = document.createElement("iframe");
-                        elem.setAttribute("src", "https://giphy.com/embed/" + d.id);//d.url);
+                        elem.setAttribute("src", "https://giphy.com/embed/" + d.id);
                         elem.style["pointer-events"] = "none";
-                        
+                        elem.addEventListener("click", setSelectedGif, d.id);
+                
                         mediaSelect.appendChild(elem);
                     }                    
                 });
@@ -60,12 +68,14 @@
         <div class="cheepbox">
             <h3>What's on your mind @(Model.LoggedInAuthor!.Name)?</h3>
             <form method="post">
+                <iframe id="gifPreview" style="width: 500px; height: 500px;"></iframe>
                 <input style="float: left; width: 1fr" type="text" asp-for="Text">
                 <input type="submit" style="display:inline-block" value="Share">
+                <input type="hidden" asp-for="GifId" value=""></input>
             </form>
             <button style="display:inline-block" id="addMediaBtn">+</button>
         </div>
-        <div id="mediaSelect" style="background-color: gray; border-radius: 5px; position: absolute;width: 500px; height: 500px; display: none; right: auto;">
+        <div id="mediaSelect" style="background-color: gray; border-radius: 5px; position: absolute;width: 500px; height: 500px; display: none; right: auto; overflow-x: hidden; overflow-y: scroll;">
         </div>
     }
 
