@@ -8,14 +8,9 @@ namespace UnitTest;
 
 public class UnitTestAuthorRepo
 {
-    public async Task<IAuthorRepository> CreateInMemoryDb(int id, string name, string? email, bool empty)
+    public async Task<IAuthorRepository> CreateInMemoryDb(int id, string name, string email, bool empty)
     {
-        var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        var context = await CreateChirpDb();
 
         if (!empty)
         {
@@ -26,9 +21,20 @@ public class UnitTestAuthorRepo
 
         }
 
+        
        
         
         return new AuthorRepository(context);
+    }
+    public async Task<ChirpDBContext> CreateChirpDb()
+    {
+        var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+        var context = new ChirpDBContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        return context;
     }
     [Theory]
     [InlineData(1, "Tom", "myemail")]
@@ -110,12 +116,7 @@ public class UnitTestAuthorRepo
     [Fact]
     public async void followAndUnFolloweAuthor()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-        using var context = new ChirpDBContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        var context = await CreateChirpDb();
       
         //create author and add to database
         var author1 = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
