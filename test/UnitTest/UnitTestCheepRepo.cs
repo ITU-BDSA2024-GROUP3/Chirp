@@ -28,15 +28,14 @@ public class UnitTestCheepRepo : IDisposable
 
       var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom" , FollowingList = new List<int>()};
 
-      var cheep = new Cheep
-      {
-         CheepId = 1,
-         Author = author,
-         UserId = author.UserId,
-         Text = "messageData",
-         TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569)
-            .UtcDateTime // Ensure this matches the format in your model
-      };
+      var cheep = new Cheep(
+         cheepId: 1,
+         text: "messageData",
+         timeStamp: DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime, // Ensure this matches the format in your model
+         author: author,
+         userId: author.UserId,
+         authorLikeList: new List<int>()
+      );
 
       context.Authors.Add(author);
       context.Cheeps.Add(cheep);
@@ -69,15 +68,14 @@ public class UnitTestCheepRepo : IDisposable
       var author2 = new Author() { UserId = 2, Cheeps = null, Email = "mymaile", Name = "Tommy" , FollowingList = new List<int>()};
       author1.FollowingList.Add(author2.UserId);
       
-      var cheep = new Cheep
-      {
-         CheepId = 1,
-         Author = author2,
-         UserId = author2.UserId,
-         Text = "messageData",
-         TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569)
-            .UtcDateTime // Ensure this matches the format in your model
-      };
+      var cheep = new Cheep(
+         cheepId: 1,
+         text: "messageData",
+         timeStamp: DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime, // Ensure this matches the format in your model
+         author: author2,
+         userId: author2.UserId,
+         authorLikeList: new List<int>()
+      );
 
       context.Authors.Add(author1);
       context.Authors.Add(author2);
@@ -154,14 +152,14 @@ public class UnitTestCheepRepo : IDisposable
       //MAKE THE DATABASE WITH AUTHOR
       ICheepRepository repo = new CheepRepository(context);
       
-      var c1 = new Cheep()
-      {
-         CheepId = 1, 
-         UserId = author.UserId,
-         Author = author, 
-         Text = "The two went past me.", 
-         TimeStamp = DateTime.Parse("2023-08-01 13:14:37")
-      };
+      var c1 = new Cheep(
+         cheepId: 1,
+         text: "The two went past me.",
+         timeStamp: DateTime.Parse("2023-08-01 13:14:37"),
+         author: author,
+         userId: author.UserId,
+         authorLikeList: new List<int>()
+      );
       
       context.Cheeps.Add(c1);
       await context.SaveChangesAsync();
