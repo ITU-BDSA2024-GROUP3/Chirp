@@ -12,6 +12,13 @@
                     }
                 }
             </div>
+            @if (ViewData["GifId"] != null)
+            {
+                string src = $"https://giphy.com/embed/{@ViewData["GifId"]}";
+                <br>
+                <iframe src="@src" style="pointer-events: none"></iframe>
+                <br>
+            }
             <br>
             @ViewData["CheepText"]
             <br>

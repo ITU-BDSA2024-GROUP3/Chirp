@@ -29,10 +29,18 @@
                 mediaSelect.style.display = "none";            
             }
         }
-
-        function setSelectedGif(id) {
-            gifPreview.setAttribute("src", "https://giphy.com/embed/" + id)
-            gifInput.value = id;
+        
+        function setSelectedGif(gif) {
+            console.log("select " + gif.id);
+            gifPreview.setAttribute("src", "https://giphy.com/embed/" + gif.id)
+            gifPreview.style.display = "block";
+            gifInput.setAttribute("value", gif.id);
+            gifPreview.style["pointer-events"] = "none";
+            
+            gifPreview.style.height = gif.images.original.height;
+            gifPreview.style.width = gif.images.original.width;
+            
+            console.log("resize to " + gif.images.original.width + "X" + gif.images.original.height);
         }
 
         addMediaBtn.addEventListener("click", () => {
@@ -43,13 +51,19 @@
                     console.log("success got data", data); 
                     
                     for (let d of data.data) {
+                        var div = document.createElement("div");
+                
                         console.log(d);
                         var elem = document.createElement("iframe");
                         elem.setAttribute("src", "https://giphy.com/embed/" + d.id);
                         elem.style["pointer-events"] = "none";
-                        elem.addEventListener("click", setSelectedGif, d.id);
-                
-                        mediaSelect.appendChild(elem);
+                        
+                        div.addEventListener("click", () => {
+                            setSelectedGif(d)
+                        });
+                        
+                        div.appendChild(elem);
+                        mediaSelect.appendChild(div);
                     }                    
                 });
             }
@@ -68,10 +82,10 @@
         <div class="cheepbox">
             <h3>What's on your mind @(Model.LoggedInAuthor!.Name)?</h3>
             <form method="post">
-                <iframe id="gifPreview" style="width: 500px; height: 500px;"></iframe>
+                <iframe id="gifPreview" style="width: 500px; height: 500px; display: none;"></iframe>
                 <input style="float: left; width: 1fr" type="text" asp-for="Text">
                 <input type="submit" style="display:inline-block" value="Share">
-                <input type="hidden" asp-for="GifId" value=""></input>
+                <input type="hidden" id="gifInput" asp-for="GifId" value=""></input>
             </form>
             <button style="display:inline-block" id="addMediaBtn">+</button>
         </div>
@@ -88,6 +102,8 @@
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
                 ViewData["Likes"] = cheep.LikeCount ?? 0;  //await Model.GetCheepLike(cheep.CheepId);
+                ViewData["GifId"] = cheep.GifId;
+                
                 if (cheep.TimeStamp != null)
                 {
                     ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString((long)cheep.TimeStamp);

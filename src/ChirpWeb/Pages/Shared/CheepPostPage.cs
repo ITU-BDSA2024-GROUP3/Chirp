@@ -29,11 +29,13 @@ public class CheepPostPage : BasePage
         
         if (!User.Identity!.IsAuthenticated)
         {
+            Console.WriteLine("User is not authenticated!");
             return RedirectToPage("Public");
         }
         
         if (!ModelState.IsValid)
         {
+            Console.WriteLine("Model state is not valid!");
             return RedirectToPage("Public");
         }
 
@@ -49,7 +51,7 @@ public class CheepPostPage : BasePage
             throw new Exception("Text is required");
         }
         
-        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId, cheepId: -1 );
+        CheepDTO newCheep = new CheepDTO(text: Text, userId: LoggedInAuthor.UserId, cheepId: -1, gifId: GifId);
         await _CheepRepo.CreateCheep(newCheep);
         
         return RedirectToPage("Public");
