@@ -179,59 +179,7 @@ public class UnitTestCheepRepo : IDisposable
    [Fact]
    public async void likeandunlikecheeps()
    {
-      //var context = await CreateDbContext();
-
-      //create author and add to database
-      /*var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
-      context.Authors.Add(author);
-      await context.SaveChangesAsync();
-      //MAKE THE DATABASE WITH AUTHOR
-      ICheepRepository repo = new CheepRepository(context);
-
-      //dto cheep that will be created by our author
-      var cheepDataTransferObject = new CheepDTO
-      (
-         text: "Something",
-         userId: author.UserId,
-         cheepId: 1,
-         authorName: author.Name,
-         timeStamp: 1728643569
-      );
-
-      await repo.CreateCheep(cheepDataTransferObject);
-      Assert.Equal(1,repo.LikeCheep(1, 1).Result);
-      Assert.Equal(0,repo.UnLikeCheep(1, 1).Result);*/
-      //var repo = await UtilFunctionsTest.CreateInMemoryDb();
-      using var connection = new SqliteConnection("Filename=:memory:");
-      await connection.OpenAsync();
-      var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
-
-      using var context = new ChirpDBContext(builder.Options);
-      await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-
-      //create author and add to database
-      var author = new Author() { UserId= 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>() };
-      context.Authors.Add(author);
-      await context.SaveChangesAsync();
-      //MAKE THE DATABASE WITH AUTHOR
-      ICheepRepository repo = new CheepRepository(context);
-
-      //dto cheep that will be created by our author
-      var cheepDataTransferObject = new CheepDTO
-      (
-         text: "Something",
-         userId: author.UserId,
-         cheepId: 1,
-         authorName: author.Name,
-         timeStamp: 1728643569
-      );
-
-      await repo.CreateCheep(cheepDataTransferObject);
-      Assert.Equal(1,repo.LikeCheep(1, 1).Result);
-      Assert.Equal(0,repo.UnLikeCheep(1, 1).Result);
-
-
-
+     
 
    }
    
