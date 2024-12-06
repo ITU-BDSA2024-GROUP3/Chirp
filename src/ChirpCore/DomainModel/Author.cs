@@ -10,6 +10,8 @@ namespace ChirpCore.DomainModel;
 
 public class Author : IdentityUser
 {
+#pragma warning disable 8618
+
     [Key]
     public int UserId { get; set; } 
     
@@ -17,7 +19,7 @@ public class Author : IdentityUser
     public string Name { get; set; }
     
     [PersonalData]
-    public override string? Email { get; set; }
+    public new string Email { get; set; }
     [PersonalData]
     public ICollection<Cheep> Cheeps { get; set; }
     
@@ -27,4 +29,6 @@ public class Author : IdentityUser
     {
         return new AuthorDTO(Name, UserId, FollowingList);
     }
+    
+    #pragma warning restore 8618
 }

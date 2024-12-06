@@ -28,16 +28,16 @@ public class UnitTestCheepRepo : IDisposable
 
    public async void AddCheepOne(ChirpDBContext context, Author author)
    {
-      var cheep = new Cheep
-      {
-         CheepId = 1,
-         Author = author,
-         UserId = author.UserId,
-         Text = "messageData",
-         TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime // Ensure this matches the format in your model
-
-      };
+      var cheep = new Cheep(
+         cheepId: 1,
+         text: "messageData",
+         timeStamp: DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime, // Ensure this matches the format in your model
+         author: author,
+         userId: author.UserId,
+         authorLikeList: new List<int>()
+      );
       context.Cheeps.Add(cheep);
+      
 
       
    }
@@ -148,14 +148,14 @@ public class UnitTestCheepRepo : IDisposable
       //MAKE THE DATABASE WITH AUTHOR
       ICheepRepository repo = new CheepRepository(context);
       
-      var c1 = new Cheep()
-      {
-         CheepId = 1, 
-         UserId = author.UserId,
-         Author = author, 
-         Text = "The two went past me.", 
-         TimeStamp = DateTime.Parse("2023-08-01 13:14:37")
-      };
+      var c1 = new Cheep(
+         cheepId: 1,
+         text: "The two went past me.",
+         timeStamp: DateTime.Parse("2023-08-01 13:14:37"),
+         author: author,
+         userId: author.UserId,
+         authorLikeList: new List<int>()
+      );
       
       context.Cheeps.Add(c1);
       await context.SaveChangesAsync();
