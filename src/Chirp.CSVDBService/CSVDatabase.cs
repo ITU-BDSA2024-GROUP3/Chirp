@@ -20,8 +20,8 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
     private CSVDatabase()
     {
         //set the config to "InvariantCulture" and inform the program that the file already has headers
-        _csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
-        {  };
+        /*_csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {  HasHeaderRecord = true};*/
         
         //Checks the data file is there and has a csv file
 
@@ -68,7 +68,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         {
             //create streamwriter and CSVwriter with using
             using (var writer = new StreamWriter(dataPath, true))
-            using (var csv = new CsvWriter(writer, _csvConfig))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
             csv.WriteRecord(record);
             csv.NextRecord();

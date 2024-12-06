@@ -60,6 +60,7 @@ if ((bool)arguments["read"].Value)
     if(limit != null) requestURI += $"?limit={limit}";
     
     var cheepsRes = await client.GetAsync(requestURI);
+    //cheepsRes.Content.ReadAsStringAsync();
     List<Cheep> cheeps = await cheepsRes.Content.ReadFromJsonAsync<List<Cheep>>();
     
     if (cheeps != null) UserInterface.PrintCheeps(cheeps);

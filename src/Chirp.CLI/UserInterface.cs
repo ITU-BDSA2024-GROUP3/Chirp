@@ -7,10 +7,10 @@ public static class UserInterface
     //prints all the cheeps stored in the database
     public static void PrintCheeps(IEnumerable<Cheep> cheeps)
     {
-        Console.WriteLine("Writing cheeps");
+        //Console.WriteLine("Writing cheeps");
         foreach (var cheep in cheeps)
-            //Console.WriteLine($"{cheep.Author} @ {ConvertTime(cheep.Timestamp)} : {cheep.Message}");
-            Console.WriteLine(cheep.ToString());
+            Console.WriteLine($"{cheep.Author} @ {ConvertTime(cheep.Timestamp)} : \"{cheep.Message}\"");
+            //Console.WriteLine(cheep.ToString());
     }
 
     //converts the unix time stamp to a timeset day:month:year
