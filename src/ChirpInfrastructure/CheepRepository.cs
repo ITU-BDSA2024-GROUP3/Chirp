@@ -24,11 +24,7 @@ public class CheepRepository : ICheepRepository
             throw new Exception("User not recognized!");
         }
 
-        Cheep message = new()
-        {
-            CheepId = _nextCheepId++, UserId = newMessage.UserId, Text = newMessage.Text, TimeStamp = DateTime.Now,
-            Author = cheepAuthor
-        };
+        Cheep message = new Cheep(cheepId: _nextCheepId++, userId: newMessage.UserId, text: newMessage.Text, timeStamp: DateTime.Now, author: cheepAuthor, authorLikeList: new List<int>());
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
         cheepAuthor.Cheeps.Add(message);
 

@@ -1,5 +1,5 @@
 ﻿<form method="post" style="display: inline">
     <input type="hidden" name="CheepId" value="@ViewData["CheepId"]"/>
     <input type="hidden" name="CurrentPage" value="@ViewData["CurrentPage"]"/>
-    <button type="submit" asp-page-handler="ToggleLike" style="border-radius: 4px;padding:2px 8px; font-size: 20px; color: #cc6e6e; background-color: transparent">@((bool)ViewData["Liked"] ? "\u2665\ufe0e" : "\u2661")</button>
+    <button type="submit" asp-page-handler="ToggleLike" style="border-radius: 4px;padding:2px 8px; font-size: 20px; color: #cc6e6e; background-color: transparent">@((bool)ViewData["Liked"]! ? "\u2665\ufe0e" : "\u2661")</button>
 </form>

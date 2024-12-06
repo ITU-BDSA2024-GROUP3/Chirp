@@ -32,14 +32,7 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                if (cheep == null)
-                {
-                    Console.WriteLine("HUHHHHHHHHHHHH");
-                }else if (cheep.CheepId == null)
-                {
-                    Console.WriteLine("i am still confused");
-                }    
-            ViewData["AuthorName"] = cheep.AuthorName;
+                ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
                 ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
@@ -54,7 +47,7 @@
 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var id = Model.LoggedInAuthor.UserId;
+                    var id = Model.LoggedInAuthor!.UserId;
                     var list = cheep.AuthorLikeList;
                     if (list == null)
                     {
