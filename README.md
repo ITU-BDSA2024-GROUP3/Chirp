@@ -27,3 +27,10 @@ the second will read a specified number of the newest cheeps.
 `dotnet run -- read`
 
 `dotnet run -- read 2`
+
+## Bugs
+It should be noted, that currently, if one wishes to run the program on a azure webservice, there will be a problem. 
+To get it to work, one would need to start a new server from `Chirp/src/Chirp.CSVDBService`, then once the server is 
+up, one needs to use the same command again, which will "update" the server, even if no changes have been made. This 
+is a weird bug which does not appear on local host, so we have assumed that it's a problem with the way Azure sets up 
+the server. 

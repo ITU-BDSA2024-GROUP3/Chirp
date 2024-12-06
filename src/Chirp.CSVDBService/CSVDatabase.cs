@@ -30,21 +30,34 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         if (!File.Exists(dataPath))
         {
             File.Create(dataPath);
+
             
-            using (var writer = new StreamWriter(dataPath, true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                //add cheep to file then add blank character to end
-                writer.WriteLine("Author,Message,Timestamp");
-            }
         }
-        }
+    }
 
         public static CSVDatabase<T> instance { get; } = new();
 
         public IEnumerable<T> Read(int? limit = null) //This does not work
         {
+            var headerExist = true;
             //ensure file exists
+            using (var reader = new StreamReader(dataPath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                if (csv.GetRecords<T>().Take(1).ToList().Count != 1)
+                {
+                    headerExist = false;
+                }
+            }
+
+            if (!headerExist)
+            {
+                using (var writer = new StreamWriter(dataPath, true))
+                {
+                    writer.WriteLine("Author,Message,Timestamp");
+                }
+            }
+
 
             using (var reader = new StreamReader(dataPath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -66,6 +79,25 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
 
         public void Store(T record) //This works
         {
+            var headerExist = true;
+            //ensure file exists
+            using (var reader = new StreamReader(dataPath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                if (csv.GetRecords<T>().Take(1).ToList().Count != 1)
+                {
+                    headerExist = false;
+                }
+            }
+
+            if (!headerExist)
+            {
+                using (var writer = new StreamWriter(dataPath, true))
+                {
+                    writer.WriteLine("Author,Message,Timestamp");
+                }
+            }
+            
             //create streamwriter and CSVwriter with using
             using (var writer = new StreamWriter(dataPath, true))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
