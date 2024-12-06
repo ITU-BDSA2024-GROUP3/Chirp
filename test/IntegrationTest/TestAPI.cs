@@ -543,9 +543,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPublicPage(page);
         bool windows = content.Contains(
-            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n                <p style=\"display:inline\">Likes: {likes}\r\n                </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
         bool linux= content.Contains(
-            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n                <p style=\"display:inline\">Likes: {likes}\n                </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
         Assert.True(windows || linux);
     }
 
@@ -558,9 +558,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     {
         var content = await SetPrivatePage(page, author, id);
         bool windows = content.Contains(
-            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n                <p style=\"display:inline\">Likes: {likes}\r\n                </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
         bool linux= content.Contains(
-            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n                <p style=\"display:inline\">Likes: {likes}\n                </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
         Assert.True(windows || linux);
     }
 
