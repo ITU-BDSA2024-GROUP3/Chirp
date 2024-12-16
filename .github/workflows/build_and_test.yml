@@ -52,7 +52,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18.x'
       - name: Install dependencies
@@ -70,7 +70,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore      
       - name: Start server
-        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+        run: dotnet run --project src/ChirpWeb/ChirpWeb.csproj &
       - name: Wait for server to be ready
         run: sleep 10 # Adjust the sleep duration if needed
       - name: Test
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Start server
-        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+        run: dotnet run --project src/ChirpWeb/ChirpWeb.csproj &
       - name: Wait for server to be ready
         run: sleep 10 # Adjust the sleep duration if needed
       - name: Test
@@ -105,8 +105,6 @@ jobs:
         run: |
           npm install
           npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
       - name: Install dotnet-ef tool
         run: dotnet tool install --global dotnet-ef
       - name: Setup user-secrets clientid
@@ -116,7 +114,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore  
       - name: Start server
-        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+        run: dotnet run --project src/ChirpWeb/ChirpWeb.csproj &
       - name: Wait for server to be ready
         run: sleep 10 # Adjust the sleep duration if needed
       - name: Test
