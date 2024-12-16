@@ -518,8 +518,8 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     }
 
     [Theory]
-    [InlineData("08/01/23 11.17.14")]
-    [InlineData("08/01/23 11.17.02")]
+    [InlineData("08/01/23 11:17:14")]
+    [InlineData("08/01/23 11:17:02")]
     public async void TimeStampsExistsPublic(string timeStamp)
     {
         var content = await SetPublic();
@@ -527,7 +527,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     }
 
     [Theory]
-    [InlineData("08/01/23 11.16.58", "Jacqualine Gilcoine", 10)]
+    [InlineData("08/01/23 11:16:58", "Jacqualine Gilcoine", 10)]
     public async void TimeStampsExistsPrivate(string timeStamp, string author, int id)
     {
         var content = await SetPrivate(author, id);
@@ -537,22 +537,24 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
     [Theory]
     [InlineData("Jacqualine Gilcoine", 
         "Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
-        "08/01/23 11.17.26", 1,0)]
+        "08/01/23 11:17:26", 1,0)]
     public async void ElementsOfCheepsAreCorrectPublic(string author, string message, string timestamp,
         int page, int likes)
     {
         var content = await SetPublicPage(page);
         bool windows = content.Contains(
             $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
+        
         bool linux= content.Contains(
             $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
+        
         Assert.True(windows || linux);
     }
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
         "That must have come to you.",
-        "08/01/23 11.17.23", 1,0)]
+        "08/01/23 11:17:23", 1,0)]
     public async void ElementsOfCheepsAreCorrectPrivate(string author, int id, string message, string timestamp,
         int page, int likes)
     {
@@ -692,7 +694,6 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         //Builds on the assumption that Helge, then Adrian has been added to the database, and Adrian follows Helge
         // Assert
         Assert.Contains("<a href=\"/Helge\">Helge</a>\n", content);
-        
     }
     
     [Fact]
