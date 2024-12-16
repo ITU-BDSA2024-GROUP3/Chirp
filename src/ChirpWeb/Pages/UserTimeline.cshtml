@@ -34,7 +34,7 @@
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
-                ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
+                ViewData["Likes"] = cheep.AuthorLikeList?.Count;
 
                 if (cheep.TimeStamp != null)
                 {

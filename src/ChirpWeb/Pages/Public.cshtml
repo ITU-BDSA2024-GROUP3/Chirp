@@ -35,7 +35,7 @@
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
-                ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
+                ViewData["Likes"] = cheep.AuthorLikeList != null? cheep.AuthorLikeList.Count : 0;
                 if (cheep.TimeStamp != null)
                 {
                     ViewData["Timestamp"] = CheepRepository.UnixTimeStampToDateTimeString((long)cheep.TimeStamp);
@@ -48,14 +48,8 @@
                 if (User.Identity.IsAuthenticated)
                 {
                     var id = Model.LoggedInAuthor!.UserId;
-                    var list = cheep.AuthorLikeList;
-                    if (list == null)
-                    {
-                        Console.WriteLine("MAKES NEW LISTS");
-                        list = new List<int>();
-                    } //TO DO, REMOVE THIS, SHOULD NEVER BE NULL, FROM DAVID
 
-                    ViewData["Liked"] = list.Contains(id);
+                    ViewData["Liked"] = cheep.AuthorLikeList?.Contains(id);
                     ViewData["LoggedInUserName"] = Model.LoggedInAuthor!.Name;
                     ViewData["Followed"] = Model.LoggedInAuthor.FollowingList.Contains(cheep.UserId);
                 }
