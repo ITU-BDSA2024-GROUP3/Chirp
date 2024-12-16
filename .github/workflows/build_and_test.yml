@@ -40,7 +40,7 @@ jobs:
         run: dotnet user-secrets set "GitHubClientSecret" "${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}" --project src/ChirpWeb/ChirpWeb.csproj
       - name: Build
         run: dotnet build --no-restore
-E2E_test:
+  E2E_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +51,7 @@ E2E_test:
       - name: Test
         run: dotnet test test/PlaywrightsTests/PlaywrightsTests.csproj --verbosity normal
         
-Unit_test:
+  Unit_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +62,7 @@ Unit_test:
       - name: Test
         run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
 
-Integration_test:
+  Integration_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
