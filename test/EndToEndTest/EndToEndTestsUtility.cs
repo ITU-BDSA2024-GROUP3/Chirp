@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.Playwright;
 
-namespace PlaywrightTests;
+namespace EndToEndTest;
 
 public class EndToEndTestsUtility
 {
@@ -17,7 +17,7 @@ public class EndToEndTestsUtility
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "dotnet",
-                Arguments = "run", //--project ./../../../../../src/ChirpWeb",
+                Arguments = "run --Test True", //--project ./../../../../../src/ChirpWeb",
                 WorkingDirectory = "./../../../../../src/ChirpWeb",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
