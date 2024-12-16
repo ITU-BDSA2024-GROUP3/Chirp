@@ -167,17 +167,15 @@ public class UnitTestCheepRepo : IDisposable
   
    
    [Fact]
-   public void convertunixtimestamp()
+   public void ConvertUnixTimestamp()
    {
       int timestamp = 1728284672;
       String time = CheepRepository.UnixTimeStampToDateTimeString(timestamp);
-      Assert.Equal(time, "10/07/24 7.04.32");
-      
-        
+      Assert.Equal("10/07/24 7:04:32", time);
    }
    
    [Fact]
-   public async void likeandunlikecheeps()
+   public async void LikeAndUnlikeCheeps()
    {
       //var repo = await UtilFunctionsTest.CreateInMemoryDb();
       using var connection = new SqliteConnection("Filename=:memory:");
@@ -207,9 +205,6 @@ public class UnitTestCheepRepo : IDisposable
       await repo.CreateCheep(cheepDataTransferObject);
       Assert.Equal(1,await repo.LikeCheep(1, 1));
       Assert.Equal(0,await repo.UnLikeCheep(1, 1));
-
-
-
    }
    
    
