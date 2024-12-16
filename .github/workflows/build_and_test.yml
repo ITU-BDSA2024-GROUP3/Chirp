@@ -62,13 +62,12 @@ jobs:
           dotnet-version: 8.0.x
       - name: Restore dependencies
         run: dotnet restore
-      - name: Setup user-secrets clientid
-        run: dotnet user-secrets set "GitHubClientID" "${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}" --project src/ChirpWeb/ChirpWeb.csproj
-      - name: Setup user-secrets clientsecret
-        run: dotnet user-secrets set "GitHubClientSecret" "${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}" --project src/ChirpWeb/ChirpWeb.csproj
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test test/IntegrationTest/IntegrationTest.csproj --verbosity normal
-      - name: Test
-        run: dotnet test IntegrationTest/IntegrationTest.csproj --verbosity normal
+        run: |
+          export GitHubClientID="${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}"
+          export GitHubClientSecret="${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}"
+          dotnet test test/IntegrationTest/IntegrationTest.csproj --verbosity normal
+
+        
