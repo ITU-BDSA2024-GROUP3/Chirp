@@ -13,33 +13,62 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      TZ: "Europe/Copenhagen"
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.x
-    - name: Restore dependencies
-      run: dotnet restore
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install dependencies
+        run: |
+          npm install
+          npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef
+      - name: Setup user-secrets clientid
+        run: dotnet user-secrets set "GitHubClientID" "${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}" --project src/ChirpWeb/ChirpWeb.csproj
+      - name: Setup user-secrets clientsecret
+        run: dotnet user-secrets set "GitHubClientSecret" "${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}" --project src/ChirpWeb/ChirpWeb.csproj
+      - name: Build
+        run: dotnet build --no-restore
+E2E_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start server
+        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+      - name: Wait for server to be ready
+        run: sleep 10 # Adjust the sleep duration if needed
+      - name: Test
+        run: dotnet test test/PlaywrightsTests/PlaywrightsTests.csproj --verbosity normal
+        
+Unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start server
+        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+      - name: Wait for server to be ready
+        run: sleep 10 # Adjust the sleep duration if needed
+      - name: Test
+        run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
 
-    - name: Restore dependencies for Integration Tests
-      run: dotnet restore test/IntegrationTest/IntegrationTest.csproj
-      
-    - name: Build web
-      run: dotnet build --no-restore
-    - name: Run Unit Tests
-      env:
-        AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
-        AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
-      run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
-      
-    - name: Run integration Test
-      env:
-        AUTHENTICATION_GITHUB_CLIENTID: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}
-        AUTHENTICATION_GITHUB_CLIENTSECRET: ${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}
-      run: dotnet test IntegrationTest/IntegrationTest.csproj --verbosity normal
-      
-    
+Integration_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start server
+        run: dotnet run --project src/Chirp.Razor/Chirp.Razor.csproj &
+      - name: Wait for server to be ready
+        run: sleep 10 # Adjust the sleep duration if needed
+      - name: Test
+        run: dotnet test IntegrationTest/IntegrationTest.csproj --verbosity normal
