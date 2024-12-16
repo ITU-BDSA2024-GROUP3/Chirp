@@ -48,6 +48,7 @@ public class AuthorRepository: IAuthorRepository
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
+    
     public async Task<AuthorDTO?> ReadAuthorDTOByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
@@ -103,8 +104,7 @@ public class AuthorRepository: IAuthorRepository
         wantToFollowAuthor.FollowingList.Add(wantToBeFollowed);
         return await _dbContext.SaveChangesAsync();
     }
-
-
+    
     public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
     {
         if (wantToUnfollow == wantToBeUnfollowed)

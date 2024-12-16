@@ -14,4 +14,5 @@ public interface ICheepRepository
     public Task<int> LikeCheep(int cheepid, int userId);
     public Task<int> UnLikeCheep(int cheepid, int userId);
     public Task<int> AmountOfLikes(int cheepId);
+    public Task DeleteUserInformation(int userId);
 }

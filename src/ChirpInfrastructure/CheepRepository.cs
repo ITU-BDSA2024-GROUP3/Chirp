@@ -75,7 +75,6 @@ public class CheepRepository : ICheepRepository
         return followers;
     }
 
-
     public List<CheepDTO> ReadFollowedCheeps(int page, int? UserId)
     {
         if (UserId == null)
@@ -118,7 +117,6 @@ public class CheepRepository : ICheepRepository
         message.TimeStamp = DateTime.Now;
         return message.CheepId;
     }
-
 
     public List<CheepDTO> ReadCheeps(int page, int? UserId)
     {
@@ -249,7 +247,7 @@ public class CheepRepository : ICheepRepository
         
         return cheep.AuthorLikeList.Count;
     }
-    
+
     public async Task<int> UnLikeCheep(int cheepid, int userId)
     {
         Cheep? cheep = await ReadCheepByCheepId(cheepid);
@@ -295,6 +293,7 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return cheep.AuthorLikeList.Count;
     }
+    
     public async Task<Cheep?> ReadCheepByCheepId(int cheepid)
     {
         IQueryable<Cheep> query = Queryable.Where<Cheep>(_dbContext.Cheeps, cheep => cheep.CheepId == cheepid)
@@ -302,5 +301,14 @@ public class CheepRepository : ICheepRepository
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-
+    
+    public async Task DeleteUserInformation(int userId)
+    {
+        foreach (Cheep cheep in _dbContext.Cheeps.Where(cheep => cheep.AuthorLikeList.Contains(userId)))
+        {
+            cheep.AuthorLikeList.Remove(userId);
+        } 
+        
+        await _dbContext.SaveChangesAsync();
+    }
 }
