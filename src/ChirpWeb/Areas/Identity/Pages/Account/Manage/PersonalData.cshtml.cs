@@ -24,7 +24,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
 
         public int currentPage;
 
-
+        #pragma warning disable 8618
         public PersonalDataModel(
             UserManager<Author> userManager,
             ILogger<PersonalDataModel> logger, ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
@@ -33,6 +33,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             _logger = logger;
             
         }
+        #pragma warning restore 8618
 
         public async Task<IActionResult> OnGet([FromQuery] int page)
         {

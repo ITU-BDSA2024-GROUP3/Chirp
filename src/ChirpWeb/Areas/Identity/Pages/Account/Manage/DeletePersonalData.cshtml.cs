@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ChirpCore;
 using ChirpCore.DomainModel;
 using ChirpWeb.Pages.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,7 +21,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
-
+        private readonly ICheepRepository _cheepRepos;
+        
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
@@ -29,6 +31,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _cheepRepos = CheepRepo;
         }
 
         /// <summary>
@@ -98,6 +101,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account.Manage
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
 
+            await _cheepRepos.DeleteUserInformation(user.UserId);
+            
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);

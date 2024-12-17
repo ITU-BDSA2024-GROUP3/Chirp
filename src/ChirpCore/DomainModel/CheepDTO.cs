@@ -20,10 +20,10 @@ public class CheepDTO
     public long? TimeStamp { get; set; }
     
     public int CheepId { get; set; }
-
+    
     public IList<int>? AuthorLikeList { get; set; }
 
-    public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null )
+    public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null)
     {
         Text = text;
         UserId = userId;
