@@ -32,7 +32,7 @@ public class EndToEndTests: PageTest{
         _serverProcess.Kill();
         _serverProcess.Dispose();
     }
-    
+    /*
     [Test]
     public async Task HomePageTest()
     {
@@ -107,8 +107,6 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task LogInUserTest()
     {
-        await EndToEndTestsUtility.UserRegister(Page, "jens@jensen", "jens","Abc123456789");
-        await EndToEndTestsUtility.UserLogOut(Page, "jens");
         await EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
 
@@ -121,13 +119,15 @@ public class EndToEndTests: PageTest{
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Expect(Page.GetByText("hans's Timeline What's on")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("hans I exist Likes: 0")).ToBeVisibleAsync();
 
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
+        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
         
-        await EndToEndTestsUtility.UserDelete(Page, "hans@grethe.com", "Abc123456789");
+        EndToEndTestsUtility.UserDelete(Page, "hans@grethe.com", "Abc123456789");
 
     }
-    /*
+
     [Test]
     public async Task followTest()
     {
@@ -249,7 +249,7 @@ public class EndToEndTests: PageTest{
         
     }
     
-    
+    */
     
     [Test]
     public async Task megaTest()
@@ -321,7 +321,7 @@ public class EndToEndTests: PageTest{
         
         EndToEndTestsUtility.UserDelete(Page, "bob@bob.com", "Abc123456789");
         
-    }*/
+    }
     
     /*
 await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
