@@ -43,16 +43,22 @@ builder.Services.AddAuthentication()
     {
         if (builder.Configuration["GitHubClientID"] == null )
         {
-            Console.Error.WriteLine("You must provide a client ID.");
+            Console.WriteLine("You must provide a client ID.");
+        }
+        else
+        {
+            o.ClientId = builder.Configuration["GitHubClientID"]!;
         }
         
         if (builder.Configuration["GitHubClientSecret"] == null )
         {
-            Console.Error.WriteLine("You must provide a client Secret.");
+            Console.WriteLine("You must provide a client Secret.");
+        }
+        else
+        {
+            o.ClientSecret = builder.Configuration["GitHubClientSecret"]!;
         }
         
-        o.ClientId = builder.Configuration["GitHubClientID"]!;
-        o.ClientSecret = builder.Configuration["GitHubClientSecret"]!;
         o.CallbackPath = "/signin-github";
         
         o.Scope.Add("user:email");
