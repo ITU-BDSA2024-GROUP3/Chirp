@@ -437,7 +437,7 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         bool windows2 = content.Contains(
             $"<Button class=\"btn\">\r\n            <a href=\"?page={page-1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page-1})</a>\r\n        </Button>");
         bool linux1 = content.Contains(
-            $"<Button class=\"btn\">\n        <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n    </Button>"
+            $"<Button class=\"btn\">\n            <a href=\"?page={page + 1}\" class=\"btn\" id=\"nextBtn\" style=\"color: white;\">Next ({page + 1})</a>\n        </Button>"
         );
         bool linux2 = content.Contains(
             $"<Button class=\"btn\">\n            <a href=\"?page={page - 1}\" class=\"btn\" id=\"prevBtn\" style=\"color: white;\">Previous ({page - 1})</a>\n        </Button>");
