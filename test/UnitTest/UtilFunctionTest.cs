@@ -20,14 +20,14 @@ public class UtilFunctionsTest
         
         var author = new Author() { UserId = 1, Cheeps = null, Email = "mymail", Name = "Tom", FollowingList = new List<int>()};
         
-        var cheep = new Cheep
-        {
-            CheepId = 1,
-            Author = author,
-            UserId = author.UserId,
-            Text = "messageData",
-            TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime // Ensure this matches the format in your model
-        };
+        var cheep = new Cheep(
+            cheepId: 1,
+            text: "messageData",
+            timeStamp: DateTimeOffset.FromUnixTimeSeconds(1728643569).UtcDateTime, // Ensure this matches the format in your model
+            author: author,
+            userId: author.UserId,
+            authorLikeList: new List<int>()
+        );
 
         context.Authors.Add(author);
         context.Cheeps.Add(cheep);

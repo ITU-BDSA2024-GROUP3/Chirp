@@ -5,7 +5,10 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    ViewData["CurrentPage"] = Model.currentPage; 
+
     var routeName = HttpContext.GetRouteValue("name");
+    ViewData["CurrentAuthorID"] = Model.Author!.UserId;
     int nextPage = Model.currentPage + 1;
     int prevPage = Model.currentPage > 1 ? Model.currentPage - 1 : 1;
 }
@@ -31,7 +34,7 @@
                 ViewData["AuthorName"] = cheep.AuthorName;
                 ViewData["CheepText"] = cheep.Text;
                 ViewData["CheepId"] = cheep.CheepId;
-                ViewData["Likes"] = await Model.GetCheepLike(cheep.CheepId);
+                ViewData["Likes"] = cheep.AuthorLikeList?.Count;
 
                 if (cheep.TimeStamp != null)
                 {
@@ -44,7 +47,7 @@
                 
                 if (User.Identity.IsAuthenticated)
                 {
-                    var id = Model.LoggedInAuthor.UserId;
+                    var id = Model.LoggedInAuthor!.UserId;
                     var list = cheep.AuthorLikeList;
                     if (list == null)
                     {

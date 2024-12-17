@@ -24,11 +24,7 @@ public class CheepRepository : ICheepRepository
             throw new Exception("User not recognized!");
         }
 
-        Cheep message = new()
-        {
-            CheepId = _nextCheepId++, UserId = newMessage.UserId, Text = newMessage.Text, TimeStamp = DateTime.Now,
-            Author = cheepAuthor
-        };
+        Cheep message = new Cheep(cheepId: _nextCheepId++, userId: newMessage.UserId, text: newMessage.Text, timeStamp: DateTime.Now, author: cheepAuthor, authorLikeList: new List<int>());
         var queryResult = _dbContext.Cheeps.Add(message); // does not write to the database!
         cheepAuthor.Cheeps.Add(message);
 
@@ -79,7 +75,6 @@ public class CheepRepository : ICheepRepository
         return followers;
     }
 
-
     public List<CheepDTO> ReadFollowedCheeps(int page, int? UserId)
     {
         if (UserId == null)
@@ -122,7 +117,6 @@ public class CheepRepository : ICheepRepository
         message.TimeStamp = DateTime.Now;
         return message.CheepId;
     }
-
 
     public List<CheepDTO> ReadCheeps(int page, int? UserId)
     {
@@ -194,7 +188,7 @@ public class CheepRepository : ICheepRepository
         // returns GMT Timezone 
         var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
+        return dateTime.ToString("MM/dd/yy H:mm:ss").Replace('-', '/').Replace('.', ':');
     }
 
     public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
@@ -223,7 +217,7 @@ public class CheepRepository : ICheepRepository
     
     public async Task<int> AmountOfLikes(int cheepId)
     {
-        Cheep cheep = await ReadCheepByCheepId(cheepId);
+        Cheep? cheep = await ReadCheepByCheepId(cheepId);
         
         
         if (cheep == null)
@@ -236,9 +230,13 @@ public class CheepRepository : ICheepRepository
             cheep.AuthorLikeList = new List<int>();
         }
         var removeThese = new List<int>();
+        if (cheep.AuthorLikeList == null)
+        {
+            cheep.AuthorLikeList = new List<int>();
+        }
         foreach (var authorid in cheep.AuthorLikeList)
         {
-            Author tempAuthor = await ReadAuthorById(authorid);
+            Author? tempAuthor = await ReadAuthorById(authorid);
             if (tempAuthor == null)
             {
                 removeThese.Add(authorid);
@@ -254,42 +252,68 @@ public class CheepRepository : ICheepRepository
         
         return cheep.AuthorLikeList.Count;
     }
-    
+
     public async Task<int> UnLikeCheep(int cheepid, int userId)
     {
-        if (ReadCheepByCheepId(cheepid).Result==null || ReadAuthorById(userId).Result == null)
+        Cheep? cheep = await ReadCheepByCheepId(cheepid);
+        Author? author = await ReadAuthorById(userId);
+        
+        if (cheep == null)
         {
-            throw new Exception($"User or cheep does not exist");
+            throw new Exception($"Cheep does not exist");
         }
-        if (!ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Contains(userId))
+        if (author == null)
+        {
+            throw new Exception($"Author does not exist");
+        }
+        if (!cheep.AuthorLikeList!.Contains(userId))
         {
             throw new Exception($"Did not like this cheep!");
         }
-        ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Remove(userId);
+        
+        cheep.AuthorLikeList.Remove(userId);
 
         await _dbContext.SaveChangesAsync();
-        return ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Count;
+        return cheep.AuthorLikeList.Count;
     }
+    
     public async Task<int> LikeCheep(int cheepid, int userId)
     {
-        if (ReadCheepByCheepId(cheepid).Result==null || ReadAuthorById(userId).Result == null)
+        Cheep? cheep = await ReadCheepByCheepId(cheepid);
+        Author? author = await ReadAuthorById(userId);
+        
+        if (cheep == null)
         {
-            throw new Exception($"User or cheep does not exist");
+            throw new Exception($"Cheep does not exist");
         }
-        if (ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Contains(userId))
+        if (author == null)
+        {
+            throw new Exception($"Author does not exist");
+        }
+        if (cheep.AuthorLikeList!.Contains(userId))
         {
             throw new Exception($"Already like this cheep!");
         }
-        ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Add(userId);
+        cheep.AuthorLikeList.Add(userId);
         await _dbContext.SaveChangesAsync();
-        return ReadCheepByCheepId(cheepid).Result.AuthorLikeList.Count;
+        return cheep.AuthorLikeList.Count;
     }
-    public async Task<Cheep> ReadCheepByCheepId(int cheepid)
+    
+    public async Task<Cheep?> ReadCheepByCheepId(int cheepid)
     {
         IQueryable<Cheep> query = Queryable.Where<Cheep>(_dbContext.Cheeps, cheep => cheep.CheepId == cheepid)
             .Select(cheep => cheep)
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-
+    
+    public async Task DeleteUserInformation(int userId)
+    {
+        foreach (Cheep cheep in _dbContext.Cheeps.Where(cheep => cheep.AuthorLikeList.Contains(userId)))
+        {
+            cheep.AuthorLikeList.Remove(userId);
+        } 
+        
+        await _dbContext.SaveChangesAsync();
+    }
 }
