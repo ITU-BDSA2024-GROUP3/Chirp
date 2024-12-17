@@ -21,7 +21,13 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-  
+    - name: Integration test
+      run: |
+        export GitHubClientID="${{ secrets.AUTHENTICATION_GITHUB_CLIENTID }}"
+        export GitHubClientSecret="${{ secrets.AUTHENTICATION_GITHUB_CLIENTSECRET }}"
+        dotnet test test/IntegrationTest/IntegrationTest.csproj --verbosity normal
+    - name: Unit test
+      run: dotnet test test/UnitTest/UnitTest.csproj --verbosity normal
   
     - name: Setup
       uses: actions/setup-dotnet@v4
