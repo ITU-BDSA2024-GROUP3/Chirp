@@ -36,38 +36,40 @@ builder.Services.AddDefaultIdentity<Author>(options =>
 
 
 
-
-builder.Services.AddAuthentication()
-    .AddCookie()
-    .AddGitHub(o =>
-    {
-        if (builder.Configuration["GitHubClientID"] == null )
+if (builder.Configuration["GitHubClientSecret"] != null)
+{
+    builder.Services.AddAuthentication()
+        .AddCookie()
+        .AddGitHub(o =>
         {
-            Console.WriteLine("You must provide a client ID.");
-        }
-        else
-        {
-            o.ClientId = builder.Configuration["GitHubClientID"]!;
-        }
-        
-        if (builder.Configuration["GitHubClientSecret"] == null )
-        {
-            Console.WriteLine("You must provide a client Secret.");
-        }
-        else
-        {
-            o.ClientSecret = builder.Configuration["GitHubClientSecret"]!;
-        }
-        
-        o.CallbackPath = "/signin-github";
-        
-        o.Scope.Add("user:email");
+            if (builder.Configuration["GitHubClientID"] == null)
+            {
+                Console.WriteLine("You must provide a client ID.");
+            }
+            else
+            {
+                o.ClientId = builder.Configuration["GitHubClientID"]!;
+            }
 
-        o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-    });
+            if (builder.Configuration["GitHubClientSecret"] == null)
+            {
+                Console.WriteLine("You must provide a client Secret.");
+            }
+            else
+            {
+                o.ClientSecret = builder.Configuration["GitHubClientSecret"]!;
+            }
+
+            o.CallbackPath = "/signin-github";
+
+            o.Scope.Add("user:email");
+
+            o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+        });
+}
 
 
-    builder.Services.AddSession(options =>
+builder.Services.AddSession(options =>
     {
         options.IdleTimeout = TimeSpan.FromSeconds(1800);
         options.Cookie.HttpOnly = true;
