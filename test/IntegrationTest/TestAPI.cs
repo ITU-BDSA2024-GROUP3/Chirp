@@ -682,71 +682,9 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         // Assert
         Assert.Contains("<title>Log in</title>", content);
     }
-    
-    [Fact]
-    public async void DoesOtherCheepsAppear()
-    {
-        // Arrange
-        var content = await SetPrivatePage(1, "Adrian", 12);
-        
-        // Act
 
-        //Builds on the assumption that Helge, then Adrian has been added to the database, and Adrian follows Helge
-        // Assert
-        Assert.Contains("<a href=\"/Helge\">Helge</a>\n", content);
-    }
-    
-    [Fact]
-    public async void UnFollowButtonTesting1()
-    {
-        // Arrange
 
-        // Act
-        
-        // Assert
-        
-    }
 
-    
-    
-    /*
-    
-    
-     * NoPreviousPage1OnHomePage
-     * PressingButtonWorksPublic
-     * PressingButtonWorksPrivate
-     * TextAlwaysExists
-     */
-    
-    
-    
-    
-    /*[Fact]
-    //[InlineData("What did they take?")]
-    public async void CanSeePublicTimelineCheep()
-    {
-        var response = await _client.GetAsync($"/");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var htmlDocument = new HtmlDocument();
-        htmlDocument.LoadHtml(content);
 
-        var tableElement = htmlDocument.GetElementbyId("messagelist");
-        Assert.NotNull(tableElement);
-    }
-    [Theory]
-    [InlineData("Helge", 11)] //Change to ids to find page
-    [InlineData("Adrian", 12)]
-    public async void CanSeePrivateTimelineCheep(string author, int id)
-    {
-        _output.WriteLine($"Author: {author}, Id: {id}");
-        var response = await _client.GetAsync($"/{id}");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        var htmlDocument = new HtmlDocument();
-        htmlDocument.LoadHtml(content);
 
-        var tableElement = htmlDocument.GetElementbyId("messagelist");
-        Assert.NotNull(tableElement);
-    }*/
 }
