@@ -2,6 +2,9 @@
 
 namespace ChirpCore.DomainModel;
 
+/// <summary>
+/// This includes the cheeps but only the information that is used for display
+/// </summary>
 public class CheepDTO
 {
     [StringLength(160)]
@@ -21,6 +24,9 @@ public class CheepDTO
     
     public int CheepId { get; set; }
     
+    /// <summary>
+    /// This is a list of the IDs of the authors who have liked the cheep
+    /// </summary>
     public IList<int>? AuthorLikeList { get; set; }
 
     public CheepDTO(string text, int userId, int cheepId, string? authorName = null, long? timeStamp = null, IList<int>? authorLikeList = null)
