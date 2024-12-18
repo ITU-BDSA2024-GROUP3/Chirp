@@ -51,6 +51,8 @@ public class Cheep
     /// <summary>
     /// This is a method that automatically creates a DTO of this specific cheep
     /// </summary>
+    /// <returns> A new CheepDTO, ie. the simplified version of cheep the client is allowed to get</returns>
+
     public CheepDTO ToDTO()
     {
         return new CheepDTO(text: Text!, userId: UserId, authorName: Author!.Name, timeStamp: TimeStamp.ToUnixTimeSeconds(), cheepId: CheepId, authorLikeList: AuthorLikeList);
