@@ -3,7 +3,7 @@
 namespace ChirpCore.DomainModel;
 
 /// <summary>
-/// These represents the cheeps that are posted to the timelines for the appropriate users to read
+/// This class represents the cheeps that are posted to the timelines for the appropriate users to read
 /// These include the message, the amount of likes and the author who posted the cheep
 /// </summary>
 public class Cheep
@@ -35,7 +35,7 @@ public class Cheep
     }
     
     /// <summary>
-    ///Constructor used by other classes
+    ///Constructor used by everything else (DBInitializer)
     /// </summary>
     
     #pragma warning restore 8618
