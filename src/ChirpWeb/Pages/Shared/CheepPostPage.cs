@@ -29,6 +29,8 @@ public class CheepPostPage : BasePage
     /// After posting cheeps (and if the conditions are wrong)
     /// the client gets redirected to the first page of the public timeline 
     /// </summary>
+    
+    
     public async Task<ActionResult> OnPost()
     {
         if (!User.Identity!.IsAuthenticated)
@@ -63,6 +65,12 @@ public class CheepPostPage : BasePage
     /// redirects to the page the client is on
     /// but if the redirected page has no cheeps it'll redirect to the last page with cheeps
     /// </summary>
+    /// <param name="AuthorName">The name of the author that is being followed</param>
+    /// <param name="CurrentPage">The current page the client is on</param>
+    /// <param name="CurrentAuthorID">The ID of the client - corresponds to the UserId column in the database</param>
+
+
+
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage, string? CurrentAuthorID)
     {
         TrySetLoggedInAuthor();
@@ -105,6 +113,10 @@ public class CheepPostPage : BasePage
     /// <summary>
     /// Likes and unlikes cheeps
     /// </summary>
+    /// <param name="CheepId">The ID of the cheep being liked - corresponds to the CheepId column in the database</param>
+    /// <param name="CurrentPage">The page the client is currently on</param>
+
+
     public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId, int CurrentPage)
     {
         TrySetLoggedInAuthor();
@@ -147,6 +159,8 @@ public class CheepPostPage : BasePage
     /// <summary>
     /// Returns the amount of likes a cheep has
     /// </summary>
+    /// <param name="CheepId">The ID of the cheep being liked - corresponds to the CheepId column in the database</param>
+
     public async Task<int> GetCheepLike(int CheepId)
     {
         int temp = await _CheepRepo.AmountOfLikes(CheepId);

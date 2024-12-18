@@ -23,8 +23,11 @@ public class PublicModel : CheepPostPage
     #pragma warning restore 8618
 
     /// <summary>
-    ///Reads all the cheeps and ensures pagenation 
+    ///Reads all the cheeps and ensures pagenation
     /// </summary>
+    /// <param name="page">The page the client is currently on</param>
+
+    
     public ActionResult OnGet([FromQuery] int page)
     {
         TrySetLoggedInAuthor();

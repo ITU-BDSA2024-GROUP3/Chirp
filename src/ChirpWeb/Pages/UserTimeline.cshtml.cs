@@ -21,6 +21,13 @@ public class UserTimelineModel : CheepPostPage
     public int currentPage;
     public UserTimelineModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="page"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
         TrySetLoggedInAuthor();
