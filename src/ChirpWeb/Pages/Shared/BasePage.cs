@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace ChirpWeb.Pages.Shared;
 
 /// <summary>
-///This is for all pages that require the user's username
+/// This class in inherited by Page Models that need access to the Author object of the user that is logged in
 /// </summary>
 
 public class BasePage : PageModel
@@ -24,7 +24,7 @@ public class BasePage : PageModel
     } 
     
     /// <summary>
-    ///Sets the client's username as a variable that can be accessed later
+    /// Sets <c>LoggedInAuthor</c> to the Author object of the user, if they have been authenticated
     /// </summary>
     public async void TrySetLoggedInAuthor() {
         if (User.Identity!.IsAuthenticated && LoggedInAuthor == null)
