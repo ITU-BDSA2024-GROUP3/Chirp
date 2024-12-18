@@ -2,11 +2,11 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2024 Group `3`
 author:
-- "Adrian Juul <adju@itu.dk>"
+- "Adrian Laursen Nohr Juul <adju@itu.dk>"
 - "Nickie Almind <nalm@itu.dk>"
 - "David Nicholas Nielsen <davn@itu.dk>"
-- "Bárður Berg <babe@itu.dk>"
-- "Theresia <trav@itu.dk>"
+- "Bárður Napoleon Djurhuus Berg <babe@itu.dk>"
+- "Theresia Mondrup Ravn <trav@itu.dk>"
 numbersections: true
 ---
 
