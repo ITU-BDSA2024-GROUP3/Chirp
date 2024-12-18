@@ -124,7 +124,7 @@ public class EndToEndTests: PageTest{
         
         //login
         EndToEndTestsUtility.UserLogIn(Page, "ropf@itu.dk", "LetM31n!");
-         Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
         
         //follow Jacqualine Gilcone
         await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).GetByRole(AriaRole.Button).First.ClickAsync();
@@ -143,7 +143,14 @@ public class EndToEndTests: PageTest{
     [Test]
     public async Task likeTest()
     {
-        
+        EndToEndTestsUtility.UserLogIn(Page, "ropf@itu.dk", "LetM31n!");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Expect(Page.GetByText("Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡")).ToBeVisibleAsync();
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+        await Expect(Page.GetByText("Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♥︎")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "♥︎" }).ClickAsync();
+        await Expect(Page.GetByText("Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡")).ToBeVisibleAsync();
+        EndToEndTestsUtility.UserLogOut(Page, "Helge");
     }
     
 }
