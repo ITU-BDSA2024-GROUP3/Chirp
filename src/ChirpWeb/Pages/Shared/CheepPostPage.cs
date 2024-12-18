@@ -27,7 +27,7 @@ public class CheepPostPage : BasePage
     /// <summary>
     /// Checks if the condition for posting the cheeps is correct and also posts cheeps
     /// After posting cheeps (and if the conditions are wrong)
-    /// the user gets redirected to the first page of the public timeline 
+    /// the client gets redirected to the first page of the public timeline 
     /// </summary>
     public async Task<ActionResult> OnPost()
     {
@@ -60,7 +60,7 @@ public class CheepPostPage : BasePage
     }
     /// <summary>
     /// Follow or unfollow an author
-    /// redirects to the page the user is on
+    /// redirects to the page the client is on
     /// but if the redirected page has no cheeps it'll redirect to the last page with cheeps
     /// </summary>
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage, string? CurrentAuthorID)

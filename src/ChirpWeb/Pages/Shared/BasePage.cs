@@ -24,12 +24,12 @@ public class BasePage : PageModel
     } 
     
     /// <summary>
-    ///Sets the user's username as a variable that can be accessed later
+    ///Sets the client's username as a variable that can be accessed later
     /// </summary>
     public async void TrySetLoggedInAuthor() {
         if (User.Identity!.IsAuthenticated && LoggedInAuthor == null)
         {
-            LoggedInAuthor = await _AuthorRepo.ReadAuthorDTOByEmail(User.Identity.Name!);
+            LoggedInAuthor = await _AuthorRepo.ReadAuthorDTOByEmail(User.Identity.Name!);//User.Identity.Name is the email
         }
     }
 }
