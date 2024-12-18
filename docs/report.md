@@ -8,9 +8,11 @@ author:
 - "Bárður Napoleon Djurhuus Berg <babe@itu.dk>"
 - "Theresia Mondrup Ravn <trav@itu.dk>"
 numbersections: true
+ 
 ---
 
 # Design and Architecture of Chirp\!
+The github repository can be found here: https://github.com/ITU-BDSA2024-GROUP3/Chirp
 ## Domain model
 
 ![Domain Model](./images/domainModel.png)

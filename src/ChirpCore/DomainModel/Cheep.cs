@@ -3,7 +3,7 @@
 namespace ChirpCore.DomainModel;
 
 /// <summary>
-/// These represents the cheeps that are posted to the timelines for the appropriate users to read
+/// This class represents the cheeps that are posted to the timelines for the appropriate users to read
 /// These include the message, the amount of likes and the author who posted the cheep
 /// </summary>
 public class Cheep
@@ -35,7 +35,7 @@ public class Cheep
     }
     
     /// <summary>
-    ///Constructor used by other classes
+    ///Constructor used by everything else (DBInitializer)
     /// </summary>
     
     #pragma warning restore 8618
@@ -51,6 +51,8 @@ public class Cheep
     /// <summary>
     /// This is a method that automatically creates a DTO of this specific cheep
     /// </summary>
+    /// <returns> A new CheepDTO, ie. the simplified version of cheep the client is allowed to get</returns>
+
     public CheepDTO ToDTO()
     {
         return new CheepDTO(text: Text!, userId: UserId, authorName: Author!.Name, timeStamp: TimeStamp.ToUnixTimeSeconds(), cheepId: CheepId, authorLikeList: AuthorLikeList);
