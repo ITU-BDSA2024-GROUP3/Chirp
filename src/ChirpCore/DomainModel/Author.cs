@@ -29,7 +29,7 @@ public class Author : IdentityUser
     [PersonalData]
     public ICollection<Cheep> Cheeps { get; set; }
     /// <summary>
-    /// This is a list of the IDs of authors who follow this author
+    /// This is a list of the IDs of authors who this author follows
     /// </summary>
     public IList<int> FollowingList { get; set; }
     /// <summary>
