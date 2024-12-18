@@ -5,8 +5,8 @@ author:
 - "Adrian Juul <adju@itu.dk>"
 - "Nickie <nalm@itu.dk>"
 - "David <davn@itu.dk>"
-- "Bárður Berg <babe@itu.dk>"
-- "Theresia <trav@itu.dk>"
+- "Bárður Napoleon Djurhuus Berg <babe@itu.dk>"
+- "Theresia Mondrup Ravn <trav@itu.dk>"
 numbersections: true
 ---
 
