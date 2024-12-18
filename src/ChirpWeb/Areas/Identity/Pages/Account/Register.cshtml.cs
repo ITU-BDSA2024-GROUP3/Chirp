@@ -137,9 +137,9 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                 var userExist = await _userManager.FindByNameAsync(Input.Email);
                 var NameExist = await _authorRepo.ReadAuthorByName(Input.Name);
                 Console.WriteLine(NameExist);
-                if (userExist == null /*&& NameExist.Name != Input.Name*/)
+                if (userExist == null)
                 {
-                    //var user = await _service.CreateAuthor(name, "", id);
+                    //We make a new user, and gives them all author attributes
                     var user = CreateUser();
 
                     user.Cheeps = new List<Cheep>();
