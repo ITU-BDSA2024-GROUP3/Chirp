@@ -32,7 +32,7 @@ public class EndToEndTests: PageTest{
         _serverProcess.Kill();
         _serverProcess.Dispose();
     }
-    /*
+    
     [Test]
     public async Task HomePageTest()
     {
@@ -103,7 +103,7 @@ public class EndToEndTests: PageTest{
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         
     }
-
+    /*
     [Test]
     public async Task LogInUserTest()
     {
@@ -250,12 +250,57 @@ public class EndToEndTests: PageTest{
     }
     
     */
+    [Test]
+    public async Task loginTestHelge()
+    {
+        await EndToEndTestsUtility.UserLogIn(Page, "ropf@itu.dk", "LetM31n!");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Helge?" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Share" })).ToBeVisibleAsync();
+        
+        EndToEndTestsUtility.UserLogOut(Page, "ropf@itu.dk");
+        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
+    }
+    [Test]
+    public async Task followingtest2()
+    {
+        //register user
+        EndToEndTestsUtility.UserRegister(Page, "dorthe@mail.com","dorthe", "Abc123456789");
+        
+        //follow testing
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).First).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Paragraph).Nth(1)).ToBeVisibleAsync();
+        
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 1" }).GetByRole(AriaRole.Button).First).ToBeVisibleAsync();
+
+        EndToEndTestsUtility.UserDelete(Page, "dorthe@mail.com", "Abc123456789");
+    }
+
+    [Test]
+    public async Task liketest2()
+    {
+        EndToEndTestsUtility.UserRegister(Page, "lars@mail.com","lars", "Abc123456789");
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+       
+        await Expect(Page.GetByText("Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 2 ♥︎")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "♥︎" }).ClickAsync();
+        await Expect(Page.GetByText("Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 1 ♡")).ToBeVisibleAsync();
+
+        EndToEndTestsUtility.UserDelete(Page, "lars@mail.com", "Abc123456789");
+
+    }
     
     [Test]
     public async Task megaTest()
     {
+        //register user
         EndToEndTestsUtility.UserRegister(Page, "hans@grethe.com","hans", "Abc123456789");
         
+        //follow testing
         await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).GetByRole(AriaRole.Button).First).ToBeVisibleAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).GetByRole(AriaRole.Paragraph).Nth(1)).ToBeVisibleAsync();
         
@@ -263,6 +308,7 @@ public class EndToEndTests: PageTest{
         
         await Expect(Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 0" }).GetByRole(AriaRole.Button).First).ToBeVisibleAsync();
         
+        //like testing
         await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 0" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
         
         await Expect(Page.GetByText("Likes: 1")).ToBeVisibleAsync();
