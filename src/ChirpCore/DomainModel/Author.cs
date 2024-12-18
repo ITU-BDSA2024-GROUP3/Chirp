@@ -35,6 +35,7 @@ public class Author : IdentityUser
     /// <summary>
     /// This is a method that automatically creates a DTO of this specific author
     /// </summary>
+    /// <returns> A new AuthorDTO, ie. the simplified version of author the client is allowed to get</returns>
     public AuthorDTO ToDTO()
     {
         return new AuthorDTO(Name, UserId, FollowingList);
