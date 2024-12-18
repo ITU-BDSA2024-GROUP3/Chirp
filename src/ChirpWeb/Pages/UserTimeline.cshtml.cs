@@ -22,12 +22,12 @@ public class UserTimelineModel : CheepPostPage
     public UserTimelineModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo) { }
 
     /// <summary>
-    ///
+    /// Returns the cheeps of the private timeline
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="page"></param>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
+    /// <param name="name">The name of the author whose timeline the client is trying to access - based on the Name column</param>
+    /// <param name="page">The current page the client is on</param>
+    /// <returns>the cheeps of the private timeline</returns>
+    /// <exception cref="Exception">If the user whose timeline is trying to be accessed doesn't exist</exception>
     public async Task<ActionResult> OnGetAsync(string name, [FromQuery] int page)
     {
         TrySetLoggedInAuthor();
