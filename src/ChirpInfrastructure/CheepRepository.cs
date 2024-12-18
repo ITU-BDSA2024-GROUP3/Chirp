@@ -12,9 +12,12 @@ public class CheepRepository : ICheepRepository
     public CheepRepository(ChirpDBContext context)
     {
         _dbContext = context;
-        _nextCheepId = 0;
+        _nextCheepId = 0;//ensures the first cheep posted will have the ID of 0
     }
-
+    /// <summary>
+    /// Cheep gets created and added to the database
+    /// CheepID is returned
+    /// </summary>
     public async Task<int> CreateCheep(CheepDTO newMessage)
     {
         Author? cheepAuthor = ReadAuthorById(newMessage.UserId).Result;
@@ -35,7 +38,11 @@ public class CheepRepository : ICheepRepository
 
         return queryResult.Entity.CheepId;
     }
-
+    /// <summary>
+    /// Returns a list of all authors that follow the author
+    /// Also deletes any followers that no longer exists
+    /// The cheeps returned is depended on the page the client is on 
+    /// </summary>
     public async Task<List<AuthorDTO>> ReadFollowingAsync(int UserId)
     {
         Author? author = await ReadAuthorById(UserId);
@@ -50,7 +57,7 @@ public class CheepRepository : ICheepRepository
 
         List<AuthorDTO> followers = new List<AuthorDTO>();
 
-        List<int> removeTheseIds = new List<int>();
+        List<int> removeTheseIds = new List<int>();//authors that no longer exists
 
         foreach (var followerId in author.FollowingList)
         {
@@ -74,7 +81,10 @@ public class CheepRepository : ICheepRepository
 
         return followers;
     }
-
+    /// <summary>
+    /// Returns the cheeps displayed
+    /// This is both the client's own cheeps and also the cheeps of the authors they follow
+    /// </summary>
     public List<CheepDTO> ReadFollowedCheeps(int page, int? UserId)
     {
         if (UserId == null)
@@ -104,7 +114,10 @@ public class CheepRepository : ICheepRepository
 
         return query.ToList();
     }
-
+    /// <summary>
+    /// Updates the text of the cheep
+    /// When a cheep is updated, the timestamp is updated to when it got updated/edited
+    /// </summary>
     public async Task<int> UpdateCheep(Cheep updatedMessage)
     {
         var message = await _dbContext.Cheeps.FindAsync(updatedMessage.CheepId);
@@ -117,7 +130,13 @@ public class CheepRepository : ICheepRepository
         message.TimeStamp = DateTime.Now;
         return message.CheepId;
     }
-
+    /// <summary>
+    /// Returns the cheeps displayed
+    /// If a UserId is included, then it returns the cheeps for a private timeline
+    /// This means only the cheeps posted by that specific author
+    /// Otherwise, it'll return all the cheeps posted by everyone (public)
+    /// The cheeps returned is depended on the page the client is on 
+    /// </summary>
     public List<CheepDTO> ReadCheeps(int page, int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core
@@ -147,7 +166,12 @@ public class CheepRepository : ICheepRepository
 
         return query.ToList();
     }
-
+    /// <summary>
+    /// Returns all cheeps with no regards to page
+    /// If a UserId is included, then it returns the cheeps for a private timeline
+    /// This means only the cheeps posted by that specific author
+    /// Otherwise, it'll return all the cheeps posted by everyone (public)
+    /// </summary>
     public List<CheepDTO> ReadAllCheeps(int? UserId)
     {
         // Formulate the query - will be translated to SQL by EF Core
@@ -173,7 +197,12 @@ public class CheepRepository : ICheepRepository
 
         return query.ToList();
     }
-
+    /// <summary>
+    /// This only exists because another method uses it (following and unfollow)
+    /// It actually belongs in AuthorRepo
+    ///
+    /// Returns the author with the id given 
+    /// </summary>
     public async Task<Author?> ReadAuthorById(int id)
     {
         IQueryable<Author> query = Queryable.Where(_dbContext.Authors, author => author.UserId == id)
@@ -181,7 +210,12 @@ public class CheepRepository : ICheepRepository
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-
+    /// <summary>
+    /// Converts unixTimeStamp to a date and time
+    /// Automatically replaces full stops with a colon
+    /// because some computers automatically formats dateTime to use full-stops instead of colons
+    /// This was done because of tests
+    /// </summary>
     public static string UnixTimeStampToDateTimeString(Int64 unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch
@@ -190,7 +224,10 @@ public class CheepRepository : ICheepRepository
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss").Replace('-', '/').Replace('.', ':');
     }
-
+    /// <summary>
+    /// The an author unfollows an author
+    /// Returns the amount in the author's followingList
+    /// </summary>
     public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
     {
         if (wantToUnfollow == wantToBeUnfollowed)
@@ -214,7 +251,10 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return wantToUnfollowAuthor.FollowingList.Count;
     }
-    
+    /// <summary>
+    /// Returns the amount of likes a cheep has
+    /// Also removes the likes from authors that no longer exists
+    /// </summary>
     public async Task<int> AmountOfLikes(int cheepId)
     {
         Cheep? cheep = await ReadCheepByCheepId(cheepId);
@@ -224,7 +264,10 @@ public class CheepRepository : ICheepRepository
             throw new Exception($"Cheep does not exist, AmountOfLikes in cheepRepo");
         }
 
-        var removeThese = new List<int>();
+        var removeThese = new List<int>();//authors that no longer exists are added here to be deleted later
+        
+        
+        //if the list doens't exist it will be created here
         if (cheep.AuthorLikeList == null)
         {
             cheep.AuthorLikeList = new List<int>();
@@ -247,7 +290,11 @@ public class CheepRepository : ICheepRepository
         
         return cheep.AuthorLikeList.Count;
     }
-
+    /// <summary>
+    /// Cheep gets unliked by the client who had previously liked it
+    /// Removes the like
+    /// Returns the amount of likes the cheep has
+    /// </summary>
     public async Task<int> UnLikeCheep(int cheepid, int userId)
     {
         Cheep? cheep = await ReadCheepByCheepId(cheepid);
@@ -271,7 +318,11 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return cheep.AuthorLikeList.Count;
     }
-    
+    /// <summary>
+    /// Author likes cheep
+    /// Amount of likes is updated
+    /// Returns the amount of likes the cheep has
+    /// </summary>
     public async Task<int> LikeCheep(int cheepid, int userId)
     {
         Cheep? cheep = await ReadCheepByCheepId(cheepid);
@@ -293,7 +344,9 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
         return cheep.AuthorLikeList.Count;
     }
-    
+    /// <summary>
+    /// Returns the cheep that has the given id
+    /// </summary>
     public async Task<Cheep?> ReadCheepByCheepId(int cheepid)
     {
         IQueryable<Cheep> query = Queryable.Where<Cheep>(_dbContext.Cheeps, cheep => cheep.CheepId == cheepid)
@@ -301,7 +354,11 @@ public class CheepRepository : ICheepRepository
             .Take(1);
         return await query.FirstOrDefaultAsync();
     }
-    
+    /// <summary>
+    /// Looks through all cheeps to check if the given author has liked the cheep
+    /// If they have, then the like gets removed
+    /// The new likes gets saved in the database
+    /// </summary>
     public async Task DeleteUserInformation(int userId)
     {
         foreach (Cheep cheep in _dbContext.Cheeps.Where(cheep => cheep.AuthorLikeList.Contains(userId)))
