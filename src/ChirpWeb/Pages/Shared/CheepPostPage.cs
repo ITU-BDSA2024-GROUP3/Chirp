@@ -29,8 +29,14 @@ public class CheepPostPage : BasePage
     /// After posting cheeps (and if the conditions are wrong)
     /// the client gets redirected to the first page of the public timeline 
     /// </summary>
+    /// <returns>Redirects to the current page</returns>
+    /// <exception cref="Exception">
+    /// - Exception
+    /// No account is logged in -or-
+    /// No text is given
+    /// </exception>
     
-    
+
     public async Task<ActionResult> OnPost()
     {
         if (!User.Identity!.IsAuthenticated)
@@ -68,6 +74,11 @@ public class CheepPostPage : BasePage
     /// <param name="AuthorName">The name of the author that is being followed</param>
     /// <param name="CurrentPage">The current page the client is on</param>
     /// <param name="CurrentAuthorID">The ID of the client - corresponds to the UserId column in the database</param>
+    /// <exception cref="Exception">
+    /// - Exception
+    /// No account is logged in -or-
+    /// followauthor not defined 
+    /// </exception>
 
 
 
@@ -115,6 +126,11 @@ public class CheepPostPage : BasePage
     /// </summary>
     /// <param name="CheepId">The ID of the cheep being liked - corresponds to the CheepId column in the database</param>
     /// <param name="CurrentPage">The page the client is currently on</param>
+    /// <exception cref="Exception">
+    /// - Exception
+    /// No account is logged in -or-
+    /// no cheep has the given id
+    /// </exception>
 
 
     public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId, int CurrentPage)
