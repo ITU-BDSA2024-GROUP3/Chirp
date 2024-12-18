@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ChirpWeb.Pages.Shared;
+/// <summary>
+/// Any page that can post cheeps (public and private timelines)
+/// This has all the code involved with making cheeps and interacting with them
+/// </summary>
 
 public class CheepPostPage : BasePage
 {
@@ -20,7 +24,11 @@ public class CheepPostPage : BasePage
     public CheepPostPage(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
     {
     }
-    
+    /// <summary>
+    /// Checks if the condition for posting the cheeps is correct and also posts cheeps
+    /// After posting cheeps (and if the conditions are wrong)
+    /// the client gets redirected to the first page of the public timeline 
+    /// </summary>
     public async Task<ActionResult> OnPost()
     {
         if (!User.Identity!.IsAuthenticated)
@@ -50,7 +58,11 @@ public class CheepPostPage : BasePage
         
         return RedirectToPage("Public");
     }
-    
+    /// <summary>
+    /// Follow or unfollow an author
+    /// redirects to the page the client is on
+    /// but if the redirected page has no cheeps it'll redirect to the last page with cheeps
+    /// </summary>
     public async Task<ActionResult> OnPostToggleFollowAsync(string AuthorName, string CurrentPage, string? CurrentAuthorID)
     {
         TrySetLoggedInAuthor();
@@ -90,7 +102,9 @@ public class CheepPostPage : BasePage
         
         return Redirect($"?page={page}");//move logic up to constructor
     }
-    
+    /// <summary>
+    /// Likes and unlikes cheeps
+    /// </summary>
     public async Task<ActionResult> OnPostToggleLikeAsync(int CheepId, int CurrentPage)
     {
         TrySetLoggedInAuthor();
@@ -130,7 +144,9 @@ public class CheepPostPage : BasePage
         
         return Redirect($"?page={CurrentPage}");//move logic up to constructor
     }
-
+    /// <summary>
+    /// Returns the amount of likes a cheep has
+    /// </summary>
     public async Task<int> GetCheepLike(int CheepId)
     {
         int temp = await _CheepRepo.AmountOfLikes(CheepId);

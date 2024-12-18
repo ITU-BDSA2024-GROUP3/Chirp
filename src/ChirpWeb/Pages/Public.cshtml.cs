@@ -15,14 +15,16 @@ public class PublicModel : CheepPostPage
 {
     public List<CheepDTO> Cheeps { get; set; }
 
-    public int currentPage { get; set; }
+    public int currentPage { get; set; }//current page that the client is on
     
     #pragma warning disable 8618
     public PublicModel(ICheepRepository CheepRepo, IAuthorRepository AuthorRepo) : base(CheepRepo, AuthorRepo)
     { }
     #pragma warning restore 8618
 
-    
+    /// <summary>
+    ///Reads all the cheeps and ensures pagenation 
+    /// </summary>
     public ActionResult OnGet([FromQuery] int page)
     {
         TrySetLoggedInAuthor();
