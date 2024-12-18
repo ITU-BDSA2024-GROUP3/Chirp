@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-//builder.Services.AddSingleton<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddDistributedMemoryCache();
@@ -27,15 +26,12 @@ builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(conne
 
 builder.Services.AddDefaultIdentity<Author>(options =>
 {
-    //options.SignIn.RequireConfirmedAccount = true;
-    //options.Lockout.AllowedForNewUsers = true;
-    //options.Password.RequiredLength = 12;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
 }).AddEntityFrameworkStores<ChirpDBContext>();
 
 
-
+//sets up GitHub authentication 
 if (builder.Configuration["GitHubClientSecret"] != null)
 {
     builder.Services.AddAuthentication()
@@ -75,9 +71,9 @@ builder.Services.AddSession(options =>
         options.Cookie.HttpOnly = true;
         options.Cookie.IsEssential = true;
     });
-//
+
 // remaining configuration not show
-//
+
 
 var app = builder.Build();
 
@@ -112,5 +108,5 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 
-public partial class Program { }
+public partial class Program { }//this is used to get integration tests to work
 
