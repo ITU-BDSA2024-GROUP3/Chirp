@@ -13,6 +13,11 @@ public class AuthorRepository: IAuthorRepository
         _dbContext = context;
     }
     
+    /// <summary>
+    /// Get the name of the user with given email address
+    /// </summary>
+    /// <param name="emailAddress">The email address of the user</param>
+    /// <returns>The name of the user</returns>
     public async Task<string?> GetNameByEmail(string emailAddress)
     {
         Author? author = await ReadAuthorByEmail(emailAddress);
@@ -25,6 +30,11 @@ public class AuthorRepository: IAuthorRepository
         return null;
     }
     
+    /// <summary>
+    /// Get AuthorDTO object containing data on user with the given ID
+    /// </summary>
+    /// <param name="id">This variable corresponds to the UserId column in the database - not the Id column</param>
+    /// <returns>AuthorDTO containing data on the user</returns>
     public async Task<AuthorDTO?> ReadAuthorDTOById(int id)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
@@ -33,6 +43,11 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
     
+    /// <summary>
+    /// Get Author object containing data on user with the given ID
+    /// </summary>
+    /// <param name="id">This variable corresponds to the UserId column in the database - not the Id column</param>
+    /// <returns>Author containing data on the user</returns>
     public async Task<Author?> ReadAuthorById(int id)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.UserId == id)
@@ -41,6 +56,11 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
 
+    /// <summary>
+    /// Get Author object containing data on user with the given name
+    /// </summary>
+    /// <param name="name">This variable corresponds to the Name column in the database - not the UserName column</param>
+    /// <returns>Author containing data on the user</returns>
     public async Task<Author?> ReadAuthorByName(string name)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
@@ -49,6 +69,11 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
     
+    /// <summary>
+    /// Get AuthorDTO object containing data on user with the given name
+    /// </summary>
+    /// <param name="email">This variable corresponds to the Email column in the database</param>
+    /// <returns>AuthorDTO containing data on the user</returns>
     public async Task<AuthorDTO?> ReadAuthorDTOByEmail(string email)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
@@ -57,6 +82,11 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
     
+    /// <summary>
+    /// Get Author object containing data on user with the given name
+    /// </summary>
+    /// <param name="email">This variable corresponds to the Email column in the database</param>
+    /// <returns>Author containing data on the user</returns>
     public async Task<Author?> ReadAuthorByEmail(string email)
     {
         IQueryable<Author> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Email == email)
@@ -65,6 +95,13 @@ public class AuthorRepository: IAuthorRepository
         return await query.FirstOrDefaultAsync();
     }
 
+    /// <summary>
+    /// Create Author for user with the given information
+    /// </summary>
+    /// <param name="name">Name of the user - corresponds to the Name column in the database</param>
+    /// <param name="email">Email of the user - corresponds to the Email column in the database</param>
+    /// <param name="UserId">User ID of the user - corresponds to the UserId column in the database</param>
+    /// <returns>The created Author object</returns>
     public async Task<Author> CreateAuthor(string name, string email, int UserId)
     {
         Author author = new() { UserId = UserId, Name = name, Email = email, Cheeps = new List<Cheep>(), FollowingList = new List<int>()};
@@ -75,12 +112,29 @@ public class AuthorRepository: IAuthorRepository
         return queryResult.Entity;
     }
     
+    /// <summary>
+    /// Gets the number of Authors in the database
+    /// </summary>
+    /// <returns>The number of Authors in the database</returns>
     public async Task<int> GetAuthorCount()
     {
         IQueryable<AuthorDTO> query =
             _dbContext.Authors.Select(author => author.ToDTO());
         return await query.CountAsync();
     }
+    
+    /// <summary>
+    /// Set one Author to follow another
+    /// </summary>
+    /// <param name="wantToFollow">UserId of the Author that wants to follow another Author</param>
+    /// <param name="wantToBeFollowed">UserId of the Author that the first Author wants to follow</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">
+    /// - Exception
+    /// An Author tries to follow themselves -or-
+    /// No Author with UserId equal to <c>wantToFollow</c> found in the database -or-
+    /// The Author with UserId equal to <c>wantToFollow</c> is already following Author with UserId equal to <c>wantToBeFollowed</c>
+    /// </exception>
     
     public async Task<int> Follow(int wantToFollow, int wantToBeFollowed)
     {
@@ -105,6 +159,18 @@ public class AuthorRepository: IAuthorRepository
         return await _dbContext.SaveChangesAsync();
     }
     
+    /// <summary>
+    /// Set one Author to unfollow another
+    /// </summary>
+    /// <param name="wantToUnfollow">UserId of the Author that wants to unfollow another Author</param>
+    /// <param name="wantToBeUnfollowed">UserId of the Author that the first Author wants to unfollow</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">
+    /// - Exception
+    /// An Author tries to unfollow themselves -or-
+    /// No Author with UserId equal to <c>wantToUnfollow</c> found in the database -or-
+    /// The Author with UserId equal to <c>wantToUnfollow</c> is already following Author with UserId equal to <c>wantToBeUnfollowed</c>
+    /// </exception>
     public async Task<int> Unfollow(int wantToUnfollow, int wantToBeUnfollowed)
     {
         if (wantToUnfollow == wantToBeUnfollowed)
@@ -128,6 +194,11 @@ public class AuthorRepository: IAuthorRepository
         return await _dbContext.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Get AuthorDTO object containing data on user with the given name.
+    /// </summary>
+    /// <param name="name">This variable corresponds to the Name column in the database - not the UserName column</param>
+    /// <returns>AuthorDTO containing data on the user</returns>
     public async Task<AuthorDTO?> ReadAuthorDTOByName(string name)
     {
         IQueryable<AuthorDTO> query = Queryable.Where<Author>(_dbContext.Authors, author => author.Name == name)
