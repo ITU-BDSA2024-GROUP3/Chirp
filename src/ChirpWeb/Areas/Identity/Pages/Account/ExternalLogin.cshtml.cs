@@ -155,8 +155,8 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
                     Name = nameClaim?.Value ?? string.Empty   // Default to empty if claim is missing
                 };
                 
-                if (ModelState.IsValid)
-                {
+                if (ModelState.IsValid){
+                //We make a new user, and gives them all author attributes
                 var user = CreateUser();
                 
                 user.Cheeps = new List<Cheep>();
@@ -225,6 +225,7 @@ namespace ChirpWeb.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                //We make a new user, and gives them all author attributes
                 var user = CreateUser();
                 
                 user.Cheeps = new List<Cheep>();
