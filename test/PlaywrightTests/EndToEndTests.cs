@@ -170,7 +170,6 @@ public class EndToEndTests: PageTest{
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Email: hans@grethe.com" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Listitem)).ToBeVisibleAsync();
         
-        EndToEndTestsUtility.UserDelete(Page, "hans@grethe.com", "Abc123456789");
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
 
 
@@ -187,8 +186,6 @@ public class EndToEndTests: PageTest{
         {
             await Page.GetByRole(AriaRole.Button, new() { Name = "Download" }).ClickAsync();
         });
-
-        EndToEndTestsUtility.UserDelete(Page, "hans@grethe.com", "Abc123456789");
 
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
 
@@ -214,7 +211,8 @@ public class EndToEndTests: PageTest{
         await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
         
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "hans" })).ToBeHiddenAsync();
-        await EndToEndTestsUtility.UserLogOut(Page, "hans");
+
+        await EndToEndTestsUtility.UserRegister(Page, "hans@grethe.com", "hans", "Abc123456789");
     }
 
 
@@ -239,18 +237,5 @@ public class EndToEndTests: PageTest{
         
         EndToEndTestsUtility.UserDelete(Page, "hans@grethe.com", "Abc123456789");
     }
-    /*
-    [Test]
-    public async Task loginTestHelge()
-    {
-        await EndToEndTestsUtility.UserLogIn(Page, "ropf@itu.dk", "LetM31n!");
-        
-        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
-        
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Helge?" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Share" })).ToBeVisibleAsync();
-        
-        EndToEndTestsUtility.UserLogOut(Page, "ropf@itu.dk");
-        await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
-    }*/
+    
 }
