@@ -125,7 +125,22 @@ public class EndToEndTests: PageTest{
 
         await EndToEndTestsUtility.UserLogOut(Page, "hans");
     }
+    /*
 
+    [Test]
+
+    public async Task followtest2()
+    {
+        EndToEndTestsUtility.UserLogIn(Page, "hans@grethe.com", "Abc123456789");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. Likes: 0" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. Likes: 0 ♡" }).Locator("div").ClickAsync();
+
+        EndToEndTestsUtility.UserLogOut(Page, "hans");
+    }
+*/
     [Test]
     public async Task likeTest()
     {
