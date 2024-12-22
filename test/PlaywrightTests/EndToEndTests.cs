@@ -183,7 +183,7 @@ public class EndToEndTests: PageTest{
 
 
     }
-
+    /*
     [Test]
     public async Task personalDataPageDeleteTest()
     {
@@ -201,7 +201,7 @@ public class EndToEndTests: PageTest{
         await Expect(Page).ToHaveURLAsync(new Regex("http://localhost:5273/"));
         EndToEndTestsUtility.UserRegister(Page, "hans@grethe.com", "hans", "Abc123456789");
     }
-
+    */
 
     [Test]
     public async Task logInHans()

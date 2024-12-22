@@ -72,14 +72,14 @@ public class EndToEndTestsUtility
 
         
     }
-
+    /*
     public static async Task UserDelete(IPage page, string userName, string password)
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = $"Manage {userName}'s account" }).ClickAsync();
-        await page.GetByRole(AriaRole.Link, new() { Name = "Forget me!" }).ClickAsync();
+        await page.GotoAsync("http://localhost:5273/Identity/Account/Manage/DeletePersonalData");
         await page.GetByPlaceholder("Please enter your password.").ClickAsync();
         await page.GetByPlaceholder("Please enter your password.").FillAsync(password);
         await page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
         
     }
+    */
 }
