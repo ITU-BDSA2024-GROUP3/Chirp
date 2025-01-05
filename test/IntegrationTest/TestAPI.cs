@@ -517,53 +517,69 @@ public async void CorrectNumberOfCheepsPerPagePublic(int page)
         Assert.DoesNotContain(message, content2);
     }
 
+    //otherTimestamp is for local, whereas timestamp is for deployed.
+    //Due to timezones the timestamps are different
     [Theory]
-    [InlineData("08/01/23 13:17:14")]
-    [InlineData("08/01/23 13:17:02")]
-    public async void TimeStampsExistsPublic(string timeStamp)
+    [InlineData("08/01/23 13:17:14","08/01/23 11:17:14")]
+    [InlineData("08/01/23 13:17:02","08/01/23 11:17:14")]
+    public async void TimeStampsExistsPublic(string timeStamp, string otherTimestamp)
     {
         var content = await SetPublic();
-        Assert.Contains(timeStamp, content);
+        bool timestamp1 = content.Contains(timeStamp);
+        bool timestamp2 = content.Contains(otherTimestamp);
+        Assert.True(timestamp1||timestamp2);
     }
 
     [Theory]
-    [InlineData("08/01/23 13:16:58", "Jacqualine Gilcoine", 10)]
-    public async void TimeStampsExistsPrivate(string timeStamp, string author, int id)
+    [InlineData("08/01/23 13:16:58", "08/01/23 11:16:58","Jacqualine Gilcoine", 10)]
+    public async void TimeStampsExistsPrivate(string timeStamp, string otherTimestamp,string author, int id)
     {
         var content = await SetPrivate(author, id);
-        Assert.Contains(timeStamp, content);
+        bool timestamp1 = content.Contains(timeStamp);
+        bool timestamp2 = content.Contains(otherTimestamp);
+        Assert.True(timestamp1||timestamp2);
     }
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 
         "Once, I remember, to be a rock, but it is this Barrymore, anyhow?",
-        "08/01/23 13:17:26", 1,0)]
-    public async void ElementsOfCheepsAreCorrectPublic(string author, string message, string timestamp,
+        "08/01/23 13:17:26", "08/01/23 11:17:26",1,0)]
+    public async void ElementsOfCheepsAreCorrectPublic(string author, string message, string timestamp, string otherTimestamp,
         int page, int likes)
     {
         var content = await SetPublicPage(page);
-        bool windows = content.Contains(
+        bool windows1Timestamp = content.Contains(
             $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
-        
-        bool linux= content.Contains(
+        bool windows2Timestamp = content.Contains(
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{otherTimestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
+
+        bool linux1Timestamp= content.Contains(
             $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
-        
-        Assert.True(windows || linux);
+        bool linux2Timestamp= content.Contains(
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{otherTimestamp}</small>\n        </div>\n    </p>\n</li>");
+
+        Assert.True((windows1Timestamp||windows2Timestamp) || (linux1Timestamp||linux2Timestamp));
     }
 
     [Theory]
     [InlineData("Jacqualine Gilcoine", 10,
         "That must have come to you.",
-        "08/01/23 13:17:23", 1,0)]
-    public async void ElementsOfCheepsAreCorrectPrivate(string author, int id, string message, string timestamp,
+        "08/01/23 13:17:23", "08/01/23 11:17:23", 1,0)]
+    public async void ElementsOfCheepsAreCorrectPrivate(string author, int id, string message, string timestamp, string otherTimestamp,
         int page, int likes)
     {
         var content = await SetPrivatePage(page, author, id);
-        bool windows = content.Contains(
+        bool windows1Timestamp = content.Contains(
             $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{timestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
-        bool linux= content.Contains(
+        bool windows2Timestamp = content.Contains(
+            $"<li>\r\n    <p>\r\n        <div>\r\n            <div style=\"display: flex; align-items: center\">\r\n                <strong>\r\n                    <a href=\"/{author}?page={page}\">{author}</a>\r\n                </strong>\r\n            </div>\r\n            <br>\r\n            {message}\r\n            <br>\r\n            <p style=\"display:inline\">Likes: {likes}\r\n            </p>\r\n            <small>{otherTimestamp}</small>\r\n        </div>\r\n    </p>\r\n</li>");
+
+        bool linux1Timestamp= content.Contains(
             $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{timestamp}</small>\n        </div>\n    </p>\n</li>");
-        Assert.True(windows || linux);
+        bool linux2Timestamp= content.Contains(
+            $"<li>\n    <p>\n        <div>\n            <div style=\"display: flex; align-items: center\">\n                <strong>\n                    <a href=\"/{author}?page={page}\">{author}</a>\n                </strong>\n            </div>\n            <br>\n            {message}\n            <br>\n            <p style=\"display:inline\">Likes: {likes}\n            </p>\n            <small>{otherTimestamp}</small>\n        </div>\n    </p>\n</li>");
+
+        Assert.True((windows1Timestamp||windows2Timestamp) || (linux1Timestamp||linux2Timestamp));
     }
 
     [Theory]
